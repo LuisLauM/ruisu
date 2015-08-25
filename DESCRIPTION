@@ -1,0 +1,11 @@
+Package: ruisu
+Type: Package
+Title: Tools for habitual tasks
+Version: 1.0
+Date: 2014-03-06
+Author: Wencheng Lau
+Maintainer: Wencheng Lau <llau@imarpe.gob.pe>
+Description: Tools for common tasks at IMARPE
+License: GLP-2
+Depends: ncdf, grid, sp, rgdal, mapdata, calibrate, zoo, ggmap, raster
+LazyData: true
