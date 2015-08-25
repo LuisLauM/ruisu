@@ -1,13 +1,56 @@
-dist.freq = function(file, file2 = NA, profile = NULL,
-                     xlab = "Longitud (cm)", ylab = "Frecuencia (%)",
-                     cex.axis = 1.2, xlim = NULL, Xinterval = 1, Yinterval = 10,
-                     lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid",
-                     styleLab = 2, jValue = NA, jtext = NA, jcex = 1, jtextcol = "black",
-                     cat.cex = 1, jround = 1, jcol = "red", jwd = 1,
-                     jty = "dotted", sinpesca = "Sin pesca", sinjuveniles = "Sin juveniles",
-                     zeros = FALSE, nzeros = 0, showRange = TRUE, adj = 0.02, showJuv = TRUE,
-                     smooth = TRUE, spar = 0.01, totalFreq = FALSE,
-                     totalLabel = "Total")
+#' lengthFrequencyPlot
+#'
+#' Given a frequency table size, it generates a vertical array of graphics for each specified 
+#' category (months, latitudes, years, etc.).
+#' 
+#' @details This function takes a length frequency data and returns an stacking plot of that frequencies.
+#' smooth: logical. If TRUE, function uses an spline function to plot by categories.
+#' This function uses a data with categories at cols and length at rows.
+#'
+#' @param file \code{character}. File path of length frequencies table.
+#' @param file2 \code{character}. File path of second length frequencies table.
+#' @param profile \code{character}. Profile by species.
+#' @param xlab A title for the X axis.
+#' @param ylab A title for the Y axis.
+#' @param cex.axis Size of axis text.
+#' @param xlim Limits for the X axis.
+#' @param Xinterval Intervals for the X axis.
+#' @param Yinterval Intervals for the Y axis.
+#' @param lcol Vector of colors for length lines (one or more).
+#' @param lcol2 Color (just one) of length line for second table.
+#' @param lwd Width of length lines.
+#' @param lty Vector of line type for length lines (one or more).
+#' @param styleLab Numer (0,1,2,3), the style of axis labels.
+#' @param jValue Juvenile length.
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#'
+#' @return None
+#'
+#' @examples
+#' Use interface at help file.
+#'
+#' @export
+lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
+                                xlab = "Longitud (cm)", ylab = "Frecuencia (%)",
+                                cex.axis = 1.2, xlim = NULL, Xinterval = 1, Yinterval = 10,
+                                lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid",
+                                styleLab = 2, jValue = NA, jtext = NA, jcex = 1, jtextcol = "black",
+                                cat.cex = 1, jround = 1, jcol = "red", jwd = 1,
+                                jty = "dotted", sinpesca = "Sin pesca", sinjuveniles = "Sin juveniles",
+                                zeros = FALSE, nzeros = 0, showRange = TRUE, adj = 0.02, showJuv = TRUE,
+                                smooth = TRUE, spar = 0.01, totalFreq = FALSE,
+                                totalLabel = "Total")
 {
   unfold <- function(marks, freqs)
   {
@@ -55,8 +98,8 @@ dist.freq = function(file, file2 = NA, profile = NULL,
     colnames(data) <- c("length", totalLabel)
   }else
     data <- data.frame(data[,1],
-                      apply(data[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
-                      check.names = FALSE)
+                       apply(data[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
+                       check.names = FALSE)
   
   if(nzeros > 0)
   {
@@ -105,8 +148,8 @@ dist.freq = function(file, file2 = NA, profile = NULL,
   {
     data2 <- read.csv(file2)[,seq(ncol(data))]
     data2 <- data.frame(data2[,1],
-                       apply(data2[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
-                       check.names = FALSE)
+                        apply(data2[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
+                        check.names = FALSE)
     ylim <- c(0, max(c(max(data2, na.rm = TRUE), ylim[2])))
   }
   
@@ -187,7 +230,7 @@ dist.freq = function(file, file2 = NA, profile = NULL,
       
       mtext(lentext, 1, line = -1, adj = 1 - adj, cex = jcex - 0.2) # Rango tallas
     }
-                             
+    
     
     mtext(colnames(data)[i], 3, line = -2, adj = adj, cex = cat.cex) # Categor?as
     
