@@ -1,11 +1,14 @@
 Package: ruisu
 Type: Package
 Title: Tools for habitual tasks
-Version: 2.0
-Date: 2014-03-06
+Version: 2.1
 Author: Wencheng Lau-Medrano
 Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
 Description: Tools for common tasks
 License: GLP-2
-Depends: calibrate, ggmap, grid, lubridate, mapdata, ncdf, raster, RCurl, rgdal, sp, zoo
 LazyData: true
+Depends: calibrate, ggmap, grid, lubridate, mapdata, ncdf, raster, Rcpp, RCurl, rgdal, sp, zoo
+Imports:
+    Rcpp (>= 0.12.3)
+LinkingTo:
+    Rcpp
