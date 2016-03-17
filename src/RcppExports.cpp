@@ -5,25 +5,16 @@
 
 using namespace Rcpp;
 
-// rcpp_hello
-List rcpp_hello();
-RcppExport SEXP ruisu_rcpp_hello() {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    __result = Rcpp::wrap(rcpp_hello());
-    return __result;
-END_RCPP
-}
 // p2pDistance
-NumericMatrix p2pDistance(NumericMatrix dataFrom, NumericMatrix dataTo);
-RcppExport SEXP ruisu_p2pDistance(SEXP dataFromSEXP, SEXP dataToSEXP) {
+NumericMatrix p2pDistance(NumericMatrix dataFrom, NumericMatrix dataTo, int greatCircle);
+RcppExport SEXP ruisu_p2pDistance(SEXP dataFromSEXP, SEXP dataToSEXP, SEXP greatCircleSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericMatrix >::type dataFrom(dataFromSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type dataTo(dataToSEXP);
-    __result = Rcpp::wrap(p2pDistance(dataFrom, dataTo));
+    Rcpp::traits::input_parameter< int >::type greatCircle(greatCircleSEXP);
+    __result = Rcpp::wrap(p2pDistance(dataFrom, dataTo, greatCircle));
     return __result;
 END_RCPP
 }
