@@ -7,8 +7,20 @@ Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
 Description: Tools for common tasks
 License: GLP-2
 LazyData: true
-Depends: calibrate, ggmap, grid, lubridate, mapdata, RNetCDF, raster, Rcpp, RCurl, rgdal, sp, zoo
+Depends:
+    calibrate,
+    ggmap,
+    grid,
+    lubridate,
+    mapdata,
+    RNetCDF,
+    raster,
+    Rcpp,
+    RCurl,
+    rgdal,
+    sp,
+    zoo
 Imports:
     Rcpp (>= 0.12.3)
-LinkingTo:
-    Rcpp
+LinkingTo: Rcpp
+RoxygenNote: 5.0.1

@@ -1,25 +1,26 @@
 #' @name centroidAssigner
 #' @aliases centroidAssigner
 #' @title Returns centroid values from Isoparalitoral-area codes.
-#' 
-#' @description The function takes a vector of isoparalitoral Areas and returns centroids, i.e. latitude and longitude values.
-#' \code{old} parameter is used to indicate the type of shape used: Ancient (elaborated, roughly, 
-#' in 1992; it has errors respect coast line) and New (made in 2012 from a shape of coastline more accurate). 
-#' The variations between the values -about centroid- ranging from a few meters (for nearshore areas) to almost 
-#' half a nautical mile (for those further away from the coast).
-#' 
+#'
+#' @description Esta función toma un vector de códigos de AIP y retorna las coordenadas de los  centroides
+#' (longitud, latitud). El parámetro \code{old} controla la base de AIP a utilizar: Si \code{old = TRUE},
+#' se usará la base de AIP creada en llos 90'; de otro modo, se utilizará la creada en 2016.
+#'
 #' @usage centroidAssigner(isoCode, old = TRUE)
-#' @param isoCode Vector of isoparalitoral-areas codes.
-#' @param old \code{logical}. Do you want to use "Old" shape of Isoparalitoral Areas?
-#' 
+#' @param isoCode Vector de códigos de AIP de los que se desea obtener  los centroides.
+#' @param old \code{logical}. ¿Desea utilizar la base de datos antigua (\code{old = TRUE}) o nueva \code{old = FALSE}?
+#'
 #' @example areaCodes <- c(1050, 4043, 17073, 27103)
 #' centroidAssigner(isoCode)
 centroidAssigner <- function(isoCode, old = TRUE)
 {
-  if(old)
-    isoAreas <- data1 else
-      isoAreas <- data2
-    
-  return(data.frame(lon = isoAreas[match(isoCode, isoAreas$code), "lon"],
-                    lat = isoAreas[match(isoCode, isoAreas$code), "lat"]))
+  isoAreas <- ifelse(isTRUE(old), ".AIPData_old", ".AIPData_new")
+
+  isoAreas <- get(isoAreas)
+
+  output <- data.frame(lon = isoAreas[match(isoCode, isoAreas$code), "lon"],
+                       lat = isoAreas[match(isoCode, isoAreas$code), "lat"],
+                       stringsAsFactors = FALSE)
+
+  return(output)
 }
