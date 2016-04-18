@@ -1,6 +1,8 @@
 getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST", dateList = NULL,
                               lonRange = c(-85, -70), latRange = c(-20, -2), outputDir = ".", outputFormat = "png"){
 
+  # what: sst, sss, chl, topo
+
   # Verifying correct values for lon, lat and dates
   if(sum(lonRange < -180 | lonRange > 180) > 1)
     stop("Incorrect values for 'lonRange'.")
