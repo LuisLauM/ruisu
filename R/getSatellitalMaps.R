@@ -1,5 +1,25 @@
-getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST", dateList = NULL,
-                              lonRange = c(-85, -70), latRange = c(-20, -2), outputDir = ".", outputFormat = "png"){
+#' @title Obtener informaciónmapas satelitales de variables oceanográficas
+#' @description Esta función toma un rango de fechas y coordenadas y extrae los mapas de distribución de
+#' Temperatura Superficial del Mar (SST), Salinidad Superficial del Mar (SSS), Clorofila-a (chl) y
+#' Topografía (topo)
+#'
+#' @param initialDate Fecha inicial para la extracción de mapas.
+#' @param initialDate Fecha final para la extracción de mapas.
+#' @param timeRes Resolución temporal para la obtención de mapas: Mensual ('month') o diario ('day').
+#' @param dateList Lista de fechas para la extracción de mapas.
+#' @param lonRange Rango de coordenadas de longitud. Si es \code{NULL}, tomará valores entre 85°W y 90°W.
+#' @param latRange Rango de coordenadas de latitud. Si es \code{NULL}, tomará valores entre 20°S y 2°S.
+#' @param outputFormat Formato de descarga de archivos: NetCDF (nc), Valores separados por comas (csv),
+#' image (png).
+#' @param outputDir Directorio para la descarga de archivos.
+#'
+#' @examples
+#' getSatellitalMaps(initialDate = "2014-3-26", finalDate = "2014-4-17", what = "sst", timeRes = "day",
+#' lonRange = c(-90, -85), latRange = c(-5, 0), outputFormat = "png",
+#' outputDir = "D:/output/")
+
+getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "month", what = "SST", dateList = NULL,
+                              lonRange = c(-85, -70), latRange = c(-20, -2), outputFormat = "png", outputDir = "."){
 
   # what: sst, sss, chl, topo
 
@@ -13,18 +33,24 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
   if(all(is.null(initialDate), is.null(finalDate), is.null(dateList)))
     stop("You have to indicate some value for initialDate/finalDate or dateList")
 
+  timePrefix <- switch(tolower(timeRes),
+                       day = c("1", "Daily", "day"),
+                       month = c("m", "Monthly", "month"),
+                       "Incorrect value for 'timeRes'. Please, select between 'day' and 'month'.")
+
   # Make date vector
   if(!is.null(dateList)){
     dateList <- sort(as.Date(dateList))
 
-    seqTime <- as.Date(paste(year(dateList), month(dateList), 1, sep = "-"))
+    seqTime <- as.Date(paste(year(dateList), month(dateList), day(dateList), sep = "-"))
   }else{
+
     initialDate <- as.Date(initialDate)
     finalDate <- as.Date(finalDate)
 
-    seqTime <- seq(from = as.Date(paste(year(initialDate), month(initialDate), 1, sep = "-")),
-                   to = as.Date(paste(year(finalDate), month(finalDate), 1, sep = "-")),
-                   by = "mon")
+    seqTime <- seq(from = as.Date(paste(year(initialDate), month(initialDate), day(initialDate), sep = "-")),
+                   to = as.Date(paste(year(finalDate), month(finalDate), day(initialDate), sep = "-")),
+                   by = timePrefix[3])
 
     if(initialDate > finalDate)
       stop("initialDate is after finalDate.")
@@ -33,8 +59,10 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
   # Get values for months and years
   yearList <- year(seqTime)
   monthList <- month(seqTime)
+  dayList <- day(seqTime)
 
   monthList <- sapply(monthList, function(x) if(x < 10) paste0("0", x) else x)
+  dayList <- sapply(dayList, function(x) if(x < 10) paste0("0", x) else x)
 
   # Define extension for output file
   formatList <- data.frame(format = c("nc", "csv", "largePng", "esriAscii"),
@@ -80,15 +108,17 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
     if(tolower(what) == "sst"){
       # Prefix for SST
       if(seqTime[i] <= as.Date("2004-1-15")){
-        prefix1 <- "erdPHsstamday."
+        prefix1 <- "erdPHssta"
         satellite <- "Pathfinder Ver 5.0"
       }else if(seqTime[i] <= as.Date("2011-1-15")){
-        prefix1 <- "erdAGsstamday."
+        prefix1 <- "erdAGssta"
         satellite <- "POES AVHRR"
       }else{
-        prefix1 <- "erdMBsstdmday."
+        prefix1 <- "erdMBsstd"
         satellite <- "Aqua MODIS"
       }
+
+      prefix1 <- paste0(prefix1, timePrefix[1], "day.")
 
       prefix2 <- "sst"
       prefix3 <- "[(0.0)]"
@@ -109,12 +139,12 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
     }else if(tolower(what) == "chl"){
       # Prefix for chlorophyll
       if(seqTime[i] <= as.Date("2003-1-15")){
-        prefix1 <- "erdSWchlamday."
+        prefix1 <- "erdSWchla"
         prefix3 <- "[(0.0)]"
 
         satellite <- "SeaWiFS"
       }else {
-        prefix1 <- "erdMH1chlamday."
+        prefix1 <- "erdMH1chla"
         prefix3 <- ""
         satellite <- "Aqua MODIS"
 
@@ -122,22 +152,28 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
         tempLons <- lonRange2
       }
 
+      prefix1 <- paste0(prefix1, timePrefix[1], "day.")
       prefix2 <- "chlorophyll"
 
     }else if(tolower(what) == "sss"){
+
       # Prefix for salinity
-      prefix1 <- "jplAquariusSSSMonthlyV4."
+      prefix1 <- paste0("jplAquariusSSS", timePrefix[2], "V4.")
       prefix2 <- "sss"
-      prefix3 <- "[(0.0)]"
+      prefix3 <- ""
+
+      tempLats <- rev(latRange)
+      tempLons <- lonRange2
 
       satellite <- "Aquarius SSS v4"
     }
 
     if(is.null(datePrefix))
-      datePrefix <- paste0("[(", yearList[i], "-", monthList[i], "-16T12:00:00Z)]")
+      datePrefix <- paste0("[(", yearList[i], "-", monthList[i], "-", dayList[i],
+                           "T00:00:00Z)]")
 
     # Concatenate parts and make URL for downloading
-    tempURL <- paste0("http://coastwatch.pfeg.noaa.gov/erddap/griddap/", prefix1,
+    tempURL <- paste0("https://coastwatch.pfeg.noaa.gov/erddap/griddap/", prefix1,
                       formatList$format[formatIndex], "?", prefix2, datePrefix, prefix3, "[(", tempLats[1], "):(",
                       tempLats[2], ")][(", tempLons[1], "):(", tempLons[2], ")]&.draw=surface&.vars=longitude|latitude|",
                       prefix2, "&.colorBar=|||||")
@@ -149,7 +185,7 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
       errorList <- c(errorList, tempURL)
       errorNames <- c(errorNames, as.character(seqTime[i]))
 
-      cat(paste0("\n ", as.character(as.yearmon(seqTime[i])), " ...... Failed! \n"))
+      cat(paste0("\n ", as.character(seqTime[i]), " ...... Failed! \n"))
 
       next
     }
@@ -157,13 +193,13 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
     # Make output file name
     outputFile <- paste0(toupper(what), "-",
                          gsub(pattern = "[^\\d]+", replacement = "", x = seqTime[i], perl = TRUE),
-                         "_Satellite-", satellite, ".",
+                         "_Satellite-", satellite, "-", timePrefix[2], ".",
                          ifelse(outputFormat == "largePng", "png", formatList$extension[formatIndex]))
 
     suppressWarnings(download.file(url = tempURL, destfile = file.path(outputDir, outputFile), quiet = TRUE,
                                    mode = "wb"))
 
-    cat(paste0("\n ", as.character(as.yearmon(seqTime[i])), " ...... OK \n"))
+    cat(paste0("\n ", as.character(seqTime[i]), " ...... OK \n"))
   }
 
   if(!is.null(errorNames))
@@ -174,11 +210,3 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, what = "SST"
   # Final output will be a list with failed URLs
   return(if(is.null(errorList)) invisible() else errorList)
 }
-
-# # DEMO
-# getSatellitalMaps(initialDate = "1992-11-15", finalDate = "1993-4-2",
-#            lonRange = c(-85, -80), latRange = c(-5, 0),
-#            outputFormat = "csv")
-#
-# getSatellitalMaps(dateList = c("2000-1-1", "2007-4-8", "2012-12-3"), what = "chl")
-# getSatellitalMaps(dateList = c("2000-1-1", "2007-4-8", "2012-12-3"), what = "chl", outputFormat = "nc")
