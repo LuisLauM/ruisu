@@ -1,22 +1,33 @@
+#' counterZOO
+#' @description Función simuladora de contador de organismos manual.
+#'
+#' @param spList Dirección de archivo que se desea utilizar para continuar el conteo. Si es
+#' \code{NULL}, se iniciará un conteo nuevo, solicitando el ingreso de una especie. Este archivo
+#' corresponderá a una tabla csv con las columnas "Especie", "Caracter", "Conteo", en ese orden.
+#' @param filepath Nombre del archivo en donde se guardarán los resultados.
+#' @param reset ¿Desea continuar con el conteo anterior o colocar todos los valores en cero?
+#'
+#' @details Esta función utiliza los siguientes comandos:
+#' \itemize{
+#' \item{\strong{new}{Para definir una especie nueva en el conteo.}}
+#' \item{\strong{correct}{Para corregir o realizar una operación sobre alguno de los valores
+#' de conteo. E.g. si se desea restar tres dígitos, se tendrá que digitar -3; si se desea sumar 2, +2.}}
+#' \item{\strong{end}{Finaliza el conteo: Muestra y guarda la tabla de conteo.}}
+#' \item{{\strong{help}}{Muestra la ayuda de comandos en consola.}}
+#' }
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' counterZOO(spList = "myFolder/myTable.csv")
+#' }
 counterZOO <- function(spList = NULL, filepath = "conteo.csv", reset = TRUE){
   #########################################################
   ##################### FUNCIÓN DE CONTEO #################
   ########################## v. 1.0 #######################
   ############## Autor: Wencheng Lau-Medrano ##############
   #########################################################
-
-  ####### Parámetros:
-  # spList  : Dirección de una tabla previa con valores que se desea cargar
-  #           para continuar contando o empezar desde cero (ver 'reset')
-  # filepath: Dirección y nombre para guardar la tabla de conteo generada
-  # reset   : Desea continuar con el conteo anterior o poner todo en cero?
-
-
-  ####### Comandos:
-  # new     : Para definir una especie nueva en la tabla de conteo.
-  # correct : Para corregir o realizar una operación sobre alguno
-  #           de los valores de conteo.
-  # end     : Finalizar conteo (mostrar y guardar tabla de conteo).
 
   cat("\n--------------------------\n")
   cat("-------- COMANDOS --------\n")
@@ -207,12 +218,15 @@ counterZOO <- function(spList = NULL, filepath = "conteo.csv", reset = TRUE){
                        Caracter = spList[,2],
                        Conteo = spList[,3])
 
-  # Guardar un csv con la tabla de conteo
-  write.csv(spList, file = filepath, quote = FALSE, row.names = FALSE)
-
-  # Mensajes finales
+  # Mensaje final
   cat("\n ¡Conteo finalizado! \n")
-  cat("\n El archivo de conteo se ha guardado en: ", file.path(getwd(), filepath), "\n\n")
+
+  # Guardar un csv con la tabla de conteo
+  if(!is.null(filepath) && dir.exists(filepath)){
+    write.csv(spList, file = filepath, quote = FALSE, row.names = FALSE)
+
+    cat("\n El archivo de conteo se ha guardado en: ", file.path(getwd(), filepath), "\n\n")
+  }
 
   return(spList)
 }

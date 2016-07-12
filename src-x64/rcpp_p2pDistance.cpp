@@ -3,11 +3,6 @@
 #include <math.h>
 using namespace Rcpp;
 
-//' @param dataFrom \code{data.frame} with lon-lat values.
-//' @param dataTo Reference lon-lat \code{data.frame}.
-//' @param greatCircle \code{logical}; si es \code{FALSE}, se devolverá la distancia euclidiana: si es
-//' \code{TRUE} devolverá la DIstancia de Gran Círculo (WGS84).
-//' @importFrom Rcpp evalCpp
 // [[Rcpp::export]]
 NumericMatrix p2pDistance(NumericMatrix dataFrom, NumericMatrix dataTo, int greatCircle = 0){
 

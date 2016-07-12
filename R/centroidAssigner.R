@@ -7,6 +7,7 @@
 #' se usará la base de AIP creada en llos 90'; de otro modo, se utilizará la creada en 2016.
 #'
 #' @usage centroidAssigner(isoCode, old = TRUE)
+#'
 #' @param isoCode Vector de códigos de AIP de los que se desea obtener  los centroides.
 #' @param old \code{logical}. ¿Desea utilizar la base de datos antigua (\code{old = TRUE}) o nueva \code{old = FALSE}?
 #'
@@ -14,7 +15,7 @@
 #' centroidAssigner(isoCode)
 centroidAssigner <- function(isoCode, old = TRUE)
 {
-  isoAreas <- ifelse(isTRUE(old), ".AIPData_old", ".AIPData_new")
+  isoAreas <- ifelse(isTRUE(old), "AIPData_old", "AIPData_new")
 
   isoAreas <- get(isoAreas)
 
