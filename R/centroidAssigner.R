@@ -11,8 +11,9 @@
 #' @param isoCode Vector de códigos de AIP de los que se desea obtener  los centroides.
 #' @param old \code{logical}. ¿Desea utilizar la base de datos antigua (\code{old = TRUE}) o nueva \code{old = FALSE}?
 #'
-#' @example areaCodes <- c(1050, 4043, 17073, 27103)
-#' centroidAssigner(isoCode)
+#' @examples
+#' areaCodes <- c(1050, 4043, 17073, 27103)
+#' centroidAssigner(isoCode = areaCodes)
 centroidAssigner <- function(isoCode, old = TRUE)
 {
   isoAreas <- ifelse(isTRUE(old), "AIPData_old", "AIPData_new")

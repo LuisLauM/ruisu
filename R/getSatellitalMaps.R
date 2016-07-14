@@ -1,17 +1,20 @@
-#' @title Obtener informaciónmapas satelitales de variables oceanográficas
+#' @title Obtener información satelital de variables oceanográficas
 #' @description Esta función toma un rango de fechas y coordenadas y extrae los mapas de distribución de
 #' Temperatura Superficial del Mar (SST), Salinidad Superficial del Mar (SSS), Clorofila-a (chl) y
 #' Topografía (topo)
 #'
 #' @param initialDate Fecha inicial para la extracción de mapas.
-#' @param initialDate Fecha final para la extracción de mapas.
+#' @param finalDate Fecha final para la extracción de mapas.
 #' @param timeRes Resolución temporal para la obtención de mapas: Mensual ('month') o diario ('day').
+#' @param what ¿Qué variable desea descargar? Ver detalles.
 #' @param dateList Lista de fechas para la extracción de mapas.
 #' @param lonRange Rango de coordenadas de longitud. Si es \code{NULL}, tomará valores entre 85°W y 90°W.
 #' @param latRange Rango de coordenadas de latitud. Si es \code{NULL}, tomará valores entre 20°S y 2°S.
 #' @param outputFormat Formato de descarga de archivos: NetCDF (nc), Valores separados por comas (csv),
 #' image (png).
 #' @param outputDir Directorio para la descarga de archivos.
+#'
+#' @export
 #'
 #' @examples
 #' getSatellitalMaps(initialDate = "2014-3-26", finalDate = "2014-4-17", what = "sst", timeRes = "day",

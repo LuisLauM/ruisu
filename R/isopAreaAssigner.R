@@ -1,52 +1,14 @@
-isopArea.assigner <- function(data, colLon = "lon", colLat = "lat", old = TRUE){
+isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = TRUE){
 
+  referenceShapefile <- get(ifelse(test = isTRUE(old), yes = "AIPShapefile_old", no = "AIPShapefile_new"))
 
+  dataPoints <- as.data.frame(dataPoints[,c(colLon, colLat)])
 
+  coordinates(dataPoints) <- dataPoints
 
+  proj4string(dataPoints) <- proj4string(referenceShapefile)
 
+  dataPoints <- over(x = dataPoints, y = referenceShapefile)
 
-
-
-
-
-
-  rm.extension <- function(path)
-  {
-    path <- basename(path)
-    newPath <- unlist(gregexpr("[[:punct:]]", path))
-    newPath <- substr(path, 1, tail(newPath, 1) - 1)
-
-    return(newPath)
-  }
-
-  if(is.na(colLon))
-    colLon <- match("lon", tolower(colnames(data)))
-
-  if(is.na(colLat))
-    colLat <- match("lat", tolower(colnames(data)))
-
-  data <- data.frame(lon = data[,colLon], lat = data[,colLat], stringsAsFactors = FALSE)
-  isoCodes <- numeric(nrow(data))
-
-  # Read points and convert to SpatialPointsDataFrame object
-  points <- data; rm(data)
-
-  isoCodes[which(is.na(points$lon) | is.na(points$lat))] <- NA
-  coords <- points[!is.na(isoCodes),]
-  coordinates(coords) <- ~ lon + lat
-
-  # Read polygon of '?reas isoparalitorales' and convert to SpatialPolygonsDataFrame object
-  if(old)
-  {
-    peru.isoparalit <- data3
-  }else
-  {
-    peru.isoparalit <- data4
-  }
-
-  proj4string(coords) <- CRS(proj4string(peru.isoparalit))
-
-  isoCodes[!is.na(isoCodes)] <- as.numeric(as.matrix(over(coords, peru.isoparalit)))
-
-  return(isoCodes)
+  return(dataPoints$code)
 }

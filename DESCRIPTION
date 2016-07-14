@@ -1,26 +1,23 @@
 Package: ruisu
 Type: Package
 Title: Tools for habitual tasks
-Version: 2.1
-Author: Wencheng Lau-Medrano
+Version: 1.0.0
+Date: 2016-06-27
+Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "llau@imarpe.gob.pe"))
+Author: Wencheng Lau-Medrano [aut, cre]
 Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
 Description: Tools for common tasks
 License: GLP-2
 LazyData: true
-Depends:
-    calibrate,
-    ggmap,
-    grid,
+Imports:
+    Rcpp (>= 0.12.3),
     lubridate,
     mapdata,
     RNetCDF,
     raster,
-    Rcpp,
     RCurl,
-    rgdal,
+    maptools,
     sp,
     zoo
-Imports:
-    Rcpp (>= 0.12.3)
 LinkingTo: Rcpp
 RoxygenNote: 5.0.1

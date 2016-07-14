@@ -1,13 +1,9 @@
-#' @import calibrate
-#' @import ggmap
-#' @import grid
 #' @import lubridate
 #' @import mapdata
 #' @import RNetCDF
 #' @import raster
 #' @import RCurl
-#' @import rgdal
-#' @import sp
+#' @import maptools
 #' @import zoo
 #'
 #' @useDynLib oXim
