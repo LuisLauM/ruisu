@@ -2,8 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{p2pDistance}
 \alias{p2pDistance}
+\title{Función para obtener distancia entre dos puntos.}
 \usage{
-p2pDistance(dataFrom, dataTo, greatCircle = 0L)
+p2pDistance(dataFrom, dataTo, greatCircle = FALSE)
 }
 \arguments{
 \item{dataFrom}{\code{data.frame} with lon-lat values.}

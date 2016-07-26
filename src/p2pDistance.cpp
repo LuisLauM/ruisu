@@ -3,13 +3,15 @@
 #include <math.h>
 using namespace Rcpp;
 
+//' @title Función para obtener distancia entre dos puntos.
 //' @param dataFrom \code{data.frame} with lon-lat values.
 //' @param dataTo Reference lon-lat \code{data.frame}.
 //' @param greatCircle \code{logical}; si es \code{FALSE}, se devolverá la distancia euclidiana: si es
 //' \code{TRUE} devolverá la DIstancia de Gran Círculo (WGS84).
+//' @export
 //' @importFrom Rcpp evalCpp
-// [[Rcpp::export]]
-NumericMatrix p2pDistance(NumericMatrix dataFrom, NumericMatrix dataTo, int greatCircle = 0){
+// [[Rcpp::export(name="p2pDistance")]]
+NumericMatrix p2pDistance(NumericMatrix dataFrom, NumericMatrix dataTo, bool greatCircle = false){
 
   double pi = 3.141592653589793;
   double earthRadius = 6371.0090667;
@@ -22,7 +24,7 @@ NumericMatrix p2pDistance(NumericMatrix dataFrom, NumericMatrix dataTo, int grea
   for(int j = 0; j < ncols + 1; j++){
     for(int i = 0; i < nrows + 1; i++){
 
-      if(greatCircle == 0){
+      if(greatCircle == false){
         double xValue = dataFrom(i, 0) - dataTo(j, 0);
         double yValue = dataFrom(i, 1) - dataTo(j, 1);
 

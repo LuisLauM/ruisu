@@ -52,8 +52,10 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
     finalDate <- as.Date(finalDate)
 
     seqTime <- seq(from = as.Date(paste(year(initialDate), month(initialDate), day(initialDate), sep = "-")),
-                   to = as.Date(paste(year(finalDate), month(finalDate), day(initialDate), sep = "-")),
+                   to = as.Date(paste(year(finalDate), month(finalDate), day(finalDate), sep = "-")),
                    by = timePrefix[3])
+
+    print(seqTime)
 
     if(initialDate > finalDate)
       stop("initialDate is after finalDate.")

@@ -1,20 +1,15 @@
 #' @import lubridate
-#' @import mapdata
-#' @import RNetCDF
-#' @import raster
-#' @import RCurl
-#' @import maptools
-#' @import zoo
+#' @import maps
+#' @import rgdal
 #'
-#' @useDynLib oXim
+#' @useDynLib ruisu
 #'
-#' @title Oxycline Index from Matrix Echograms
+#' @title Paquete con herramientas diversas.
 #'
 #' @author Wencheng Lau-Medrano, \email{llau@@imarpe.gob.pe}
-#' @name oXim-package
-#' @description Pack oriented to extract oxycline depth from echogram matrix using Sobel-based algorithms.
-#' @aliases oXim-package oXim
+#' @name ruisu-package
+#' @description Paquete con funciones misceláneas dentro del Instituto del Mar del Perú.
+#' @aliases ruisu-package ruisu
 #' @docType package
-#' @references oXim: Oxycline Index from Matrix Echograms (RJournal)
-#' @keywords echograms, oxycline, depth, image-filtering
+#' @keywords miscelánea, IMARPE
 NULL
