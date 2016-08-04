@@ -3,16 +3,18 @@ Type: Package
 Title: Tools for habitual tasks
 Version: 1.0.0
 Date: 2016-06-27
-Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "llau@imarpe.gob.pe"))
+Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "luis.laum@gmail.com"))
 Author: Wencheng Lau-Medrano [aut, cre]
 Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
 Description: Tools for common tasks
-License: GLP-2
+License: GPL (>= 2)
 LazyData: true
 Imports:
     Rcpp (>= 0.12.3),
     lubridate,
     rgdal,
-    maps
+    maps,
+    stats,
+    RCurl
 LinkingTo: Rcpp
 RoxygenNote: 5.0.1

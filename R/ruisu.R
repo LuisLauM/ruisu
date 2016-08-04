@@ -1,6 +1,8 @@
 #' @import lubridate
 #' @import maps
 #' @import rgdal
+#' @import RCurl
+#' @import stats
 #'
 #' @useDynLib ruisu
 #'

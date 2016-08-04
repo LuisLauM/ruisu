@@ -36,6 +36,6 @@ Topografía (topo)
 \examples{
 getSatellitalMaps(initialDate = "2014-3-26", finalDate = "2014-4-17", what = "sst", timeRes = "day",
 lonRange = c(-90, -85), latRange = c(-5, 0), outputFormat = "png",
-outputDir = "D:/output/")
+outputDir = "../")
 }
 
