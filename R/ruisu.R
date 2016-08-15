@@ -15,3 +15,13 @@
 #' @docType package
 #' @keywords miscelánea, IMARPE
 NULL
+
+#' @title \code{data.frame} with new (corrected) AIP information.
+#' @name AIPData_new
+#' @description \code{data.frame} with 7 columns:
+#' @aliases AIPData_new
+#' @docType data
+#' @usage AIPData_new
+#' @format A \code{data.frame} with
+#' @references Instituto del Mar del Peru.
+NULL

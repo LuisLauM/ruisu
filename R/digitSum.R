@@ -1,15 +1,14 @@
 #' @name digitsum
 #' @aliases digitsum
-#' @title Devuelve la suma de los dígitos de un número.
+#' @title Returns sum of digit from number
 #'
-#' @description Función (recreativa) para separar los dígitos de un número y obtener
-#' la suma de ellos. Si \code{recursive = TRUE}, la suma se realizará hasta que el
-#' resultado final conste de una sola cifra.
+#' @description Recreational function that split digit from number and gets sum of them. If \code{recursive = TRUE}
+#' this operation will be done until output consist of one digit.
 #'
 #' @usage digitsum(x, recursive = FALSE)
 #'
-#' @param x Número o vector de números enteros o fraccionarios.
-#' @param recursive ¿Desea que la suma se realice hasta que el resultado conste de un dígito?
+#' @param x Numeric vector.
+#' @param recursive Would you want to sum until output consist of one digit?
 #'
 #' @export
 #'

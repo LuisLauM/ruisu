@@ -1,19 +1,16 @@
-#' counterZOO
-#' @description Función simuladora de contador de organismos manual.
+#' @title Laboratory Counter simulator
 #'
-#' @param spList Dirección de archivo que se desea utilizar para continuar el conteo. Si es
-#' \code{NULL}, se iniciará un conteo nuevo, solicitando el ingreso de una especie. Este archivo
-#' corresponderá a una tabla csv con las columnas "Especie", "Caracter", "Conteo", en ese orden.
-#' @param filepath Nombre del archivo en donde se guardarán los resultados.
-#' @param reset ¿Desea continuar con el conteo anterior o colocar todos los valores en cero?
+#' @param spList (Optional) Path of file to re start counting. If \code{NULL}, new counting will start. This file
+#' requires columns "Especie", "Caracter", "Conteo".
+#' @param filepath File name where the output file will be saved.
+#' @param reset Would you want to continue with the previous count (\code{FALSE}) or reset (put in zeros)?
 #'
-#' @details Esta función utiliza los siguientes comandos:
+#' @details This function uses next commands:
 #' \itemize{
-#' \item{\strong{new}{Para definir una especie nueva en el conteo.}}
-#' \item{\strong{correct}{Para corregir o realizar una operación sobre alguno de los valores
-#' de conteo. E.g. si se desea restar tres dígitos, se tendrá que digitar -3; si se desea sumar 2, +2.}}
-#' \item{\strong{end}{Finaliza el conteo: Muestra y guarda la tabla de conteo.}}
-#' \item{{\strong{help}}{Muestra la ayuda de comandos en consola.}}
+#' \item{\strong{new}{Defines a new species that will be included in the count.}}
+#' \item{\strong{correct}{Allows to make some basic operation in count values. E.g. +1, -2.}}
+#' \item{\strong{end}{Ends the count and save the file.}}
+#' \item{{\strong{help}}{Shows commands' help in console.}}
 #' }
 #'
 #' @export

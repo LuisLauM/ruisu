@@ -9,7 +9,7 @@ calculateWaterMass(data, method = "oliveros", sst = "sst", sss = "sss",
   dc = "dc", asFactors = TRUE)
 }
 \arguments{
-\item{data}{\code{data.frame} object including SST, SSS, month, depth, longitude and latitude information (View Details).}
+\item{data}{\code{data.frame} including SST, SSS, month, depth, longitude and latitude information (View Details).}
 
 \item{method}{Select method for water mass estimation: Oliveros (2020), Swartzman (2008) and Zuta (1978).}
 
@@ -27,9 +27,14 @@ calculateWaterMass(data, method = "oliveros", sst = "sst", sss = "sss",
 
 \item{dc}{Name of column which contains Distance to Coast info.}
 
-\item{asFactors}{\code{logical}. If \code{TRUE}, output will returned as a \code{factor} object, otherwise as a \code{character} vector.}
+\item{asFactors}{\code{logical}. If \code{TRUE}, output will returned as a \code{factor} object, otherwise as
+a \code{character} vector.}
 }
 \description{
 Title Function to identify water mass from different sources.
+}
+\details{
+Variables in \code{data} must be as next: SST (° S), SSS (PSU), depth (m), longitude (° W) and
+latitude (° E).
 }
 

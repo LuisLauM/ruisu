@@ -2,24 +2,18 @@
 % Please edit documentation in R/getProportion.R
 \name{getProportion}
 \alias{getProportion}
-\title{Función para obtener proporciones a partir de una tabla}
+\title{Get proportions from table}
 \usage{
 getProportion(table, group = 3)
 }
 \arguments{
-\item{table}{Tabla en modo \code{data.frame} o \code{matrix}. Todos los valores deben
-ser numéricos.}
+\item{table}{\code{data.frame} or \code{matrix} object. All values must be numeric.}
 
-\item{group}{Desea que las proporciones se tomen por fila (\code{group = 1}), columna
-(\code{group = 2}) o la tabla completa (\code{group = 3}, valor por defecto).}
-}
-\value{
-Una objeto (clase \code{matrix}) de las mismas dimensiones que el original con
-las proporciones solicitadas
+\item{group}{Specify how the proportions will be extracted. 1 indicates rows, 2 indicates
+columns and 3 indicates rows and columns (total).}
 }
 \description{
-Toma una tabla y devuelve los valores proporcionales ya sea por fila,
-columna o la tabla completa.
+Takes a table and gets propotions by row, column or total.
 }
 \examples{
 myTable <- matrix(data = runif(n = 15, min = 0, max = 30), ncol = 3)

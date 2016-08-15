@@ -5,26 +5,28 @@
 \title{Title plotIsoparalitoral}
 \usage{
 plotIsoparalitoral(codeList = NULL, add = FALSE, old = TRUE,
-  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE),
-  mapParams = list(database = "world"), ...)
+  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE, xlab =
+  NA, ylab = NA), mapParams = list(database = "world"), ...)
 }
 \arguments{
-\item{codeList}{Vector conteniendo los códigos de AIP a plotear.}
+\item{codeList}{AIP codes to plot.}
 
-\item{add}{¿Desea agregar las AIP a un gráfico presente (\code{TRUE}) o desea plotear un mapa
-con líneas de costa (\code{FALSE})?}
+\item{add}{logical flag that specifies whether to add to the current plot. If FALSE, a new plot is begun, using
+coordinates for Peruvian shore.}
 
-\item{old}{¿Desea utilizar las AIP anteriores (\code{AIPShapefile_old}) o las nuevas (\code{AIPShapefile_new})?}
+\item{old}{\code{logical}. Specifying whether to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).}
 
-\item{plotParams}{Objeto \code{lista} conteniendo parámetros adicionales pasados a la función \code{plot}. Se
-usará solo si \code{add = FALSE}.}
+\item{plotParams}{Extra parameters passed to \code{\link{plot}} function. This argument is ignored if \code{add = TRUE}.}
 
-\item{mapParams}{Objeto \code{lista} conteniendo parámetros adicionales pasados a la función \code{map}. Se
-usará solo si \code{add = FALSE}.}
+\item{mapParams}{Extra parameters passed to \code{\link{map}} function. This argument is ignored if \code{add = TRUE}.}
 
-\item{...}{Parámetros adicionales pasados a la función \code{\link{plot.SpatialPolygons}}.}
+\item{...}{Extra parameters passed to \code{plot.SpatialPolygons} function.}
 }
 \description{
 Title plotIsoparalitoral
+}
+\details{
+\code{plot.SpatialPolygons} is an internal function of \code{\link{sp}}. Some important parameters are: \code{border} which
+allows to specify color (or colors if a vector) of each AIP. \code{col} is useful to modify fill color of AIP.
 }
 

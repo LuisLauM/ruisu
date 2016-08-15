@@ -7,14 +7,12 @@
 centroidAssigner(isoCode, old = TRUE)
 }
 \arguments{
-\item{isoCode}{Vector de códigos de AIP de los que se desea obtener  los centroides.}
+\item{isoCode}{Vector with AIP codes.}
 
-\item{old}{\code{logical}. ¿Desea utilizar la base de datos antigua (\code{old = TRUE}) o nueva \code{old = FALSE}?}
+\item{old}{\code{logical}. Specifying whether to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).}
 }
 \description{
-Esta función toma un vector de códigos de AIP y retorna las coordenadas de los  centroides
-(longitud, latitud). El parámetro \code{old} controla la base de AIP a utilizar: Si \code{old = TRUE},
-se usará la base de AIP creada en llos 90'; de otro modo, se utilizará la creada en 2016.
+This function takes a vector of AIP codes and returns centroids (center of mass) in lon-lat values.
 }
 \examples{
 areaCodes <- c(1050, 4043, 17073, 27103)

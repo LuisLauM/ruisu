@@ -2,19 +2,18 @@
 % Please edit documentation in R/digitSum.R
 \name{digitsum}
 \alias{digitsum}
-\title{Devuelve la suma de los dígitos de un número.}
+\title{Returns sum of digit from number}
 \usage{
 digitsum(x, recursive = FALSE)
 }
 \arguments{
-\item{x}{Número o vector de números enteros o fraccionarios.}
+\item{x}{Numeric vector.}
 
-\item{recursive}{¿Desea que la suma se realice hasta que el resultado conste de un dígito?}
+\item{recursive}{Would you want to sum until output consist of one digit?}
 }
 \description{
-Función (recreativa) para separar los dígitos de un número y obtener
-la suma de ellos. Si \code{recursive = TRUE}, la suma se realizará hasta que el
-resultado final conste de una sola cifra.
+Recreational function that split digit from number and gets sum of them. If \code{recursive = TRUE}
+this operation will be done until output consist of one digit.
 }
 \examples{
 digitsum(1516)

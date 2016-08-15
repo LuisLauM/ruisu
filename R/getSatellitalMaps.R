@@ -21,8 +21,9 @@
 #' lonRange = c(-90, -85), latRange = c(-5, 0), outputFormat = "png",
 #' outputDir = "../")
 
-getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "month", what = "SST", dateList = NULL,
-                              lonRange = c(-85, -70), latRange = c(-20, -2), outputFormat = "png", outputDir = "."){
+getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "month", what = "SST", atDepth = NULL,
+                              dateList = NULL, lonRange = c(-85, -70), latRange = c(-20, -2), outputFormat = "png",
+                              outputDir = "."){
 
   # what: sst, sss, chl, topo
 
@@ -54,8 +55,6 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
     seqTime <- seq(from = as.Date(paste(year(initialDate), month(initialDate), day(initialDate), sep = "-")),
                    to = as.Date(paste(year(finalDate), month(finalDate), day(finalDate), sep = "-")),
                    by = timePrefix[3])
-
-    print(seqTime)
 
     if(initialDate > finalDate)
       stop("initialDate is after finalDate.")
@@ -123,11 +122,24 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
         satellite <- "Aqua MODIS"
       }
 
-      prefix1 <- paste0(prefix1, timePrefix[1], "day.")
+      prefix1 <- paste0(prefix1, timePrefix[1], "day_LonPM180.")
 
       prefix2 <- "sst"
       prefix3 <- "[(0.0)]"
 
+      tempLons <- lonRange2
+
+    }else if(tolower(what) == "sst_soda"){
+
+      # Prefix for salinity
+      prefix1 <- "hawaii_d90f_20ee_c4cb_LonPM180."
+      prefix2 <- "temp"
+      prefix3 <- paste0("[(", ifelse(is.null(atDepth), 5.01, atDepth), ")]")
+
+      # tempLats <- rev(latRange)
+      tempLons <- lonRange2
+
+      satellite <- "SODA-POP-2.2.4"
     }else if(tolower(what) == "topo"){
       # Prefix for topography
       prefix1 <- "usgsCeSrtm30v6."
@@ -171,6 +183,27 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
       tempLons <- lonRange2
 
       satellite <- "Aquarius SSS v4"
+    }else if(tolower(what) == "sss_soda"){
+
+      # Prefix for salinity
+      prefix1 <- "hawaii_d90f_20ee_c4cb_LonPM180."
+      prefix2 <- "salt"
+      prefix3 <- paste0("[(", ifelse(is.null(atDepth), 5.01, atDepth), ")]")
+
+      # tempLats <- rev(latRange)
+      tempLons <- lonRange2
+
+      satellite <- "SODA-POP-2.2.4"
+    }else if(tolower(what) == "sealevel"){
+
+      # Prefix for sea level
+      prefix1 <- paste0("erdTAssh", timePrefix[1], "day_LonPM180.")
+      prefix2 <- "ssh"
+      prefix3 <- "[(0.0)]"
+
+      tempLons <- lonRange2
+
+      satellite <- "AVISOcean"
     }
 
     if(is.null(datePrefix))
@@ -183,7 +216,7 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
                       tempLats[2], ")][(", tempLons[1], "):(", tempLons[2], ")]&.draw=surface&.vars=longitude|latitude|",
                       prefix2, "&.colorBar=|||||")
 
-    # print(tempURL)
+    print(tempURL)
 
     # If URL is incorrect or if file is not available, show warning message and save failed URL
     if(!url.exists(url = tempURL)){

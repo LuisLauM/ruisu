@@ -5,7 +5,7 @@
 \title{Obtener información satelital de variables oceanográficas}
 \usage{
 getSatellitalMaps(initialDate = NULL, finalDate = NULL, timeRes = "month",
-  what = "SST", dateList = NULL, lonRange = c(-85, -70),
+  what = "SST", atDepth = NULL, dateList = NULL, lonRange = c(-85, -70),
   latRange = c(-20, -2), outputFormat = "png", outputDir = ".")
 }
 \arguments{
