@@ -1,9 +1,9 @@
-#' @title Obtener información satelital de variables oceanográficas
-#' @description Esta función toma un rango de fechas y coordenadas y extrae los mapas de distribución de
-#' Temperatura Superficial del Mar (SST), Salinidad Superficial del Mar (SSS), Clorofila-a (chl) y
-#' Topografía (topo)
+#' @title Get satellital information for oceanographic variables
+#' @description This function uses date and space range and get maps for Sea Surface Temperature (SST),
+#' Sea Surface Salinity (SSS), Chlorophyll-a (Chl), Topography (topo), Sea level (sealevel) and SODA
+#' estimations for Temperature (sst_soda) and Salinity (sss_soda) by depth (\code{atDepth} parameter).
 #'
-#' @param initialDate Fecha inicial para la extracción de mapas.
+#' @param initialDate Initial date Fecha inicial para la extracción de mapas.
 #' @param finalDate Fecha final para la extracción de mapas.
 #' @param timeRes Resolución temporal para la obtención de mapas: Mensual ('month') o diario ('day').
 #' @param what ¿Qué variable desea descargar? Ver detalles.

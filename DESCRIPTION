@@ -9,7 +9,7 @@ Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
 Description: Tools for common tasks
 License: GPL (>= 2)
 LazyData: true
-Depends: maps
+Depends: maps, sp
 Imports:
     Rcpp (>= 0.12.3),
     lubridate,

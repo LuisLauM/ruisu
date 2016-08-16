@@ -2,14 +2,14 @@
 % Please edit documentation in R/getSatellitalMaps.R
 \name{getSatellitalMaps}
 \alias{getSatellitalMaps}
-\title{Obtener información satelital de variables oceanográficas}
+\title{Get satellital information for oceanographic variables}
 \usage{
 getSatellitalMaps(initialDate = NULL, finalDate = NULL, timeRes = "month",
   what = "SST", atDepth = NULL, dateList = NULL, lonRange = c(-85, -70),
   latRange = c(-20, -2), outputFormat = "png", outputDir = ".")
 }
 \arguments{
-\item{initialDate}{Fecha inicial para la extracción de mapas.}
+\item{initialDate}{Initial date Fecha inicial para la extracción de mapas.}
 
 \item{finalDate}{Fecha final para la extracción de mapas.}
 
@@ -29,9 +29,9 @@ image (png).}
 \item{outputDir}{Directorio para la descarga de archivos.}
 }
 \description{
-Esta función toma un rango de fechas y coordenadas y extrae los mapas de distribución de
-Temperatura Superficial del Mar (SST), Salinidad Superficial del Mar (SSS), Clorofila-a (chl) y
-Topografía (topo)
+This function uses date and space range and get maps for Sea Surface Temperature (SST),
+Sea Surface Salinity (SSS), Chlorophyll-a (Chl), Topography (topo), Sea level (sealevel) and SODA
+estimations for Temperature (sst_soda) and Salinity (sss_soda) by depth (\code{atDepth} parameter).
 }
 \examples{
 getSatellitalMaps(initialDate = "2014-3-26", finalDate = "2014-4-17", what = "sst", timeRes = "day",

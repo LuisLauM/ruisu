@@ -10,7 +10,15 @@ isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = 
 
   referenceShapefile <- get(ifelse(test = isTRUE(old), yes = "AIPShapefile_old", no = "AIPShapefile_new"))
 
-  dataPoints <- as.data.frame(dataPoints[,c(colLon, colLat)])
+  if(class(dataPoints) == "data.frame"){
+    dataPoints <- as.data.frame(dataPoints[,c(colLon, colLat)])
+  }else if(class(dataPoints) == "numeric"){
+    dataPoints <- data.frame(lon = dataPoints[1], lat = dataPoints[2])
+  }
+
+  dataPoints <- switch(class(dataPoints),
+                       "data.frame" = as.data.frame(dataPoints[,c(colLon, colLat)]),
+                       "numeric" = data.frame(lon = dataPoints[1], lat = dataPoints[2]))
 
   coordinates(dataPoints) <- dataPoints
 

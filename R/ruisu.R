@@ -3,6 +3,7 @@
 #' @import rgdal
 #' @import RCurl
 #' @import stats
+#' @import sp
 #'
 #' @useDynLib ruisu
 #'
