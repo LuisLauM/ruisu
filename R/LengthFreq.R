@@ -41,10 +41,10 @@
 #' @param totalLabel
 #'
 #' @export
-lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
+lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames = NULL,
                                 xlab = "Longitud (cm)", ylab = "Frecuencia (%)", ylim = NULL,
                                 cex.axis = 1.2, xlim = NULL, Xinterval = 1, Yinterval = 10,
-                                lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid",
+                                lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid", lineCategory = -2,
                                 styleLab = 2, jValue = NA, jtext = NA, jcex = 1, jtextcol = "black",
                                 cat.cex = 1, jround = 1, jcol = "red", jwd = 1,
                                 jty = "dotted", sinpesca = "Sin pesca", sinjuveniles = "Sin juveniles",
@@ -131,6 +131,13 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
     ylim <- c(0, max(c(max(data2, na.rm = TRUE), ylim[2])))
   }
 
+  if(is.null(categoryNames)){
+    categoryNames <- colnames(data)
+  }else{
+    categoryNames <- c("", categoryNames)
+  }
+
+
   x11()
   par(mfrow = c(ncol(data) - 1, 1), mar = c(0, 2, 0, 2), oma = c(6, 4, 1, 1))
 
@@ -212,7 +219,7 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
       mtext(lentext, 1, line = -1, adj = 1 - adj, cex = jcex - 0.2) # Rango tallas
     }
 
-    mtext(colnames(data)[i], 3, line = -2, adj = adj, cex = cat.cex) # Categor?as
+    mtext(categoryNames[i], 3, line = lineCategory, adj = adj, cex = cat.cex) # Categor?as
   }
 
   atX = seq(xlim[1], xlim[2], by = Xinterval)

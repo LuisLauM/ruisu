@@ -6,14 +6,15 @@
 category (months, latitudes, years, etc.).}
 \usage{
 lengthFrequencyPlot(file, file2 = NA, profile = NULL,
-  xlab = "Longitud (cm)", ylab = "Frecuencia (\%)", ylim = NULL,
-  cex.axis = 1.2, xlim = NULL, Xinterval = 1, Yinterval = 10,
-  lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid", styleLab = 2,
-  jValue = NA, jtext = NA, jcex = 1, jtextcol = "black", cat.cex = 1,
-  jround = 1, jcol = "red", jwd = 1, jty = "dotted",
-  sinpesca = "Sin pesca", sinjuveniles = "Sin juveniles", zeros = FALSE,
-  nzeros = 0, showRange = TRUE, adj = 0.02, showJuv = TRUE,
-  smooth = TRUE, spar = 0.01, totalFreq = FALSE, totalLabel = "Total")
+  categoryNames = NULL, xlab = "Longitud (cm)", ylab = "Frecuencia (\%)",
+  ylim = NULL, cex.axis = 1.2, xlim = NULL, Xinterval = 1,
+  Yinterval = 10, lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid",
+  lineCategory = -2, styleLab = 2, jValue = NA, jtext = NA, jcex = 1,
+  jtextcol = "black", cat.cex = 1, jround = 1, jcol = "red", jwd = 1,
+  jty = "dotted", sinpesca = "Sin pesca", sinjuveniles = "Sin juveniles",
+  zeros = FALSE, nzeros = 0, showRange = TRUE, adj = 0.02,
+  showJuv = TRUE, smooth = TRUE, spar = 0.01, totalFreq = FALSE,
+  totalLabel = "Total")
 }
 \arguments{
 \item{file}{\code{character}. File path of length frequencies table.}
