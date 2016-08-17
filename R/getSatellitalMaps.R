@@ -23,7 +23,7 @@
 
 getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "month", what = "SST", atDepth = NULL,
                               dateList = NULL, lonRange = c(-85, -70), latRange = c(-20, -2), outputFormat = "png",
-                              outputDir = "."){
+                              outputDir = ".", showURL = FALSE){
 
   # what: sst, sss, chl, topo
 
@@ -216,7 +216,9 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
                       tempLats[2], ")][(", tempLons[1], "):(", tempLons[2], ")]&.draw=surface&.vars=longitude|latitude|",
                       prefix2, "&.colorBar=|||||")
 
-    print(tempURL)
+    if(isTRUE(showURL)){
+      cat(paste0("\n", tempURL))
+    }
 
     # If URL is incorrect or if file is not available, show warning message and save failed URL
     if(!url.exists(url = tempURL)){

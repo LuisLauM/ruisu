@@ -6,7 +6,8 @@
 \usage{
 getSatellitalMaps(initialDate = NULL, finalDate = NULL, timeRes = "month",
   what = "SST", atDepth = NULL, dateList = NULL, lonRange = c(-85, -70),
-  latRange = c(-20, -2), outputFormat = "png", outputDir = ".")
+  latRange = c(-20, -2), outputFormat = "png", outputDir = ".",
+  showURL = FALSE)
 }
 \arguments{
 \item{initialDate}{Initial date Fecha inicial para la extracción de mapas.}

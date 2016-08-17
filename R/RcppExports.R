@@ -6,6 +6,7 @@
 #' @param dataTo Reference lon-lat \code{data.frame}.
 #' @param greatCircle \code{logical}; si es \code{FALSE}, se devolverá la distancia euclidiana: si es
 #' \code{TRUE} devolverá la DIstancia de Gran Círculo (WGS84).
+#' @useDynLib ruisu
 #' @export
 #' @importFrom Rcpp evalCpp
 p2pDistance <- function(dataFrom, dataTo, greatCircle = FALSE) {

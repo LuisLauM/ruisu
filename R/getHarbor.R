@@ -27,12 +27,10 @@ getHarbor <- function(myHarbor){
 
           break
         }
-      }else{
-        if(is.element(myHarbor, tempPattern2)){
-          output <- c(output, i)
+      }else if(grepl(pattern = tempPattern[1], x = myHarbor)){
+        output <- c(output, i)
 
-          break
-        }
+        break
       }
     }
   }

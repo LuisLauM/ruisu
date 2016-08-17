@@ -60,7 +60,6 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
     data[,apply(data, 2, function(x) sum(x > 0, na.rm = TRUE)) < 2] <- 0
   }
 
-
   if(zeros | smooth){
     data[is.na(data)] = 0
   }else{
@@ -94,7 +93,6 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
     ylim <- c(0, roundUp(max(data, na.rm = TRUE)))
   }
 
-
   if(is.null(xlim)){
     xlim <- c(roundUp(min(data[,1])), roundUp(max(data[,1])))
   }
@@ -114,7 +112,6 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
       Xinterval <- 1
       jValue <- 29
       jtext <- "juv = "
-
     }
   }
 
@@ -155,7 +152,6 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
       }
     }
 
-
     if(!is.na(file2)){
       if(sum(is.na(data2[,i])) == nrow(data2)){
         points(data2[,1], rep(0, nrow(data2)), col = "white",
@@ -185,7 +181,6 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL,
     if(!is.na(jValue)){
       abline(v = jValue, lty = jty, col = jcol, lwd = jwd)
     }
-
 
     if(isTRUE(showJuv)){
       if(juv(data[,i], data[,1], jValue) != 0){
