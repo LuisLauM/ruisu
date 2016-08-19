@@ -46,7 +46,7 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
                                 cex.axis = 1.2, xlim = NULL, Xinterval = 1, Yinterval = 10,
                                 lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid", lineCategory = -2,
                                 styleLab = 2, jValue = NA, jtext = NA, jcex = 1, jtextcol = "black",
-                                cat.cex = 1, jround = 1, jcol = "red", jwd = 1,
+                                cat.cex = 1, jround = 1, jcol = "red", jwd = 1, jline = -1.5,
                                 jty = "dotted", sinpesca = "Sin pesca", sinjuveniles = "Sin juveniles",
                                 zeros = FALSE, nzeros = 0, showRange = TRUE, adj = 0.02, showJuv = TRUE,
                                 smooth = TRUE, spar = 0.01, totalFreq = FALSE,
@@ -149,7 +149,12 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
       if(smooth){
         model <- smooth.spline(data[,1], data[,i], spar = spar)
         model <- predict(model, seq(xlim[1], xlim[2], diff(xlim)/500))
-        model$y[which(model$y < 0)] <- 0
+
+        if(!isTRUE(zeros)){
+          model$y[which(model$y < 0.1)] <- NA
+        }else{
+          model$y[which(model$y < 0.1)] <- 0
+        }
 
         plot(model, xlab = NA, ylab = NA, axes = FALSE, ylim = ylim, type = "l",
              lty = lty[i - 1], xlim = xlim, col = lcol[i - 1], lwd = lwd)
@@ -166,7 +171,12 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
       }else if(smooth){
         model <- smooth.spline(data2[,1], data2[,i], spar = spar)
         model <- predict(model, seq(xlim[1], xlim[2], diff(xlim)/500))
-        model$y[which(model$y < 0)] <- 0
+
+        if(!isTRUE(zeros)){
+          model$y[which(model$y < 0.1)] <- NA
+        }else{
+          model$y[which(model$y < 0.1)] <- 0
+        }
 
         points(model, ylim = ylim, type = "l",
                lty = lty[i - 1], xlim = xlim, col = lcol2, lwd = lwd)
@@ -203,7 +213,7 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
         }
       }
 
-      mtext(juvtext, 3, line = -1.5, adj = 1 - adj, cex = jcex, col = jtextcol) # juveniles
+      mtext(juvtext, 3, line = jline, adj = 1 - adj, cex = jcex, col = jtextcol) # juveniles
     }
 
     if(showRange){
