@@ -13,6 +13,8 @@
 #' @param outputFormat Formato de descarga de archivos: NetCDF (nc), Valores separados por comas (csv),
 #' image (png).
 #' @param outputDir Directorio para la descarga de archivos.
+#' @param atDepth Define depth value for getting info.
+#' @param showURL Do you want to show the URL each time?
 #'
 #' @export
 #'
@@ -23,7 +25,7 @@
 
 getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "month", what = "SST", atDepth = NULL,
                               dateList = NULL, lonRange = c(-85, -70), latRange = c(-20, -2), outputFormat = "png",
-                              outputDir = ".", showURL = FALSE, compile = FALSE){
+                              outputDir = ".", showURL = FALSE){
 
   if(what != "png" && isTRUE(compile)){
     outputDir <- tempdir()
@@ -34,14 +36,14 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
 
   cat(paste0("\n Download finished! There were ", length(errorList), " problems. \n"))
 
-  if(what != "png" && isTRUE(compile)){
-
-    cat("\nMaking compilation.. .")
-
-
-
-    cat("\nCompilation finished.")
-  }
+  # if(what != "png" && isTRUE(compile)){
+  #
+  #   cat("\nMaking compilation.. .")
+  #
+  #
+  #
+  #   cat("\nCompilation finished.")
+  # }
 
   # Final output will be a list with failed URLs
   return(if(is.null(errorList)) invisible() else errorList)

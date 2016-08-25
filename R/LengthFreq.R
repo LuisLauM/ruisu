@@ -52,10 +52,14 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
                                 smooth = TRUE, spar = 0.01, totalFreq = FALSE,
                                 totalLabel = "Total"){
 
-  data <- read.csv(file, stringsAsFactors = FALSE, check.names = FALSE)
+  if(class(file) == "data.frame"){
+    data <- file
+  }else{
+    data <- read.csv(file, stringsAsFactors = FALSE, check.names = FALSE)
+  }
 
   if(totalFreq){
-    data <- data.frame(data[,1], apply(data, 1, sum, na.rm = TRUE))
+    data <- data.frame(data[,1], apply(data, 1, sum, na.rm = TRUE), stringsAsFactors = FALSE)
   }else{
     data[,apply(data, 2, function(x) sum(x > 0, na.rm = TRUE)) < 2] <- 0
   }
@@ -67,12 +71,13 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
   }
 
   if(totalFreq){
-    data <- data.frame(data[,1], data[,2]/sum(data[,2], na.rm = TRUE)*100, check.names = FALSE)
+    data <- data.frame(data[,1], data[,2]/sum(data[,2], na.rm = TRUE)*100, check.names = FALSE,
+                       stringsAsFactors = FALSE)
     colnames(data) <- c("length", totalLabel)
   }else{
     data <- data.frame(data[,1],
                        apply(data[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
-                       check.names = FALSE)
+                       check.names = FALSE, stringsAsFactors = FALSE)
   }
 
   if(nzeros > 0){
@@ -112,6 +117,10 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
       Xinterval <- 1
       jValue <- 29
       jtext <- "juv = "
+    }else if(tolower(profile) == "bonito"){
+      Xinterval <- 1
+      jValue <- 52
+      jtext <- "juv = "
     }
   }
 
@@ -124,10 +133,16 @@ lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames 
   lty <- rep(lty, length.out = ncol(data) - 1)
 
   if(!is.na(file2)){
-    data2 <- read.csv(file2)[,seq(ncol(data))]
+    if(class(file) == "data.frame"){
+      data2 <- file2
+    }else{
+      data2 <- read.csv(file2, stringsAsFactors = FALSE, check.names = FALSE)
+    }
+    data2 <- data2[,seq(ncol(data))]
     data2 <- data.frame(data2[,1],
                         apply(data2[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
-                        check.names = FALSE)
+                        check.names = FALSE,
+                        stringsAsFactors = FALSE)
     ylim <- c(0, max(c(max(data2, na.rm = TRUE), ylim[2])))
   }
 

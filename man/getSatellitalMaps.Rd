@@ -18,6 +18,8 @@ getSatellitalMaps(initialDate = NULL, finalDate = NULL, timeRes = "month",
 
 \item{what}{¿Qué variable desea descargar? Ver detalles.}
 
+\item{atDepth}{Define depth value for getting info.}
+
 \item{dateList}{Lista de fechas para la extracción de mapas.}
 
 \item{lonRange}{Rango de coordenadas de longitud. Si es \code{NULL}, tomará valores entre 85°W y 90°W.}
@@ -28,6 +30,8 @@ getSatellitalMaps(initialDate = NULL, finalDate = NULL, timeRes = "month",
 image (png).}
 
 \item{outputDir}{Directorio para la descarga de archivos.}
+
+\item{showURL}{Do you want to show the URL each time?}
 }
 \description{
 This function uses date and space range and get maps for Sea Surface Temperature (SST),
