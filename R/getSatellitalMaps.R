@@ -27,9 +27,9 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
                               dateList = NULL, lonRange = c(-85, -70), latRange = c(-20, -2), outputFormat = "png",
                               outputDir = ".", showURL = FALSE){
 
-  if(what != "png" && isTRUE(compile)){
-    outputDir <- tempdir()
-  }
+  # if(what != "png" && isTRUE(compile)){
+  #   outputDir <- tempdir()
+  # }
 
   getSatellitalMaps_internal(initialDate, finalDate, timeRes, what, atDepth, dateList, lonRange, latRange, outputFormat,
                              outputDir, showURL)
