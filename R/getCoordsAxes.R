@@ -9,6 +9,13 @@
 #' @examples
 getCoordsAxes <- function(coord, what){
 
+  output <- sapply(coord, .getCoordsAxes, what = what)
+
+  return(output)
+}
+
+.getCoordsAxes <- function(coord, what){
+
   if(tolower(what) == "lon"){
     if(coord < 0){
       sufix <- "\u00b0 W"
