@@ -20,9 +20,10 @@ centroidAssigner <- function(isoCode, old = TRUE)
 
   isoAreas <- get(isoAreas)
 
-  output <- data.frame(lon = isoAreas[match(isoCode, isoAreas$code), "lon"],
-                       lat = isoAreas[match(isoCode, isoAreas$code), "lat"],
-                       stringsAsFactors = FALSE)
+  index <- match(isoCode, isoAreas$code)
+  output <- data.frame(isoCode, isoAreas[index, c("x", "y")])
+  colnames(output) <- c("area", "lon", "lat")
+  rownames(output) <- seq(nrow(output))
 
   return(output)
 }

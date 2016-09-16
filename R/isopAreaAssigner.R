@@ -18,7 +18,12 @@ isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = 
 
   dataPoints <- switch(class(dataPoints),
                        "data.frame" = as.data.frame(dataPoints[,c(colLon, colLat)]),
-                       "numeric" = data.frame(lon = dataPoints[1], lat = dataPoints[2]))
+                       "numeric" = data.frame(lon = dataPoints[1], lat = dataPoints[2], stringsAsFactors = FALSE))
+
+  output <- rep(NA, nrow(dataPoints))
+
+  index <- complete.cases(dataPoints)
+  dataPoints <- dataPoints[index,]
 
   coordinates(dataPoints) <- dataPoints
 
@@ -26,5 +31,7 @@ isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = 
 
   dataPoints <- over(x = dataPoints, y = referenceShapefile)
 
-  return(dataPoints$code)
+  output[index] <- dataPoints$code
+
+  return(output)
 }
