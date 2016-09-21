@@ -4,12 +4,32 @@
 \alias{minDistanceToCoast}
 \title{Title}
 \usage{
-minDistanceToCoast(data, colLon = "lon", colLat = "lat")
+minDistanceToCoast(data, colLon = "lon", colLat = "lat",
+  countryFilter = "peru", unit = "mn")
 }
 \arguments{
-\item{colLat}{}
+\item{data}{\code{data.frame} with coords that will be used to calculate min distance to coast line.}
+
+\item{colLon}{Name or position of column for longitude. As default, it will be \code{lon}.}
+
+\item{colLat}{Name or position of column for latitude As default, it will be \code{lat}.}
+
+\item{countryFilter}{Select the country for make comparation}
+
+\item{unit}{Define the unit for outputs: nm (nautical miles), degrees, m (meters).}
 }
 \description{
 Title
+}
+\examples{
+n <- 10000
+allData <- data.frame(lon = runif(n, -80, -70), lat = runif(n, -18, -2),
+                      stringsAsFactors = FALSE)
+
+# Only consider data on the sea
+allData <- allData[!is.na(isopArea.assigner(allData)),]
+
+# Get distances
+minValues <- minDistanceToCoast(allData)
 }
 
