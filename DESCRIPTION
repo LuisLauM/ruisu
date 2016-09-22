@@ -17,6 +17,8 @@ Imports:
     stats,
     RCurl,
     bitops,
-    stringr
+    stringr,
+    stringi,
+    magrittr
 LinkingTo: Rcpp
 RoxygenNote: 5.0.1
