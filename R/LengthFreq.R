@@ -5,253 +5,165 @@
 #' smooth: logical. If TRUE, function uses an spline function to plot by categories.
 #' This function uses a data with categories at cols and length at rows.
 #'
-#' @param file \code{character}. File path of length frequencies table.
-#' @param file2 \code{character}. File path of second length frequencies table.
-#' @param profile \code{character}. Profile by species.
-#' @param xlab A title for the X axis.
-#' @param ylab A title for the Y axis.
-#' @param cex.axis Size of axis text.
-#' @param xlim Limits for the X axis.
-#' @param Xinterval Intervals for the X axis.
-#' @param Yinterval Intervals for the Y axis.
-#' @param lcol Vector of colors for length lines (one or more).
-#' @param lcol2 Color (just one) of length line for second table.
-#' @param lwd Width of length lines.
-#' @param lty Vector of line type for length lines (one or more).
-#' @param styleLab Numer (0,1,2,3), the style of axis labels.
-#' @param jValue Juvenile length.
-#' @param jtext
-#' @param jcex
-#' @param jtextcol
-#' @param cat.cex
-#' @param jround
-#' @param jcol
-#' @param jwd
-#' @param jty
-#' @param sinpesca
-#' @param sinjuveniles
-#' @param zeros
-#' @param nzeros
-#' @param showRange
-#' @param adj
-#' @param showJuv
+#' @param file1 Indica la tabla desde donde se dibujarán las frecuencias por talla. Ver detalles.
+#' @param file2 Indica la tabla secundaria desde donde se dibujarán las frecuencias por talla. Ver detalles.
+#' @param xlim
+#' @param xInterval
+#' @param ylim
+#' @param yInterval
+#' @param ltys1
+#' @param lwds1
+#' @param cols1
+#' @param ltys2
+#' @param lwds2
+#' @param cols2
+#' @param juvLine
+#' @param juvLty
+#' @param juvLwd
+#' @param juvCol
+#' @param cex.axis
+#' @param cex.lab
 #' @param smooth
-#' @param spar
-#' @param totalFreq
-#' @param totalLabel
+#' @param oma
+#' @param yLab
+#' @param noDataLabel
+#' @param juvLabel
+#' @param yLabFactor
+#' @param relative
+#' @param profile
+#' @param xlab
 #'
 #' @export
-lengthFrequencyPlot <- function(file, file2 = NA, profile = NULL, categoryNames = NULL,
-                                xlab = "Longitud (cm)", ylab = "Frecuencia (%)", ylim = NULL,
-                                cex.axis = 1.2, xlim = NULL, Xinterval = 1, Yinterval = 10,
-                                lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid", lineCategory = -2,
-                                styleLab = 2, jValue = NA, jtext = NA, jcex = 1, jtextcol = "black",
-                                cat.cex = 1, jround = 1, jcol = "red", jwd = 1, jline = -1.5,
-                                jty = "dotted", sinpesca = "Sin pesca", sinjuveniles = "Sin juveniles",
-                                zeros = FALSE, nzeros = 0, showRange = TRUE, adj = 0.02, showJuv = TRUE,
-                                smooth = TRUE, spar = 0.01, totalFreq = FALSE,
-                                totalLabel = "Total"){
+lengthFrequencyPlot <- function(file1, file2 = NULL,
+                                profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
+                                ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
+                                juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", cex.axis = 1, cex.lab = 1,
+                                smooth = FALSE, oma = c(5, 5, 1, 3), xLab = "Longitud total (cm)", yLab = "Frecuencia (%)",
+                                noDataLabel = "Sin datos", juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE){
 
-  if(class(file) == "data.frame"){
-    data <- file
+  if(is.element(class(file1), c("data.frame", "matrix"))){
+    file1 <- file1[,-1]
   }else{
-    data <- read.csv(file, stringsAsFactors = FALSE, check.names = FALSE)
+    file1 <- read.csv(file = file1, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
   }
 
-  if(totalFreq){
-    data <- data.frame(data[,1], apply(data, 1, sum, na.rm = TRUE), stringsAsFactors = FALSE)
-  }else{
-    data[,apply(data, 2, function(x) sum(x > 0, na.rm = TRUE)) < 2] <- 0
-  }
-
-  if(zeros | smooth){
-    data[is.na(data)] = 0
-  }else{
-    data[data == 0] <- NA
-  }
-
-  if(totalFreq){
-    data <- data.frame(data[,1], data[,2]/sum(data[,2], na.rm = TRUE)*100, check.names = FALSE,
-                       stringsAsFactors = FALSE)
-    colnames(data) <- c("length", totalLabel)
-  }else{
-    data <- data.frame(data[,1],
-                       apply(data[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
-                       check.names = FALSE, stringsAsFactors = FALSE)
-  }
-
-  if(nzeros > 0){
-    iniIndex <- apply(apply(data[,-1], 2, is.na), 2, VectorInVector, pattern = c(TRUE, FALSE))
-    finIndex <- apply(apply(data[,-1], 2, is.na), 2, VectorInVector, pattern = c(FALSE, TRUE))
-    for(i in seq(2, ncol(data))){
-      if(sum(is.na(data[,i])) == nrow(data)){
-        next
-      }
-
-      index <- c(min(iniIndex[[i - 1]]), max(finIndex[[i - 1]]))
-      index <- c(seq(index[1] - nzeros + 1, index[1]), seq(index[2], index[2] + nzeros - 1))
-      data[index,i] <- 0
+  if(!is.null(file2)){
+    if(is.element(class(file1), c("data.frame", "matrix"))){
+      file2 <- file2[,-1]
+    }else{
+      file2 <- read.csv(file = file2, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
     }
-  }
 
-  if(is.null(ylim)){
-    ylim <- c(0, roundUp(max(data, na.rm = TRUE)))
-  }
+    if(ncol(file1) != ncol(file2)){
+      stop("'file1' and 'file2' must have the same number of columns.")
+    }
 
-  if(is.null(xlim)){
-    xlim <- c(roundUp(min(data[,1])), roundUp(max(data[,1])))
+    if(isTRUE(relative)){
+      file2 <- sweep(as.matrix(file2), 2, colSums(file2, na.rm = TRUE), "/")*100
+    }
+
+    file2[file2 <= 0 | is.na(file2)] <- 0
+
+    ltys2 <- rep(ltys2, length.out = ncol(file2))
+    lwds2 <- rep(lwds2, length.out = ncol(file2))
+    cols2 <- rep(cols2, length.out = ncol(file2))
   }
 
   if(!is.null(profile)){
-    if(tolower(profile) == "anchoveta"){
-      Xinterval <- 0.5
-      jValue <- 12
-      jtext <- "juv = "
 
-    }else if(tolower(profile) == "jurel"){
-      Xinterval <- 1
-      jValue <- 31
-      jtext <- "juv = "
-
-    }else if(tolower(profile) == "caballa"){
-      Xinterval <- 1
-      jValue <- 29
-      jtext <- "juv = "
-    }else if(tolower(profile) == "bonito"){
-      Xinterval <- 1
-      jValue <- 52
-      jtext <- "juv = "
-    }
+    xlim <- switch(tolower(profile),
+                   anchoveta = c(2, 20),
+                   jurel = c(2, 50))
+    juvLine <- switch(tolower(profile),
+                      anchoveta = 12,
+                      jurel = 31)
+    xInterval <- switch(tolower(profile),
+                        anchoveta = 0.5,
+                        jurel = 1)
   }
 
-  lcol <- rep(lcol, length.out = ncol(data) - 1)
+  file1[file1 <= 0 | is.na(file1)] <- 0
 
-  if(is.null(lcol2)){
-    lcol2 <- "gray31"
+  if(isTRUE(relative)){
+    file1 <- sweep(as.matrix(file1), 2, colSums(file1, na.rm = TRUE), "/")*100
   }
 
-  lty <- rep(lty, length.out = ncol(data) - 1)
-
-  if(!is.na(file2)){
-    if(class(file) == "data.frame"){
-      data2 <- file2
-    }else{
-      data2 <- read.csv(file2, stringsAsFactors = FALSE, check.names = FALSE)
-    }
-    data2 <- data2[,seq(ncol(data))]
-    data2 <- data.frame(data2[,1],
-                        apply(data2[,-1], 2, function(x) 100*x/sum(x, na.rm = TRUE)),
-                        check.names = FALSE,
-                        stringsAsFactors = FALSE)
-    ylim <- c(0, max(c(max(data2, na.rm = TRUE), ylim[2])))
+  if(is.null(xlim)){
+    xlim <- range(an(rownames(file1)))
   }
 
-  if(is.null(categoryNames)){
-    categoryNames <- colnames(data)
-  }else{
-    categoryNames <- c("", categoryNames)
-  }
+  ltys1 <- rep(ltys1, length.out = ncol(file1))
+  lwds1 <- rep(lwds1, length.out = ncol(file1))
+  cols1 <- rep(cols1, length.out = ncol(file1))
 
+  file1[file1 <= 0 | is.na(file1)] <- 0
 
   x11()
-  par(mfrow = c(ncol(data) - 1, 1), mar = c(0, 2, 0, 2), oma = c(6, 4, 1, 1))
+  par(mfrow = c(ncol(file1), 1), mar = c(rep(0, 4)), oma = oma, xaxs = "i", yaxs = "i")
 
-  for(i in seq(2, ncol(data))){
-    if(sum(is.na(data[,i])) == nrow(data)){
-      plot(data[,1], rep(0, nrow(data)), col = "white", xlab = NA, ylab = NA, axes = FALSE,
-           xlim = xlim, ylim = ylim)
+  for(i in seq(ncol(file1))){
+    plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
+
+    if(isTRUE(smooth)){
+      allLengths <- spline(x = an(rownames(file1)), y = file1[,i], method = "natural", n = 1e3)
     }else{
-      if(smooth){
-        model <- smooth.spline(data[,1], data[,i], spar = spar)
-        model <- predict(model, seq(xlim[1], xlim[2], diff(xlim)/500))
+      allLengths <- list(x = an(rownames(file1)), y = file1[,i])
+    }
 
-        if(!isTRUE(zeros)){
-          model$y[which(model$y < 0.1)] <- NA
-        }else{
-          model$y[which(model$y < 0.1)] <- 0
-        }
+    allLengths$y[allLengths$y < 0.001] <- NA
 
-        plot(model, xlab = NA, ylab = NA, axes = FALSE, ylim = ylim, type = "l",
-             lty = lty[i - 1], xlim = xlim, col = lcol[i - 1], lwd = lwd)
+    if(sum(!is.na(allLengths$y)) < 2){
+      mtext(text = noDataLabel, side = 3, adj = 0.99, line = -2)
+    }else if(!is.null(juvLine)){
+      juvValue <- sum(allLengths$y[allLengths$x < juvLine], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
+      mtext(text = paste0(juvLabel, round(juvValue*100, 1), ifelse(isTRUE(relative), "%", "")),
+            side = 3, line = -2, adj = 0.99)
+
+      abline(v = juvLine, lty = juvLty, lwd = juvLwd, col = juvCol)
+    }
+
+    lines(allLengths, lty = ltys1[i], lwd = lwds1[i], col = cols1[i])
+
+    if(!is.null(file2)){
+      if(isTRUE(smooth)){
+        allLengths <- spline(x = an(rownames(file2)), y = file2[,i], method = "natural", n = 1e3)
       }else{
-        plot(data[,1], data[,i], xlab = NA, ylab = NA, axes = FALSE, ylim = ylim, type = "l",
-             lty = lty[i - 1], xlim = xlim, col = lcol[i - 1], lwd = lwd)
+        allLengths <- list(x = an(rownames(file2)), y = file2[,i])
+      }
+
+      allLengths$y[allLengths$y < 0.001] <- NA
+
+      lines(allLengths, lty = ltys2[i], lwd = lwds2[i], col = cols2[i])
+    }
+
+    if(is.null(yInterval)){
+      yInterval <- diff(ylim)/5
+    }
+
+    if(i %% 2 > 0){
+      axis(side = 2, at = seq(ylim[1], ylim[2], by = yInterval), las = 2, cex.axis = cex.axis,
+           labels = seq(ylim[1], ylim[2], by = yInterval)/yLabFactor)
+    }else{
+      axis(side = 4, at = seq(ylim[1], ylim[2], by = yInterval), las = 2, cex.axis = cex.axis,
+           labels = seq(ylim[1], ylim[2], by = yInterval)/yLabFactor)
+    }
+
+    if(i == ncol(file1)){
+      if(profile == "anchoveta"){
+        axis(side = 1, at = seq(xlim[1], xlim[2], by = xInterval), labels = NA, tcl = -0.25)
+        axis(side = 1, at = seq(xlim[1], xlim[2], by = 1), cex.axis = cex.axis)
+      }else{
+        axis(side = 1, at = allMarks, cex.axis = cex.axis)
       }
     }
 
-    if(!is.na(file2)){
-      if(sum(is.na(data2[,i])) == nrow(data2)){
-        points(data2[,1], rep(0, nrow(data2)), col = "white",
-               xlim = xlim, ylim = ylim)
-      }else if(smooth){
-        model <- smooth.spline(data2[,1], data2[,i], spar = spar)
-        model <- predict(model, seq(xlim[1], xlim[2], diff(xlim)/500))
-
-        if(!isTRUE(zeros)){
-          model$y[which(model$y < 0.1)] <- NA
-        }else{
-          model$y[which(model$y < 0.1)] <- 0
-        }
-
-        points(model, ylim = ylim, type = "l",
-               lty = lty[i - 1], xlim = xlim, col = lcol2, lwd = lwd)
-      }else{
-        points(data2[,1], data2[,i], ylim = ylim, type = "l",
-               lty = lty[i - 1], xlim = xlim, col = lcol2, lwd = lwd)
-      }
-    }
+    mtext(text = colnames(file1)[i], side = 3, adj = 0.01, line = -2)
 
     box()
-
-    atY <- seq(ylim[1], ylim[2], by = Yinterval)
-    if(i%%2 != 0 | ncol(data) == 2){
-      axis(2, las = styleLab, cex.axis = cex.axis, at = atY, labels = atY)
-    }else{
-      axis(4, las = styleLab, cex.axis = cex.axis, at = atY, labels = atY)
-    }
-
-    if(!is.na(jValue)){
-      abline(v = jValue, lty = jty, col = jcol, lwd = jwd)
-    }
-
-    if(isTRUE(showJuv)){
-      if(juv(data[,i], data[,1], jValue) != 0){
-
-        juvtext = paste(jtext,
-                        round(juv(data[,i], data[,1], jValue), jround),
-                        "%", sep = "")
-      }else{
-        if(sum(is.na(data[,i])) == nrow(data)){
-          juvtext = sinpesca
-        }else{
-          juvtext = sinjuveniles
-        }
-      }
-
-      mtext(juvtext, 3, line = jline, adj = 1 - adj, cex = jcex, col = jtextcol) # juveniles
-    }
-
-    if(showRange){
-      if(sum(is.na(data[,i])) != nrow(data)){
-        lentext = paste0("Rango : ", min(data[!is.na(data[,i]), 1], na.rm = TRUE),
-                         " - ", max(data[!is.na(data[,i]), 1], na.rm = TRUE))
-      }else{
-        lentext = NA
-      }
-    }else{
-      lentext = NA
-
-      mtext(lentext, 1, line = -1, adj = 1 - adj, cex = jcex - 0.2) # Rango tallas
-    }
-
-    mtext(categoryNames[i], 3, line = lineCategory, adj = adj, cex = cat.cex) # Categor?as
   }
 
-  atX = seq(xlim[1], xlim[2], by = Xinterval)
-  axis(side = 1, at = atX, labels = atX, cex.axis = cex.axis)
-
-  mtext(xlab, 1, line = 4, outer = TRUE, cex = cex.axis)
-  mtext(ylab, 2, line = 2, outer = TRUE, cex = cex.axis)
+  mtext(text = xLab, side = 1, line = 3, outer = TRUE, cex = cex.lab)
+  mtext(text = yLab, side = 2, line = 3, outer = TRUE, cex = cex.lab)
 
   return(invisible())
 }

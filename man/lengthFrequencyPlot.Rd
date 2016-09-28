@@ -5,49 +5,21 @@
 \title{Given a frequency table size, it generates a vertical array of graphics for each specified
 category (months, latitudes, years, etc.).}
 \usage{
-lengthFrequencyPlot(file, file2 = NA, profile = NULL,
-  categoryNames = NULL, xlab = "Longitud (cm)", ylab = "Frecuencia (\%)",
-  ylim = NULL, cex.axis = 1.2, xlim = NULL, Xinterval = 1,
-  Yinterval = 10, lcol = "blue", lcol2 = NULL, lwd = 1, lty = "solid",
-  lineCategory = -2, styleLab = 2, jValue = NA, jtext = NA, jcex = 1,
-  jtextcol = "black", cat.cex = 1, jround = 1, jcol = "red", jwd = 1,
-  jline = -1.5, jty = "dotted", sinpesca = "Sin pesca",
-  sinjuveniles = "Sin juveniles", zeros = FALSE, nzeros = 0,
-  showRange = TRUE, adj = 0.02, showJuv = TRUE, smooth = TRUE,
-  spar = 0.01, totalFreq = FALSE, totalLabel = "Total")
+lengthFrequencyPlot(file1, file2 = NULL, profile = NULL, xlim = NULL,
+  xInterval = 1, ylim = c(0, 50), yInterval = NULL, ltys1 = "solid",
+  lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1",
+  cols2 = "blue", juvLine = NULL, juvLty = "dotted", juvLwd = 1,
+  juvCol = "red", cex.axis = 1, cex.lab = 1, smooth = FALSE,
+  oma = c(5, 5, 1, 3), xLab = "Longitud total (cm)",
+  yLab = "Frecuencia (\%)", noDataLabel = "Sin datos",
+  juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE)
 }
 \arguments{
-\item{file}{\code{character}. File path of length frequencies table.}
+\item{file1}{Indica la tabla desde donde se dibujarán las frecuencias por talla. Ver detalles.}
 
-\item{file2}{\code{character}. File path of second length frequencies table.}
+\item{file2}{Indica la tabla secundaria desde donde se dibujarán las frecuencias por talla. Ver detalles.}
 
-\item{profile}{\code{character}. Profile by species.}
-
-\item{xlab}{A title for the X axis.}
-
-\item{ylab}{A title for the Y axis.}
-
-\item{cex.axis}{Size of axis text.}
-
-\item{xlim}{Limits for the X axis.}
-
-\item{Xinterval}{Intervals for the X axis.}
-
-\item{Yinterval}{Intervals for the Y axis.}
-
-\item{lcol}{Vector of colors for length lines (one or more).}
-
-\item{lcol2}{Color (just one) of length line for second table.}
-
-\item{lwd}{Width of length lines.}
-
-\item{lty}{Vector of line type for length lines (one or more).}
-
-\item{styleLab}{Numer (0,1,2,3), the style of axis labels.}
-
-\item{jValue}{Juvenile length.}
-
-\item{totalLabel}{}
+\item{xlab}{}
 }
 \details{
 This function takes a length frequency data and returns an stacking plot of that frequencies.
