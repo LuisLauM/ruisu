@@ -55,7 +55,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
   allDistances <- spDists(x = as.matrix(coastline[index, c("lon", "lat")]),
                           y = as.matrix(data[,c(colLon, colLat)]), longlat = TRUE)
   minDistancesValue <- apply(allDistances, 2, min)
-  minDistancesPosition <- coastline[index & apply(allDistances, 2, which.min), c("lon", "lat")]
+  minDistancesPosition <- coastline[index, c("lon", "lat")][apply(allDistances, 2, which.min),]
 
   unitFactor <- switch(tolower(unit),
                        mn = 1/1.852,
