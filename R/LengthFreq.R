@@ -37,7 +37,8 @@
 lengthFrequencyPlot <- function(file1, file2 = NULL,
                                 profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
                                 ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
-                                juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", cex.axis = 1, cex.lab = 1,
+                                juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", juvCex = 1,
+                                cex.axis = 1, cex.lab = 1,
                                 smooth = FALSE, oma = c(5, 5, 1, 3), xLab = "Longitud total (cm)", yLab = "Frecuencia (%)",
                                 noDataLabel = "Sin datos", juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE){
 
@@ -116,7 +117,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL,
       mtext(text = noDataLabel, side = 3, adj = 0.99, line = -2)
     }else if(!is.null(juvLine)){
       juvValue <- sum(allLengths$y[allLengths$x < juvLine], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
-      mtext(text = paste0(juvLabel, round(juvValue*100, 1), ifelse(isTRUE(relative), "%", "")),
+      mtext(text = paste0(juvLabel, round(juvValue*100, 0), " %"), cex = juvCex,
             side = 3, line = -2, adj = 0.99)
 
       abline(v = juvLine, lty = juvLty, lwd = juvLwd, col = juvCol)

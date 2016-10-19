@@ -9,8 +9,8 @@ lengthFrequencyPlot(file1, file2 = NULL, profile = NULL, xlim = NULL,
   xInterval = 1, ylim = c(0, 50), yInterval = NULL, ltys1 = "solid",
   lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1",
   cols2 = "blue", juvLine = NULL, juvLty = "dotted", juvLwd = 1,
-  juvCol = "red", cex.axis = 1, cex.lab = 1, smooth = FALSE,
-  oma = c(5, 5, 1, 3), xLab = "Longitud total (cm)",
+  juvCol = "red", juvCex = 1, cex.axis = 1, cex.lab = 1,
+  smooth = FALSE, oma = c(5, 5, 1, 3), xLab = "Longitud total (cm)",
   yLab = "Frecuencia (\%)", noDataLabel = "Sin datos",
   juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE)
 }
