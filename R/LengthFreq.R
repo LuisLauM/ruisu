@@ -39,7 +39,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL,
                                 ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
                                 juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", juvCex = 1,
                                 cex.axis = 1, cex.lab = 1,
-                                smooth = FALSE, oma = c(5, 5, 1, 3), xLab = "Longitud total (cm)", yLab = "Frecuencia (%)",
+                                smooth = FALSE, oma = c(5, 5, 1, 3), xLab = NULL, yLab = "Frecuencia (%)",
                                 noDataLabel = "Sin datos", juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE){
 
   if(is.element(class(file1), c("data.frame", "matrix"))){
@@ -70,17 +70,20 @@ lengthFrequencyPlot <- function(file1, file2 = NULL,
     cols2 <- rep(cols2, length.out = ncol(file2))
   }
 
+
+
   if(!is.null(profile)){
 
-    xlim <- switch(tolower(profile),
-                   anchoveta = c(2, 20),
-                   jurel = c(2, 50))
-    juvLine <- switch(tolower(profile),
-                      anchoveta = 12,
-                      jurel = 31)
-    xInterval <- switch(tolower(profile),
-                        anchoveta = 0.5,
-                        jurel = 1)
+    index <- match(tolower(profile), rownames(speciesInfo))
+
+    xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
+    juvLine <- an(speciesInfo$juvenile[index])
+    xInterval <- an(speciesInfo$bin[index])
+
+    if(is.null(xLab)){
+      xLab <- paste0("Longitud ", speciesInfo$lengthType[index], " (", speciesInfo$unit[index], ")")
+    }
+
   }
 
   file1[file1 <= 0 | is.na(file1)] <- 0
@@ -150,11 +153,11 @@ lengthFrequencyPlot <- function(file1, file2 = NULL,
     }
 
     if(i == ncol(file1)){
-      if(profile == "anchoveta"){
+      if(!is.null(profile) && profile == "anchoveta"){
         axis(side = 1, at = seq(xlim[1], xlim[2], by = xInterval), labels = NA, tcl = -0.25)
         axis(side = 1, at = seq(xlim[1], xlim[2], by = 1), cex.axis = cex.axis)
       }else{
-        axis(side = 1, at = allMarks, cex.axis = cex.axis)
+        axis(side = 1, at = seq(xlim[1], xlim[2], by = xInterval), cex.axis = cex.axis)
       }
     }
 
@@ -163,7 +166,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL,
     box()
   }
 
-  mtext(text = xLab, side = 1, line = 3, outer = TRUE, cex = cex.lab)
+  mtext(text = ifelse(is.null(xLab), "Longitud", xLab), side = 1, line = 3, outer = TRUE,
+        cex = cex.lab)
   mtext(text = yLab, side = 2, line = 3, outer = TRUE, cex = cex.lab)
 
   return(invisible())
