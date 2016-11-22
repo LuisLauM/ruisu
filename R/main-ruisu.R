@@ -604,7 +604,7 @@ isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = 
 #' xlim, juvLine, xInterval and xLab.
 #'
 #' @export
-lengthFrequencyPlot <- function(file1, file2 = NULL,
+lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
                                 profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
                                 ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
                                 juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", juvCex = 1, yLab_line = 3,
@@ -625,9 +625,13 @@ lengthFrequencyPlot <- function(file1, file2 = NULL,
     stop("Incorrect value for file1. It must be a 'matrix', 'data.frame' or it must indicate the file name of a length matrix.")
   }
 
+  file1 <- file1*dataFactor
+
   if(!is.null(file2)){
-    if(is.element(class(file1), c("data.frame", "matrix"))){
-      file2 <- file2[,-1]
+    if(is.element(class(file2), c("data.frame", "matrix"))){
+      file2Names <- list(an(file2[,1]), colnames(file2)[-1])
+      file2 <- data.frame(file2[,-1], stringsAsFactors = FALSE)
+      dimnames(file2) <- file1Names
     }else{
       file2 <- read.csv(file = file2, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
     }
@@ -641,6 +645,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL,
     }
 
     file2[file2 <= 0 | is.na(file2)] <- 0
+
+    file2 <- file2*dataFactor
 
     ltys2 <- rep(ltys2, length.out = ncol(file2))
     lwds2 <- rep(lwds2, length.out = ncol(file2))
@@ -1012,6 +1018,49 @@ randomRectangles <- function(nsquares = 500)
 
     rect(center[1] - size[1], center[2] - size[2], center[1] + size[1], center[2] + size[2],
          col = fill, border = brdr, density = NA, lwd = 1.5)
+  }
+
+  return(invisible())
+}
+
+#' Make a progress bar
+#'
+#' @param i Step of the iteration.
+#' @param n Total number of iteration
+#'
+#' @return The function returns only messages (from \code{cat}).
+#' @export
+#'
+#' @examples
+#' n = 1000
+#' for(i in seq(n)){
+#'   Sys.sleep(0.01)
+#'   progressBar(i = i, n = n)
+#' }
+progressBar <- function(i, n){
+
+  if(i >= n){
+    stop("Incorrect value for 'i' or 'n'.")
+  }
+
+  index <- floor(i/n*100)
+
+  if(index == floor((i - 1)/n*100)){
+    return(invisible())
+  }
+
+  if(index %% 5 == 0){
+    if(index %% 25 == 0){
+      if(i != n){
+        cat(paste0("  ", index, "% (boot = ", i, ")\n"))
+      }else{
+        cat(paste0(" 100% (boot = ", i, ")\n"))
+      }
+    }else{
+      cat("|")
+    }
+  }else{
+    cat(".")
   }
 
   return(invisible())
