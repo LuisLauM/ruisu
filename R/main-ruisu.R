@@ -27,6 +27,16 @@ NULL
 #' @references Instituto del Mar del Peru.
 NULL
 
+#' @title \code{data.frame} with old (original) AIP information.
+#' @name AIPData_old
+#' @description \code{data.frame} with 7 columns:
+#' @aliases AIPData_old
+#' @docType data
+#' @usage AIPData_old
+#' @format A \code{data.frame} with
+#' @references Instituto del Mar del Peru.
+NULL
+
 
 #' Abbreviation for \code{as.numeric}
 #'
@@ -1037,9 +1047,9 @@ randomRectangles <- function(nsquares = 500)
 #'   Sys.sleep(0.01)
 #'   progressBar(i = i, n = n)
 #' }
-progressBar <- function(i, n){
+progressBar <- function(i, n, stepText = "n"){
 
-  if(i >= n){
+  if(i > n){
     stop("Incorrect value for 'i' or 'n'.")
   }
 
@@ -1052,9 +1062,9 @@ progressBar <- function(i, n){
   if(index %% 5 == 0){
     if(index %% 25 == 0){
       if(i != n){
-        cat(paste0("  ", index, "% (boot = ", i, ")\n"))
+        cat(paste0("  ", index, "% (", stepText, " = ", i, ")\n"))
       }else{
-        cat(paste0(" 100% (boot = ", i, ")\n"))
+        cat(paste0(" 100% (", stepText, " = ", i, ")\n"))
       }
     }else{
       cat("|")
