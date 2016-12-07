@@ -7,12 +7,12 @@ category (months, latitudes, years, etc.).}
 \usage{
 lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, profile = NULL,
   xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
-  ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid",
-  lwds2 = "1", cols2 = "blue", juvLine = NULL, juvLty = "dotted",
-  juvLwd = 1, juvCol = "red", juvCex = 1, yLab_line = 3, cex.axis = 1,
-  cex.lab = 1, juvAdj = 0.99, juvRound = 0, namesAdj = 0.01,
-  smooth = FALSE, oma = c(5, 5, 1, 3), xLab = NULL,
-  yLab = "Frecuencia (\%)", noDataLabel = "Sin datos",
+  ylimList = NULL, yIntervalList = NULL, ltys1 = "solid", lwds1 = "1",
+  cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
+  juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
+  juvCex = 1, yLab_line = 3, cex.axis = 1, cex.lab = 1, juvAdj = 0.99,
+  juvRound = 0, namesAdj = 0.01, smooth = FALSE, oma = c(5, 5, 1, 3),
+  xLab = NULL, yLab = "Frecuencia (\%)", noDataLabel = "Sin datos",
   juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE)
 }
 \arguments{

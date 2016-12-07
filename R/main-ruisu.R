@@ -571,6 +571,62 @@ isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = 
   return(output)
 }
 
+#' @title Determine the proximity to coast of points
+#'
+#' @param dataPoints \code{data.frame} which has Longitude and Latitude information.
+#' @param colLon Name of column which contains Longitude info.
+#' @param colLat Name of column which contains Latitude info.
+#' @param units Which units do you want to use for measuring the proximity to coast.
+#' @param distance
+#'
+#' @return A \code{logical} vector indicating whether the coordinates belong to the area between
+#' the coast line and a buffer of the selected distance.
+#' @export
+#'
+#' @examples
+#' isNearCoast(c(-81.191, -5.211), distance = 20)
+#' isNearCoast(c(-81.191, -5.211), distance = 10)
+isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m", distance = 20){
+
+  # Check values for aguments
+  if(tolower(units) == "m"){
+    posibleValues <- c(10, 20, 30, 50, 100, 150, 200, 300)
+  }else if(tolower(units) == "nm"){
+    posibleValues <- seq(0.2, 2, 0.2)
+  }else{
+    stop("'units' must be m (meters) or nm (nautical miles).")
+  }
+
+  if(length(distance) != 1 || !is.numeric(an(distance)) || !is.element(an(distance), posibleValues)){
+    stop("'distance' must be numeric, length 1 and values ", paste(posibleValues, collapse = ", "), ".")
+  }
+
+  # Select the reference shapefile
+  referenceShapefile <- get(ifelse(test = tolower(units) == "m", yes = "coastlineBuffer_m", no = "coastlineBuffer_nm"))
+
+  # If the input data is a vector, rearrange in a data.frame
+  dataPoints <- switch(class(dataPoints),
+                       "data.frame" = as.data.frame(dataPoints[,c(colLon, colLat)]),
+                       "numeric" = data.frame(lon = dataPoints[1], lat = dataPoints[2], stringsAsFactors = FALSE))
+
+  # Select just points with valid values for both lon and lat
+  index <- complete.cases(dataPoints)
+  dataPoints <- dataPoints[index,]
+
+  # Define projection
+  coordinates(dataPoints) <- dataPoints
+  proj4string(dataPoints) <- proj4string(referenceShapefile)
+
+  # Make the intersection
+  dataPoints <- over(x = dataPoints, y = referenceShapefile)
+
+  # Build the output vector (logical)
+  output <- rep(FALSE, nrow(dataPoints))
+  output[index & dataPoints$distance <= distance] <- TRUE
+
+  return(output)
+}
+
 #' @title  Given a frequency table size, it generates a vertical array of graphics for each specified
 #' category (months, latitudes, years, etc.).
 #'
@@ -616,6 +672,7 @@ isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = 
 #' @export
 lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
                                 profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
+                                ylimList = NULL, yIntervalList = NULL,
                                 ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
                                 juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", juvCex = 1, yLab_line = 3,
                                 cex.axis = 1, cex.lab = 1,
@@ -699,6 +756,11 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
   par(mfrow = c(ncol(file1), 1), mar = c(rep(0, 4)), oma = oma, xaxs = "i", yaxs = "i")
 
   for(i in seq(ncol(file1))){
+
+    if(!is.null(ylimList)){
+      ylim <- ylimList[[i]]
+    }
+
     plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
 
     if(isTRUE(smooth)){
@@ -735,6 +797,10 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
 
     if(is.null(yInterval)){
       yInterval <- diff(ylim)/5
+    }
+
+    if(!is.null(yIntervalList)){
+      yInterval <- yIntervalList[[i]]
     }
 
     if(i %% 2 > 0){
