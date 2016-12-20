@@ -630,59 +630,71 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #' @title  Given a frequency table size, it generates a vertical array of graphics for each specified
 #' category (months, latitudes, years, etc.).
 #'
-#' @details This function takes a length frequency data and returns an stacking plot of that frequencies.
-#' smooth: logical. If TRUE, function uses an spline function to plot by categories.
-#' This function uses a data with categories at cols and length at rows.
-#'
 #' @param file1 Indicates the table from the main length distribution will be drawn. See details.
 #' @param file2 Indicates the table from the secondary length distribution will be drawn. See details.
 #' @param dataFactor Factor that multiplies matrices 1 and 2.
 #' @param newPlot If \code{TRUE}, the plot will be opened in a new window (using \code{x11} command).
+#' @param profile \code{character}. Indicates the profile (as an species' name) used to predine values of
+#' xlim, juvLine, xInterval and xlab.
 #' @param xlim Limits of x axis.
 #' @param xInterval Number of intervals for x axis labels.
 #' @param ylim Limits of y axis.
 #' @param yInterval Number of intervals for y axis labels.
+#' @param ylimList List of xlim value for each plot.
+#' @param yIntervalList List of yInterval value for each plot.
 #' @param ltys1 lty (see \code{\link{par}}) parameter for main length distribution lines.
 #' @param lwds1 lwd (see \code{\link{par}}) parameter for main length distribution lines.
-#' @param cols1 col (see \code{\link{par}}) parameter for main length distribution lines.
+#' @param col1 col (see \code{\link{par}}) parameter for main length distribution lines.
 #' @param ltys2 lty (see \code{\link{par}}) parameter for secondary length distribution lines.
 #' @param lwds2 lwd (see \code{\link{par}}) parameter for secondary length distribution lines.
-#' @param cols2 col (see \code{\link{par}}) parameter for secondary length distribution lines.
-#' @param juvLine line (see \code{\link{mtext}}) parameter for juvenile text.
+#' @param col2 col (see \code{\link{par}}) parameter for secondary length distribution lines.
+#' @param juvLimit Limit length for juveniles.
 #' @param juvLty lty (see \code{\link{par}}) parameter for juvenile line.
 #' @param juvLwd lwd (see \code{\link{par}}) parameter for juvenile line.
 #' @param juvCol col (see \code{\link{par}}) parameter for juvenile line.
+#' @param showJuv1 Do you want to show the percentage of juveniles 1 as text?
+#' @param juvLine1 line (see \code{\link{mtext}}) parameter for juvenile 1 line.
+#' @param juvCex1 Size for juveniles 1 text.
+#' @param juvLabel1 Text before juvenile 1 value.
+#' @param showJuv2 Do you want to show the percentage of juveniles 2 as text?
+#' @param juvLine2 line (see \code{\link{mtext}}) parameter for juvenile 2 line.
+#' @param juvCex2 Size for juveniles 2 text.
+#' @param juvLabel2 Text before juvenile 2 value.
+#' @param juvAdj adj (see \code{\link{mtext}}) parameter for juvenile text.
+#' @param juvRound Number of decimals places used to show juveniles' values.
+#' @param juvSide side (see \code{\link{mtext}}) parameter for juvenile text.
+#' @param juvTextCol col (see \code{\link{par}}) parameter for juvenile text. If \code{NULL}
+#' (default), function will use \code{col1} and \code{col2} values.
 #' @param cex.axis cex.axis (see \code{\link{par}}) parameter for x and y axes.
 #' @param cex.lab cex.lab (see \code{\link{par}}) parameter for x and y axes.
+#' @param ylab_line line (see \code{\link{mtext}}) parameter for ylab text.
+#' @param namesAdj adj (see \code{\link{mtext}}) parameter for categories (column names) text.
 #' @param smooth \code{logical} Do you want to smooth the length distribution lines?
 #' @param oma oma (see \code{\link{par}}) parameter for plot.
+#' @param xlab Label for x axis.
 #' @param ylab Label for y axis.
 #' @param noDataLabel \code{character}. If there is no data in a column, the function will show
 #' what this parameter indicates.
-#' @param juvLabel Text before juvenile value.
 #' @param ylabFactor \code{numeric}. Value that multiplies all values in both main and secondary matrices.
 #' @param relative \code{logical} Do you want to plot relatives or absolutes values?
-#' @param juvCex Size of juveniles' text.
-#' @param ylab_line line (see \code{\link{mtext}}) parameter for ylab text.
-#' @param juvAdj adj (see \code{\link{mtext}}) parameter for juvenile text.
-#' @param juvRound Number of decimals places used to show juveniles' values.
-#' @param namesAdj adj (see \code{\link{mtext}}) parameter for categories (column names) text.
-#' @param xLab Label for x axis.
-#' @param profile \code{character}. Indicates the profile (as an species' name) used to predine values of
-#' xlim, juvLine, xInterval and xLab.
-#' @param ylimList List of xlim value for each plot.
-#' @param yIntervalList List of yInterval value for each plot.
+#'
+#' @details This function takes a length frequency data and returns an stacking plot of that frequencies.
+#' smooth: logical. If TRUE, function uses an spline function to plot by categories.
+#' This function uses a data with categories at col and length at rows.
+#'
 #'
 #' @export
 lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
                                 profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
                                 ylimList = NULL, yIntervalList = NULL,
-                                ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
-                                juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", juvCex = 1, ylab_line = 3,
-                                cex.axis = 1, cex.lab = 1,
-                                juvAdj = 0.99, juvRound = 0, namesAdj = 0.01,
-                                smooth = FALSE, oma = c(5, 5, 1, 3), xLab = NULL, ylab = "Frecuencia (%)",
-                                noDataLabel = "Sin datos", juvLabel = "juveniles = ", ylabFactor = 1, relative = TRUE){
+                                ltys1 = "solid", lwds1 = "1", col1 = "black", ltys2 = "solid", lwds2 = "1", col2 = "blue",
+                                juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
+                                showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1, juvLabel1 = "juveniles_1 = ",
+                                showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
+                                juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol = NULL,
+                                cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
+                                smooth = FALSE, oma = c(5, 5, 1, 3), xlab = NULL, ylab = "Frecuencia (%)",
+                                noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE){
 
   if(is.element(class(file1), c("data.frame", "matrix"))){
 
@@ -721,21 +733,19 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     ltys2 <- rep(ltys2, length.out = ncol(file2))
     lwds2 <- rep(lwds2, length.out = ncol(file2))
-    cols2 <- rep(cols2, length.out = ncol(file2))
+    col2 <- rep(col2, length.out = ncol(file2))
   }
-
-
 
   if(!is.null(profile)){
 
     index <- match(tolower(profile), rownames(speciesInfo))
 
     xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
-    juvLine <- an(speciesInfo$juvenile[index])
+    juvLimit <- an(speciesInfo$juvenile[index])
     xInterval <- an(speciesInfo$bin[index])
 
-    if(is.null(xLab)){
-      xLab <- paste0("Longitud ", speciesInfo$lengthType[index], " (", speciesInfo$unit[index], ")")
+    if(is.null(xlab)){
+      xlab <- paste0("Longitud ", speciesInfo$lengthType[index], " (", speciesInfo$unit[index], ")")
     }
 
   }
@@ -752,7 +762,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
   ltys1 <- rep(ltys1, length.out = ncol(file1))
   lwds1 <- rep(lwds1, length.out = ncol(file1))
-  cols1 <- rep(cols1, length.out = ncol(file1))
+  col1 <- rep(col1, length.out = ncol(file1))
 
   file1[file1 <= 0 | is.na(file1)] <- 0
 
@@ -778,17 +788,21 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     allLengths$y[allLengths$y < 0.001] <- NA
 
-    if(sum(!is.na(allLengths$y)) < 2){
-      mtext(text = noDataLabel, side = 3, adj = juvAdj, line = -2)
-    }else if(!is.null(juvLine)){
-      juvValue <- sum(allLengths$y[allLengths$x < juvLine], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
-      mtext(text = paste0(juvLabel, round(juvValue*100, juvRound), " %"), cex = juvCex,
-            side = 3, line = -2, adj = juvAdj)
 
-      abline(v = juvLine, lty = juvLty, lwd = juvLwd, col = juvCol)
+    # Add juveniles 1 text
+    if(sum(!is.na(allLengths$y)) < 2){
+      mtext(text = noDataLabel, side = 3, adj = juvAdj1, line = -2)
+    }else if(!is.null(juvLimit)){
+      if(isTRUE(showJuv1)){
+        juvValue <- sum(allLengths$y[allLengths$x < juvLimit], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
+        mtext(text = paste0(juvLabel1, round(juvValue*100, juvRound), " %"), cex = juvCex1,
+              col = ifelse(is.null(juvTextCol), col1, juvTextCol), side = juvSide, line = juvLine1, adj = juvAdj)
+      }
+
+      abline(v = juvLimit, lty = juvLty, lwd = juvLwd, col = juvCol)
     }
 
-    lines(allLengths, lty = ltys1[i], lwd = lwds1[i], col = cols1[i])
+    lines(allLengths, lty = ltys1[i], lwd = lwds1[i], col = col1[i])
 
     if(!is.null(file2)){
       if(isTRUE(smooth)){
@@ -797,9 +811,20 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
         allLengths <- list(x = an(rownames(file2)), y = file2[,i])
       }
 
+      # Add juveniles 2 text
+      if(sum(!is.na(allLengths$y)) < 2){
+        mtext(text = noDataLabel, side = 3, adj = juvAdj2, line = -2)
+      }else if(!is.null(juvLimit)){
+        if(isTRUE(showJuv2)){
+          juvValue <- sum(allLengths$y[allLengths$x < juvLimit], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
+          mtext(text = paste0(juvLabel2, round(juvValue*100, juvRound), " %"), cex = juvCex2,
+                col = ifelse(is.null(juvTextCol), col2, juvTextCol), side = juvSide, line = juvLine2, adj = juvAdj)
+        }
+      }
+
       allLengths$y[allLengths$y < 0.001] <- NA
 
-      lines(allLengths, lty = ltys2[i], lwd = lwds2[i], col = cols2[i])
+      lines(allLengths, lty = ltys2[i], lwd = lwds2[i], col = col2[i])
     }
 
     if(is.null(yInterval)){
@@ -832,7 +857,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     box()
   }
 
-  mtext(text = ifelse(is.null(xLab), "Longitud", xLab), side = 1, line = 3, outer = TRUE,
+  mtext(text = ifelse(is.null(xlab), "Longitud", xlab), side = 1, line = 3, outer = TRUE,
         cex = cex.lab)
   mtext(text = ylab, side = 2, line = ylab_line, outer = TRUE, cex = cex.lab)
 

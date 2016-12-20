@@ -8,13 +8,16 @@ category (months, latitudes, years, etc.).}
 lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
   profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50),
   yInterval = NULL, ylimList = NULL, yIntervalList = NULL,
-  ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid",
-  lwds2 = "1", cols2 = "blue", juvLine = NULL, juvLty = "dotted",
-  juvLwd = 1, juvCol = "red", juvCex = 1, ylab_line = 3, cex.axis = 1,
-  cex.lab = 1, juvAdj = 0.99, juvRound = 0, namesAdj = 0.01,
-  smooth = FALSE, oma = c(5, 5, 1, 3), xLab = NULL,
-  ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
-  juvLabel = "juveniles = ", ylabFactor = 1, relative = TRUE)
+  ltys1 = "solid", lwds1 = "1", col1 = "black", ltys2 = "solid",
+  lwds2 = "1", col2 = "blue", juvLimit = NULL, juvLty = "dotted",
+  juvLwd = 1, juvCol = "red", showJuv1 = TRUE, juvLine1 = -2,
+  juvCex1 = 1, juvLabel1 = "juveniles_1 = ", showJuv2 = TRUE,
+  juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
+  juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol = NULL,
+  cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
+  smooth = FALSE, oma = c(5, 5, 1, 3), xlab = NULL,
+  ylab = "Frecuencia (\%)", noDataLabel = "Sin datos", ylabFactor = 1,
+  relative = TRUE)
 }
 \arguments{
 \item{file1}{Indicates the table from the main length distribution will be drawn. See details.}
@@ -26,7 +29,7 @@ lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
 \item{newPlot}{If \code{TRUE}, the plot will be opened in a new window (using \code{x11} command).}
 
 \item{profile}{\code{character}. Indicates the profile (as an species' name) used to predine values of
-xlim, juvLine, xInterval and xLab.}
+xlim, juvLine, xInterval and xlab.}
 
 \item{xlim}{Limits of x axis.}
 
@@ -44,15 +47,15 @@ xlim, juvLine, xInterval and xLab.}
 
 \item{lwds1}{lwd (see \code{\link{par}}) parameter for main length distribution lines.}
 
-\item{cols1}{col (see \code{\link{par}}) parameter for main length distribution lines.}
+\item{col1}{col (see \code{\link{par}}) parameter for main length distribution lines.}
 
 \item{ltys2}{lty (see \code{\link{par}}) parameter for secondary length distribution lines.}
 
 \item{lwds2}{lwd (see \code{\link{par}}) parameter for secondary length distribution lines.}
 
-\item{cols2}{col (see \code{\link{par}}) parameter for secondary length distribution lines.}
+\item{col2}{col (see \code{\link{par}}) parameter for secondary length distribution lines.}
 
-\item{juvLine}{line (see \code{\link{mtext}}) parameter for juvenile text.}
+\item{juvLimit}{Limit length for juveniles.}
 
 \item{juvLty}{lty (see \code{\link{par}}) parameter for juvenile line.}
 
@@ -60,17 +63,36 @@ xlim, juvLine, xInterval and xLab.}
 
 \item{juvCol}{col (see \code{\link{par}}) parameter for juvenile line.}
 
-\item{juvCex}{Size of juveniles' text.}
+\item{showJuv1}{Do you want to show the percentage of juveniles 1 as text?}
 
-\item{ylab_line}{line (see \code{\link{mtext}}) parameter for ylab text.}
+\item{juvLine1}{line (see \code{\link{mtext}}) parameter for juvenile 1 line.}
+
+\item{juvCex1}{Size for juveniles 1 text.}
+
+\item{juvLabel1}{Text before juvenile 1 value.}
+
+\item{showJuv2}{Do you want to show the percentage of juveniles 2 as text?}
+
+\item{juvLine2}{line (see \code{\link{mtext}}) parameter for juvenile 2 line.}
+
+\item{juvCex2}{Size for juveniles 2 text.}
+
+\item{juvLabel2}{Text before juvenile 2 value.}
+
+\item{juvAdj}{adj (see \code{\link{mtext}}) parameter for juvenile text.}
+
+\item{juvRound}{Number of decimals places used to show juveniles' values.}
+
+\item{juvSide}{side (see \code{\link{mtext}}) parameter for juvenile text.}
+
+\item{juvTextCol}{col (see \code{\link{par}}) parameter for juvenile text. If \code{NULL}
+(default), function will use \code{col1} and \code{col2} values.}
 
 \item{cex.axis}{cex.axis (see \code{\link{par}}) parameter for x and y axes.}
 
 \item{cex.lab}{cex.lab (see \code{\link{par}}) parameter for x and y axes.}
 
-\item{juvAdj}{adj (see \code{\link{mtext}}) parameter for juvenile text.}
-
-\item{juvRound}{Number of decimals places used to show juveniles' values.}
+\item{ylab_line}{line (see \code{\link{mtext}}) parameter for ylab text.}
 
 \item{namesAdj}{adj (see \code{\link{mtext}}) parameter for categories (column names) text.}
 
@@ -78,14 +100,12 @@ xlim, juvLine, xInterval and xLab.}
 
 \item{oma}{oma (see \code{\link{par}}) parameter for plot.}
 
-\item{xLab}{Label for x axis.}
+\item{xlab}{Label for x axis.}
 
 \item{ylab}{Label for y axis.}
 
 \item{noDataLabel}{\code{character}. If there is no data in a column, the function will show
 what this parameter indicates.}
-
-\item{juvLabel}{Text before juvenile value.}
 
 \item{ylabFactor}{\code{numeric}. Value that multiplies all values in both main and secondary matrices.}
 
@@ -94,6 +114,6 @@ what this parameter indicates.}
 \details{
 This function takes a length frequency data and returns an stacking plot of that frequencies.
 smooth: logical. If TRUE, function uses an spline function to plot by categories.
-This function uses a data with categories at cols and length at rows.
+This function uses a data with categories at col and length at rows.
 }
 
