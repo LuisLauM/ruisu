@@ -5,20 +5,25 @@
 \title{Given a frequency table size, it generates a vertical array of graphics for each specified
 category (months, latitudes, years, etc.).}
 \usage{
-lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, profile = NULL,
-  xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
-  ylimList = NULL, yIntervalList = NULL, ltys1 = "solid", lwds1 = "1",
-  cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
-  juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
-  juvCex = 1, yLab_line = 3, cex.axis = 1, cex.lab = 1, juvAdj = 0.99,
-  juvRound = 0, namesAdj = 0.01, smooth = FALSE, oma = c(5, 5, 1, 3),
-  xLab = NULL, yLab = "Frecuencia (\%)", noDataLabel = "Sin datos",
-  juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE)
+lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
+  profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50),
+  yInterval = NULL, ylimList = NULL, yIntervalList = NULL,
+  ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid",
+  lwds2 = "1", cols2 = "blue", juvLine = NULL, juvLty = "dotted",
+  juvLwd = 1, juvCol = "red", juvCex = 1, ylab_line = 3, cex.axis = 1,
+  cex.lab = 1, juvAdj = 0.99, juvRound = 0, namesAdj = 0.01,
+  smooth = FALSE, oma = c(5, 5, 1, 3), xLab = NULL,
+  ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
+  juvLabel = "juveniles = ", ylabFactor = 1, relative = TRUE)
 }
 \arguments{
 \item{file1}{Indicates the table from the main length distribution will be drawn. See details.}
 
 \item{file2}{Indicates the table from the secondary length distribution will be drawn. See details.}
+
+\item{dataFactor}{Factor that multiplies matrices 1 and 2.}
+
+\item{newPlot}{If \code{TRUE}, the plot will be opened in a new window (using \code{x11} command).}
 
 \item{profile}{\code{character}. Indicates the profile (as an species' name) used to predine values of
 xlim, juvLine, xInterval and xLab.}
@@ -30,6 +35,10 @@ xlim, juvLine, xInterval and xLab.}
 \item{ylim}{Limits of y axis.}
 
 \item{yInterval}{Number of intervals for y axis labels.}
+
+\item{ylimList}{List of xlim value for each plot.}
+
+\item{yIntervalList}{List of yInterval value for each plot.}
 
 \item{ltys1}{lty (see \code{\link{par}}) parameter for main length distribution lines.}
 
@@ -53,7 +62,7 @@ xlim, juvLine, xInterval and xLab.}
 
 \item{juvCex}{Size of juveniles' text.}
 
-\item{yLab_line}{line (see \code{\link{mtext}}) parameter for ylab text.}
+\item{ylab_line}{line (see \code{\link{mtext}}) parameter for ylab text.}
 
 \item{cex.axis}{cex.axis (see \code{\link{par}}) parameter for x and y axes.}
 
@@ -71,14 +80,14 @@ xlim, juvLine, xInterval and xLab.}
 
 \item{xLab}{Label for x axis.}
 
-\item{yLab}{Label for y axis.}
+\item{ylab}{Label for y axis.}
 
 \item{noDataLabel}{\code{character}. If there is no data in a column, the function will show
 what this parameter indicates.}
 
 \item{juvLabel}{Text before juvenile value.}
 
-\item{yLabFactor}{\code{numeric}. Value that multiplies all values in both main and secondary matrices.}
+\item{ylabFactor}{\code{numeric}. Value that multiplies all values in both main and secondary matrices.}
 
 \item{relative}{\code{logical} Do you want to plot relatives or absolutes values?}
 }

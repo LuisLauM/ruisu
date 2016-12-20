@@ -636,6 +636,8 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #'
 #' @param file1 Indicates the table from the main length distribution will be drawn. See details.
 #' @param file2 Indicates the table from the secondary length distribution will be drawn. See details.
+#' @param dataFactor Factor that multiplies matrices 1 and 2.
+#' @param newPlot If \code{TRUE}, the plot will be opened in a new window (using \code{x11} command).
 #' @param xlim Limits of x axis.
 #' @param xInterval Number of intervals for x axis labels.
 #' @param ylim Limits of y axis.
@@ -654,31 +656,33 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #' @param cex.lab cex.lab (see \code{\link{par}}) parameter for x and y axes.
 #' @param smooth \code{logical} Do you want to smooth the length distribution lines?
 #' @param oma oma (see \code{\link{par}}) parameter for plot.
-#' @param yLab Label for y axis.
+#' @param ylab Label for y axis.
 #' @param noDataLabel \code{character}. If there is no data in a column, the function will show
 #' what this parameter indicates.
 #' @param juvLabel Text before juvenile value.
-#' @param yLabFactor \code{numeric}. Value that multiplies all values in both main and secondary matrices.
+#' @param ylabFactor \code{numeric}. Value that multiplies all values in both main and secondary matrices.
 #' @param relative \code{logical} Do you want to plot relatives or absolutes values?
 #' @param juvCex Size of juveniles' text.
-#' @param yLab_line line (see \code{\link{mtext}}) parameter for ylab text.
+#' @param ylab_line line (see \code{\link{mtext}}) parameter for ylab text.
 #' @param juvAdj adj (see \code{\link{mtext}}) parameter for juvenile text.
 #' @param juvRound Number of decimals places used to show juveniles' values.
 #' @param namesAdj adj (see \code{\link{mtext}}) parameter for categories (column names) text.
 #' @param xLab Label for x axis.
 #' @param profile \code{character}. Indicates the profile (as an species' name) used to predine values of
 #' xlim, juvLine, xInterval and xLab.
+#' @param ylimList List of xlim value for each plot.
+#' @param yIntervalList List of yInterval value for each plot.
 #'
 #' @export
-lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
+lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
                                 profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
                                 ylimList = NULL, yIntervalList = NULL,
                                 ltys1 = "solid", lwds1 = "1", cols1 = "black", ltys2 = "solid", lwds2 = "1", cols2 = "blue",
-                                juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", juvCex = 1, yLab_line = 3,
+                                juvLine = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red", juvCex = 1, ylab_line = 3,
                                 cex.axis = 1, cex.lab = 1,
                                 juvAdj = 0.99, juvRound = 0, namesAdj = 0.01,
-                                smooth = FALSE, oma = c(5, 5, 1, 3), xLab = NULL, yLab = "Frecuencia (%)",
-                                noDataLabel = "Sin datos", juvLabel = "juveniles = ", yLabFactor = 1, relative = TRUE){
+                                smooth = FALSE, oma = c(5, 5, 1, 3), xLab = NULL, ylab = "Frecuencia (%)",
+                                noDataLabel = "Sin datos", juvLabel = "juveniles = ", ylabFactor = 1, relative = TRUE){
 
   if(is.element(class(file1), c("data.frame", "matrix"))){
 
@@ -752,7 +756,10 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
 
   file1[file1 <= 0 | is.na(file1)] <- 0
 
-  x11()
+  if(isTRUE(newPlot)){
+    x11()
+  }
+
   par(mfrow = c(ncol(file1), 1), mar = c(rep(0, 4)), oma = oma, xaxs = "i", yaxs = "i")
 
   for(i in seq(ncol(file1))){
@@ -805,10 +812,10 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
 
     if(i %% 2 > 0){
       axis(side = 2, at = seq(ylim[1], ylim[2], by = yInterval), las = 2, cex.axis = cex.axis,
-           labels = seq(ylim[1], ylim[2], by = yInterval)/yLabFactor)
+           labels = seq(ylim[1], ylim[2], by = yInterval)/ylabFactor)
     }else{
       axis(side = 4, at = seq(ylim[1], ylim[2], by = yInterval), las = 2, cex.axis = cex.axis,
-           labels = seq(ylim[1], ylim[2], by = yInterval)/yLabFactor)
+           labels = seq(ylim[1], ylim[2], by = yInterval)/ylabFactor)
     }
 
     if(i == ncol(file1)){
@@ -827,7 +834,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1,
 
   mtext(text = ifelse(is.null(xLab), "Longitud", xLab), side = 1, line = 3, outer = TRUE,
         cex = cex.lab)
-  mtext(text = yLab, side = 2, line = yLab_line, outer = TRUE, cex = cex.lab)
+  mtext(text = ylab, side = 2, line = ylab_line, outer = TRUE, cex = cex.lab)
 
   return(invisible())
 }
