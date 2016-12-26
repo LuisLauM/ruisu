@@ -727,7 +727,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
       file2 <- sweep(as.matrix(file2), 2, colSums(file2, na.rm = TRUE), "/")*100
     }
 
-    file2[file2 <= 0 | is.na(file2)] <- 0
+    # file2[file2 <= 0 | is.na(file2)] <- 0
 
     file2 <- file2*dataFactor
 
@@ -791,7 +791,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     # Add juveniles 1 text
     if(sum(!is.na(allLengths$y)) < 2){
-      mtext(text = noDataLabel, side = 3, adj = juvAdj1, line = -2)
+      mtext(text = noDataLabel, side = juvSide, adj = juvAdj1, line = juvLine1, cex = juvCex1)
     }else if(!is.null(juvLimit)){
       if(isTRUE(showJuv1)){
         juvValue <- sum(allLengths$y[allLengths$x < juvLimit], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
@@ -813,7 +813,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
       # Add juveniles 2 text
       if(sum(!is.na(allLengths$y)) < 2){
-        mtext(text = noDataLabel, side = 3, adj = juvAdj2, line = -2)
+        mtext(text = noDataLabel, side = juvSide, adj = juvAdj, line = juvLine2, cex = juvCex2)
       }else if(!is.null(juvLimit)){
         if(isTRUE(showJuv2)){
           juvValue <- sum(allLengths$y[allLengths$x < juvLimit], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
