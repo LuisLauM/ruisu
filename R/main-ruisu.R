@@ -791,7 +791,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     # Add juveniles 1 text
     if(sum(!is.na(allLengths$y)) < 2){
-      mtext(text = noDataLabel, side = juvSide, adj = juvAdj1, line = juvLine1, cex = juvCex1)
+      mtext(text = noDataLabel, side = juvSide, adj = juvAdj, line = juvLine1, cex = juvCex1)
     }else if(!is.null(juvLimit)){
       if(isTRUE(showJuv1)){
         juvValue <- sum(allLengths$y[allLengths$x < juvLimit], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
