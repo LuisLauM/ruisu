@@ -120,8 +120,13 @@ getSatellitalMaps_internal <- function(initialDate, finalDate, timeRes, what, at
     if(tolower(what) == "sst"){
       # Prefix for SST
       if(seqTime[i] <= as.Date("2004-1-15")){
-        prefix1 <- "erdPHssta"
-        satellite <- "Pathfinder Ver 5.0"
+        if(tolower(timeRes) == "day"){
+          prefix1 <- "erdPHssta"
+          satellite <- "Pathfinder Ver 5.0"
+        }else if(tolower(timeRes) == "month"){
+          prefix1 <- "erdMTsstd"
+          satellite <- "Terra MODIS"
+        }
       }else if(seqTime[i] <= as.Date("2011-1-15")){
         prefix1 <- "erdAGssta"
         satellite <- "POES AVHRR"
