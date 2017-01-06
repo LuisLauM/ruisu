@@ -1,4 +1,5 @@
 #' @import lubridate
+#' @importFrom raster intersect
 #' @import maps
 #' @import rgdal
 #' @import RCurl
@@ -432,30 +433,19 @@ getHarbor <- function(myHarbor){
   myHarbor <- chartr(old = "\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1",
                      new = "aeiouun", x = tolower(myHarbor))
 
-  allPatterns <- strsplit(x = harborData$pattern, split = "-")
-
   output <- NULL
-  for(i in seq_along(allPatterns)){
-    tempPattern <- allPatterns[[i]]
+  for(i in seq_along(myHarbor)){
 
-    for(j in seq_along(tempPattern)){
-      tempPattern2 <- tempPattern[j]
+    tempHarbor <- myHarbor[i]
 
-      if(grepl(pattern = "_", x = tempPattern2)){
+    harborPos <- which(sapply(harborData$pattern, grepl, x = tempHarbor))
 
-        tempPattern2 <- unlist(strsplit(tempPattern2, "_"))
-
-        if(is.element(substr(myHarbor, 1, 1), tempPattern2[1]) && grepl(pattern = tempPattern2[2], x = myHarbor)){
-          output <- c(output, i)
-
-          break
-        }
-      }else if(grepl(pattern = tempPattern[1], x = myHarbor)){
-        output <- c(output, i)
-
-        break
-      }
+    if(length(harborPos) > 1){
+      warning(paste(tempHarbor, "matched with more than one pattern at pos =", i,
+                    "\nFunction will take the first matched value:", harborData$name[harborPos[1]]))
     }
+
+    output <- c(output, harborPos[1])
   }
 
   return(as.list(harborData[output,]))
@@ -1172,4 +1162,66 @@ progressBar <- function(i, n, stepText = "n"){
   }
 
   return(invisible())
+}
+
+#' Get an overlay polygon from two set of points
+#'
+#' @param points1 Set of points 1 (\code{data.frame} or \code{list}).
+#' @param points2 Set of points 2 (\code{data.frame} or \code{list}).
+#' @param fillBase Indicates the way for closing the polygon. If \code{NULL} (default), the polygons will be closed
+#' joining the first and the last point. For extra ways, see details.
+#'
+#' @details \code{points1} and \code{points2} must be a \code{list} or \code{data.frame} with 'x' and 'y' levels as
+#' coordinates.
+#' \code{fillBase} argument can be used for closing the polygons. If \code{NULL}, first and last points will
+#' be joined. another value may be a function (\code{min}, \code{max}, \code{mean} or \code{median}) or a single
+#' number (e.g. zero).
+#'
+#' @return An \code{SpatialPolygons} object.
+#' @export
+#'
+#' @examples
+#' n <- 30
+#' points1 <- list(x = seq(n), y = runif(n = n, min = 20, max = 40))
+#' points2 <- list(x = seq(n), y = runif(n = n, min = 5, max = 30))
+#'
+#' plot(points1, type = "l", ylim = c(0, 40))
+#' lines(points2)
+#'
+#' overShape <- getOverlay(points1 = points1, points2 = points2, fillBase = 0)
+#' lines(overShape, col = "red")
+getOverlay <- function(points1, points2, fillBase = NULL){
+
+  points1 <- as.list(points1)
+  points2 <- as.list(points2)
+
+  if(!is.null(fillBase)){
+
+    validFunctions <- c("min", "max", "mean", "median")
+    if(is.function(fillBase) & is.element(fillBase, validFunctions)){
+      fillBase <- match.fun(fillBase)
+
+      fillBase <- fillBase(y, na.rm = TRUE)
+    }else if(!is.numeric(fillBase)){
+      stop("Incorrect value for 'fillBase'.")
+    }
+
+    points1 <- with(points1, list(x = c(x, rev(x)), y = c(y, rep(fillBase, length(y)))))
+    points2 <- with(points2, list(x = c(x, rev(x)), y = c(y, rep(fillBase, length(y)))))
+  }else{
+    with(points1, list(x = c(x, x[1]), y = c(y, y[1])))
+    points1 <- with(points1, list(x = c(x, x[1]), y = c(y, y[1])))
+    points2 <- with(points2, list(x = c(x, x[1]), y = c(y, y[1])))
+  }
+
+
+  points1 <- SpatialPolygons(Srl = list(Polygons(srl = list(Polygon(points1)), ID = 1)))
+
+
+  points2 <- SpatialPolygons(Srl = list(Polygons(srl = list(Polygon(points2)), ID = 1)))
+
+  overShape <- intersect(x = points1, y = points2)
+  unionShape <- union(x = points1, y = points2)
+
+  return(list(overShape, unionShape))
 }

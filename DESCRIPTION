@@ -13,6 +13,7 @@ Depends: maps, sp, R (>= 3.2.0)
 Imports:
     Rcpp (>= 0.12.3),
     lubridate,
+    raster,
     rgdal,
     stats,
     RCurl,
