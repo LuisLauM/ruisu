@@ -5,17 +5,18 @@
 #' @import RCurl
 #' @import stats
 #' @import sp
+#' @import graphics
+#' @import utils
+#' @import grDevices
 #'
-#' @useDynLib ruisu
-#'
-#' @title Paquete con herramientas diversas.
+#' @title Miscellany functions for the IMARPE work
 #'
 #' @author Wencheng Lau-Medrano, \email{llau@@imarpe.gob.pe}
 #' @name ruisu-package
-#' @description Paquete con funciones misceláneas dentro del Instituto del Mar del Perú.
+#' @description Package with useful tools and functions for everyday IMARPE work.
 #' @aliases ruisu-package ruisu
 #' @docType package
-#' @keywords miscelánea, IMARPE
+#' @keywords miscellany, IMARPE
 NULL
 
 #' @title \code{data.frame} with new (corrected) AIP information.
@@ -39,7 +40,7 @@ NULL
 NULL
 
 
-#' Abbreviation for \code{as.numeric}
+#' @title Abbreviation for \code{as.numeric}
 #'
 #' @param x Object to be coerced or tested.
 #' @param ... Further arguments passed to \code{as.numeric}.
@@ -53,7 +54,7 @@ an <- function(x, ...){
   return(as.numeric(x, ...))
 }
 
-#' Abbreviation for \code{as.character}
+#' @title Abbreviation for \code{as.character}
 #'
 #' @param x object to be coerced or tested.
 #' @param ... Further arguments passed to \code{as.character}.
@@ -67,7 +68,7 @@ ac <- function(x, ...){
   return(as.character(x, ...))
 }
 
-#' Abbreviation for \code{as.numeric(as.character(x))}
+#' @title Abbreviation for \code{as.numeric(as.character(x))}
 #'
 #' @param x object to be coerced or tested.
 #' @param ... Further arguments passed to \code{as.character}.
@@ -81,10 +82,10 @@ anc <- function(x, ...){
   return(as.numeric(as.character(x, ...)))
 }
 
-#' Title Function to identify water mass from different sources.
+#' @title Title Function to identify water mass from different sources.
 #'
 #' @param data \code{data.frame} including SST, SSS, month, depth, longitude and latitude information (see Details).
-#' @param method Select method for water mass estimation: Oliveros (2020), Swartzman (2008) and Zuta (1978).
+#' @param method Select method for water mass estimation: Oliveros (2020), Swartzman (2008, default) and Zuta (1978).
 #' @param sst Name of column which contains Sea Surface Temperature info.
 #' @param sss Name of column which contains Sea Surface Salinity info.
 #' @param lon Name of column which contains Longitude info.
@@ -95,11 +96,11 @@ anc <- function(x, ...){
 #' @param asFactors \code{logical}. If \code{TRUE}, output will returned as a \code{factor} object, otherwise as
 #' a \code{character} vector.
 #'
-#' @details Variables in \code{data} must be as next: SST (° S), SSS (PSU), depth (m), longitude (° W) and
-#' latitude (° E).
+#' @details Variables in \code{data} must be as next: SST ( C), SSS (PSU), depth (m), longitude ( W) and
+#' latitude ( E).
 #'
 #' @export
-calculateWaterMass <- function(data, method = "oliveros", sst = "sst", sss = "sss", lon = "lon",
+calculateWaterMass <- function(data, method = "swartzman", sst = "sst", sss = "sss", lon = "lon",
                                lat = "lat", month = "month", depth = "depth", dc = "dc",
                                asFactors = TRUE){
 
@@ -399,7 +400,7 @@ digitsum <- function(x, recursive = FALSE)
   return(x)
 }
 
-#' getCoordsAxes
+#' @title Easy way to get the labels of coordinates from a vector.
 #'
 #' @param coord Numeric vector of coordinates.
 #' @param what Indicate \code{coord} belongs to longitude (\code{what = "lon"}) or
@@ -418,7 +419,7 @@ getCoordsAxes <- function(coord, what){
   return(output)
 }
 
-#' Get harbor information from name
+#' @title Get harbor information from name
 #'
 #' @param myHarbor \code{character}. Text with the name of harbor.
 #'
@@ -451,7 +452,7 @@ getHarbor <- function(myHarbor){
   return(as.list(harborData[output,]))
 }
 
-#' Get proportions from table
+#' @title Get proportions from table
 #'
 #' @description Takes a table and gets propotions by row, column or total.
 #'
@@ -521,7 +522,7 @@ getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "m
   return(if(is.null(errorList)) invisible() else errorList)
 }
 
-#' Title Function to get AIP code from lon-lat information.
+#' @title Title Function to get AIP code from lon-lat information.
 #'
 #' @param dataPoints \code{data.frame} which has Longitude and Latitude information.
 #' @param colLon Name of column which contains Longitude info.
@@ -567,7 +568,7 @@ isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = 
 #' @param colLon Name of column which contains Longitude info.
 #' @param colLat Name of column which contains Latitude info.
 #' @param units Which units do you want to use for measuring the proximity to coast.
-#' @param distance
+#' @param distance Maximum distance (in degrees) to make the searching.
 #'
 #' @return A \code{logical} vector indicating whether the coordinates belong to the area between
 #' the coast line and a buffer of the selected distance.
@@ -757,7 +758,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
   file1[file1 <= 0 | is.na(file1)] <- 0
 
   if(isTRUE(newPlot)){
-    x11()
+    dev.new()
   }
 
   par(mfrow = c(ncol(file1), 1), mar = c(rep(0, 4)), oma = oma, xaxs = "i", yaxs = "i")
@@ -854,7 +855,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
   return(invisible())
 }
 
-#' Get the minumim distance to coast
+#' @title Get the minumim distance to coast
 #'
 #' @param data \code{data.frame} with coords that will be used to calculate min distance to coast line.
 #' @param colLon Name or position of column for longitude. As default, it will be \code{lon}.
@@ -881,7 +882,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 #' xlim <- c(-85, -70)
 #' ylim <- c(-20, -2)
 #'
-#' x11()
+#' dev.new()
 #' par(mar = c(2, 3, 1, 1), xaxs = "i", yaxs = "i")
 #' plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
 #'
@@ -928,7 +929,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
               position = minDistancesPosition))
 }
 
-#' Calculate the moving average for a numeric vector
+#' @title Calculate the moving average for a numeric vector
 #'
 #' @param x Numeric vector.
 #' @param n Size for grouping.
@@ -949,7 +950,7 @@ movingAverage <- function(x, n = 3, circular = TRUE, ...)
   return(an(output))
 }
 
-#' Curious way to show a message.
+#' @title Curious way to show a message.
 #'
 #' @param message What message do you want to show?
 #' @param delay Specify the time delay between letters.
@@ -966,7 +967,7 @@ newYear <- function(message, delay = 4, nroBombs = 100, dispersion = 10, cex.tex
   xlim <- c(0, 20)
   ylim <- c(0, 200)
 
-  x11()
+  dev.new()
   plot(1, 1, pch = NA, xlim = xlim, ylim = ylim, xlab = NA, ylab = NA)
 
   message <- unlist(strsplit(message, split = "_"))
@@ -1016,7 +1017,7 @@ newYear <- function(message, delay = 4, nroBombs = 100, dispersion = 10, cex.tex
   return(invisible())
 }
 
-#' Title plotIsoparalitoral
+#' @title Title plotIsoparalitoral
 #'
 #' @param codeList AIP codes to plot.
 #' @param add logical flag that specifies whether to add to the current plot. If FALSE, a new plot is begun, using
@@ -1059,15 +1060,23 @@ plotIsoparalitoral <- function(codeList = NULL, add = FALSE, old = TRUE,
 
   codeList <- index
 
-  sp:::plot.SpatialPolygons(referenceShapefile[codeList, 1], add = TRUE, ...)
+  plot.SpatialPolygons(referenceShapefile[codeList, 1], add = TRUE, ...)
 
   return(invisible())
 }
 
-#' prepareProjFolder
+#' @title Easy way to prepare a folder for a typical R Project
 #'
 #' @param folder \code{character}. Path of the folder that will be created.
 #' @param type Indicates the type of sub directories that will be created (see Details).
+#'
+#' @details You can indicate the set of directories that will be created using \code{type} as follows:
+#' \itemize{
+#'  \item{"1"}{"code", "data", "figures", "outputs"}
+#'  \item{"2"}{"code", "data", "figures", "raw", "outputs", "bib"}
+#'  \item{"3"}{"bib", "drafts", "presentations", "results/raw", "results/data", "results/figures",
+#'             "results/code/figures", "results/code/analysis"}
+#' }
 #'
 #' @export
 #'
@@ -1089,7 +1098,7 @@ prepareProjFolder <- function(folder, type = 1){
   return(invisible())
 }
 
-#' Title Draw colorful squares
+#' @title Title Draw colorful squares
 #'
 #' @param nsquares How much squares do you desire? (500, as default).
 #'
@@ -1097,8 +1106,7 @@ prepareProjFolder <- function(folder, type = 1){
 #'
 #' @examples
 #' randomRectangles(nsquares = 120)
-randomRectangles <- function(nsquares = 500)
-{
+randomRectangles <- function(nsquares = 500){
   nsquares <- as.integer(nsquares)
 
   par(bg = "black")
@@ -1121,10 +1129,11 @@ randomRectangles <- function(nsquares = 500)
   return(invisible())
 }
 
-#' Make a progress bar
+#' @title Make a progress bar
 #'
 #' @param i Step of the iteration.
 #' @param n Total number of iteration
+#' @param stepText Text before 'n'.
 #'
 #' @return The function returns only messages (from \code{cat}).
 #' @export
@@ -1164,7 +1173,7 @@ progressBar <- function(i, n, stepText = "n"){
   return(invisible())
 }
 
-#' Get an overlay polygon from two set of points
+#' @title Get an overlay polygon from two set of points
 #'
 #' @param points1 Set of points 1 (\code{data.frame} or \code{list}).
 #' @param points2 Set of points 2 (\code{data.frame} or \code{list}).
@@ -1189,7 +1198,6 @@ progressBar <- function(i, n, stepText = "n"){
 #' lines(points2)
 #'
 #' overShape <- getOverlay(points1 = points1, points2 = points2, fillBase = 0)
-#' lines(overShape, col = "red")
 getOverlay <- function(points1, points2, fillBase = NULL){
 
   points1 <- as.list(points1)

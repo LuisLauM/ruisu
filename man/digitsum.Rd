@@ -20,4 +20,3 @@ digitsum(1516)
 
 digitsum(1516, recursive = TRUE)
 }
-

@@ -18,4 +18,3 @@ This function takes a vector of AIP codes and returns centroids (center of mass)
 areaCodes <- c(1050, 4043, 17073, 27103)
 centroidAssigner(isoCode = areaCodes)
 }
-

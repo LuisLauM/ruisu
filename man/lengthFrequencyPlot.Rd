@@ -116,4 +116,3 @@ This function takes a length frequency data and returns an stacking plot of that
 smooth: logical. If TRUE, function uses an spline function to plot by categories.
 This function uses a data with categories at col and length at rows.
 }
-

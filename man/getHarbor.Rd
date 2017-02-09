@@ -9,13 +9,9 @@ getHarbor(myHarbor)
 \arguments{
 \item{myHarbor}{\code{character}. Text with the name of harbor.}
 }
-\description{
-Get harbor information from name
-}
 \details{
 The function will use \code{harborData} as a reference data.
 }
 \examples{
 getHarbor(myHarbor = "T. de mora")
 }
-

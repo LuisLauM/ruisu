@@ -2,15 +2,14 @@
 % Please edit documentation in R/main-ruisu.R
 \docType{package}
 \name{ruisu-package}
-\alias{ruisu}
 \alias{ruisu-package}
-\title{Paquete con herramientas diversas.}
+\alias{ruisu}
+\title{Miscellany functions for the IMARPE work}
 \description{
-Paquete con funciones misceláneas dentro del Instituto del Mar del Perú.
+Package with useful tools and functions for everyday IMARPE work.
 }
 \author{
 Wencheng Lau-Medrano, \email{llau@imarpe.gob.pe}
 }
 \keyword{IMARPE}
-\keyword{miscelánea,}
-
+\keyword{miscellany,}

@@ -18,13 +18,9 @@ isopArea.assigner(dataPoints, colLon = "lon", colLat = "lat", old = TRUE)
 \value{
 A numeric vector indicating the AIP values for each coord.
 }
-\description{
-Title Function to get AIP code from lon-lat information.
-}
 \examples{
 exampleCoords <- data.frame(lon = runif(n = 10, min = -80, max = -78),
                             lat = runif(n = 10, min = -14, max = -12))
 
 isopArea.assigner(dataPoints = exampleCoords)
 }
-

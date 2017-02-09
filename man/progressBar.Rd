@@ -10,12 +10,11 @@ progressBar(i, n, stepText = "n")
 \item{i}{Step of the iteration.}
 
 \item{n}{Total number of iteration}
+
+\item{stepText}{Text before 'n'.}
 }
 \value{
 The function returns only messages (from \code{cat}).
-}
-\description{
-Make a progress bar
 }
 \examples{
 n = 1000
@@ -24,4 +23,3 @@ for(i in seq(n)){
   progressBar(i = i, n = n)
 }
 }
-

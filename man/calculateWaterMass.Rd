@@ -4,14 +4,14 @@
 \alias{calculateWaterMass}
 \title{Title Function to identify water mass from different sources.}
 \usage{
-calculateWaterMass(data, method = "oliveros", sst = "sst", sss = "sss",
+calculateWaterMass(data, method = "swartzman", sst = "sst", sss = "sss",
   lon = "lon", lat = "lat", month = "month", depth = "depth",
   dc = "dc", asFactors = TRUE)
 }
 \arguments{
 \item{data}{\code{data.frame} including SST, SSS, month, depth, longitude and latitude information (see Details).}
 
-\item{method}{Select method for water mass estimation: Oliveros (2020), Swartzman (2008) and Zuta (1978).}
+\item{method}{Select method for water mass estimation: Oliveros (2020), Swartzman (2008, default) and Zuta (1978).}
 
 \item{sst}{Name of column which contains Sea Surface Temperature info.}
 
@@ -30,11 +30,7 @@ calculateWaterMass(data, method = "oliveros", sst = "sst", sss = "sss",
 \item{asFactors}{\code{logical}. If \code{TRUE}, output will returned as a \code{factor} object, otherwise as
 a \code{character} vector.}
 }
-\description{
-Title Function to identify water mass from different sources.
-}
 \details{
-Variables in \code{data} must be as next: SST (° S), SSS (PSU), depth (m), longitude (° W) and
-latitude (° E).
+Variables in \code{data} must be as next: SST ( C), SSS (PSU), depth (m), longitude ( W) and
+latitude ( E).
 }
-

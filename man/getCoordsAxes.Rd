@@ -2,7 +2,7 @@
 % Please edit documentation in R/main-ruisu.R
 \name{getCoordsAxes}
 \alias{getCoordsAxes}
-\title{getCoordsAxes}
+\title{Easy way to get the labels of coordinates from a vector.}
 \usage{
 getCoordsAxes(coord, what)
 }
@@ -15,11 +15,7 @@ latitude (\code{what = "lat"}) values.}
 \value{
 A \code{character} vector, ready to put as coords labels.
 }
-\description{
-getCoordsAxes
-}
 \examples{
 myLongitudes <- seq(-20, -15, 0.5)
 getCoordsAxes(coord = myLongitudes, what = "lat")
 }
-

@@ -28,4 +28,3 @@ This function uses next commands:
 counterZOO(spList = "myFolder/myTable.csv")
 }
 }
-

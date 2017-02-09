@@ -22,9 +22,6 @@ minDistanceToCoast(data, colLon = "lon", colLat = "lat",
 It returns a list with both the minimum distance to coast line and the point where this
 distance is reached.
 }
-\description{
-Get the minumim distance to coast
-}
 \examples{
 
 n <- 100
@@ -39,7 +36,7 @@ minValues <- minDistanceToCoast(allData)
 xlim <- c(-85, -70)
 ylim <- c(-20, -2)
 
-x11()
+dev.new()
 par(mar = c(2, 3, 1, 1), xaxs = "i", yaxs = "i")
 plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
 
@@ -58,4 +55,3 @@ axis(side = 2, at = seq(ylim[1], ylim[2], length.out = 10),
      labels = getCoordsAxes(seq(ylim[1], ylim[2], length.out = 10), "lat"), las = 2)
 box()
 }
-

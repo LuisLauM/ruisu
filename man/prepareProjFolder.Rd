@@ -2,7 +2,7 @@
 % Please edit documentation in R/main-ruisu.R
 \name{prepareProjFolder}
 \alias{prepareProjFolder}
-\title{prepareProjFolder}
+\title{Easy way to prepare a folder for a typical R Project}
 \usage{
 prepareProjFolder(folder, type = 1)
 }
@@ -11,12 +11,17 @@ prepareProjFolder(folder, type = 1)
 
 \item{type}{Indicates the type of sub directories that will be created (see Details).}
 }
-\description{
-prepareProjFolder
+\details{
+You can indicate the set of directories that will be created using \code{type} as follows:
+\itemize{
+ \item{"1"}{"code", "data", "figures", "outputs"}
+ \item{"2"}{"code", "data", "figures", "raw", "outputs", "bib"}
+ \item{"3"}{"bib", "drafts", "presentations", "results/raw", "results/data", "results/figures",
+            "results/code/figures", "results/code/analysis"}
+}
 }
 \examples{
 \dontrun{
 prepareProjFolder(folder = "../exampleFolder", type = 3)
 }
 }
-

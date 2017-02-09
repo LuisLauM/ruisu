@@ -9,10 +9,6 @@ randomRectangles(nsquares = 500)
 \arguments{
 \item{nsquares}{How much squares do you desire? (500, as default).}
 }
-\description{
-Title Draw colorful squares
-}
 \examples{
 randomRectangles(nsquares = 120)
 }
-

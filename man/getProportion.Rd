@@ -19,4 +19,3 @@ Takes a table and gets propotions by row, column or total.
 myTable <- matrix(data = runif(n = 15, min = 0, max = 30), ncol = 3)
 getProportion(table = myTable)
 }
-

@@ -22,11 +22,7 @@ coordinates for Peruvian shore.}
 
 \item{...}{Extra parameters passed to \code{plot.SpatialPolygons} function.}
 }
-\description{
-Title plotIsoparalitoral
-}
 \details{
 \code{plot.SpatialPolygons} is an internal function of \code{\link{sp}}. Some important parameters are: \code{border} which
 allows to specify color (or colors if a vector) of each AIP. \code{col} is useful to modify fill color of AIP.
 }
-

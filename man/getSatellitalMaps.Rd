@@ -48,4 +48,3 @@ getSatellitalMaps(initialDate = "2014-3-26", finalDate = "2014-4-17", what = "ss
 lonRange = c(-90, -85), latRange = c(-5, 0), outputFormat = "png",
 outputDir = "../")
 }
-

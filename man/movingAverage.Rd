@@ -19,11 +19,7 @@ otherwise assume external values are missing (\code{NA}).}
 \value{
 A numeric vector with the same length of the original vector.
 }
-\description{
-Calculate the moving average for a numeric vector
-}
 \examples{
 exampleVector <- runif(n = 20, min = 0, max = 100)
 movingAverage(x = exampleVector)
 }
-
