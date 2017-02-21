@@ -8,6 +8,7 @@
 #' @import graphics
 #' @import utils
 #' @import grDevices
+#' @import fields
 #'
 #' @title Miscellany functions for the IMARPE work
 #'
@@ -731,7 +732,10 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     index <- match(tolower(profile), rownames(speciesInfo))
 
-    xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
+    if(is.null(xlim)){
+      xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
+    }
+
     juvLimit <- an(speciesInfo$juvenile[index])
     xInterval <- an(speciesInfo$bin[index])
 
@@ -1060,7 +1064,7 @@ plotIsoparalitoral <- function(codeList = NULL, add = FALSE, old = TRUE,
 
   codeList <- index
 
-  plot.SpatialPolygons(referenceShapefile[codeList, 1], add = TRUE, ...)
+  plot(referenceShapefile[codeList, 1], add = TRUE, ...)
 
   return(invisible())
 }
@@ -1232,4 +1236,106 @@ getOverlay <- function(points1, points2, fillBase = NULL){
   unionShape <- union(x = points1, y = points2)
 
   return(list(overShape, unionShape))
+}
+
+
+#' @title Plot typical wind arrows from wind velocity data
+#'
+#' @param intensityMatrix Matrix with values of intensity of wind (velocity).
+#' @param angleMatrix Matrix with angle values of wind.
+#' @param maxLength For changing length of arrows (\code{numeric}).
+#' @param densityfactor For changing the quantity of arrows on plot. Value from 0 to 1.
+#' @param arrowCol Color of arrows.
+#' @param add \code{logical}; if \code{TRUE}, add to current plot and \code{...} will not be considered.
+#' @param xInterval If \code{add = TRUE}, it works for specifing the interval of marks in X axis.
+#' @param yInterval If \code{add = TRUE}, it works for specifing the interval of marks in Y axis.
+#' @param col Color table to use for image.
+#' @param ... Extra arguments passed to \code{image} function. It will only be used if \code{add = FALSE}.
+#'
+#' @return A plot of arrows indicating the intensity and direction of winds.
+#' @export
+makeWindPlot <- function(intensityMatrix, angleMatrix, maxLength = 1, densityfactor = 0.98, arrowCol = "black",
+                         add = TRUE, includeRaster = TRUE, col = tim.colors(1e3),
+                         xInterval = NULL, yInterval = NULL, ...){
+
+  if(is.null(list(...)$xlim)){
+    if(is.list(intensityMatrix)){
+      xlim <- range(intensityMatrix$x)
+    }else if(is.list(angleMatrix)){
+      xlim <- range(angleMatrix$x)
+    }else{
+      xlim <- c(0, 1)
+    }
+  }
+
+  if(is.null(list(...)$ylim)){
+    if(is.list(intensityMatrix)){
+      ylim <- range(intensityMatrix$y)
+    }else if(is.list(angleMatrix)){
+      ylim <- range(angleMatrix$y)
+    }else{
+      ylim <- c(0, 1)
+    }
+  }
+
+  if(is.null(list(...)$zlim)){
+    zlim <- c(0, max(an(intensityMatrix$z), na.rm = TRUE))
+  }
+
+  if(is.matrix(intensityMatrix)){
+    intensityMatrix <- list(x = seq(xlim[1], xlim[2], length.out = nrow(intensityMatrix)),
+                            y = seq(ylim[1], ylim[2], length.out = ncol(intensityMatrix)),
+                            z = intensityMatrix)
+  }
+
+  if(is.matrix(angleMatrix)){
+    angleMatrix <- list(x = seq(xlim[1], xlim[2], length.out = nrow(angleMatrix)),
+                        y = seq(ylim[1], ylim[2], length.out = ncol(angleMatrix)),
+                        z = angleMatrix)
+  }
+
+  # x11()
+  if(!isTRUE(add)){
+    plot(1, 1, pch = NA, axes = FALSE, xlim = xlim, ylim = ylim, xlab = NA, ylab = NA)
+  }
+
+  if(isTRUE(includeRaster)){
+    image(intensityMatrix, add = TRUE, col = col, ...)
+  }
+
+  densityfactor <- floor((nrow(intensityMatrix$z) - 1)*(1 - densityfactor) + 1)
+
+  for(i in seq(from = 1, to = nrow(intensityMatrix$z), by = densityfactor)){
+    for(j in seq(from = 1, to = ncol(intensityMatrix$z), by = densityfactor)){
+
+      intensityValue <- intensityMatrix$z[i, j]
+      angleValue <- angleMatrix$z[i, j]
+
+      if(!is.na(intensityValue) || !is.na(angleValue)){
+        arrows(x0 = intensityMatrix$x[i], y0 = intensityMatrix$y[j],
+               x1 = intensityMatrix$x[i] + sin(angleValue)*intensityMatrix$z[i, j]*maxLength,
+               y1 = intensityMatrix$y[j] + cos(angleValue)*intensityMatrix$z[i, j]*maxLength,
+               length = 0.05, angle = 30, col = arrowCol)
+      }
+    }
+  }
+
+  xInterval <- if(is.null(xInterval) || is.na(xInterval)) diff(xlim)/5 else xInterval
+  yInterval <- if(is.null(yInterval) || is.na(yInterval)) diff(ylim)/5 else yInterval
+
+  if(!isTRUE(add)){
+    xAxis <- seq(xlim[1], xlim[2], xInterval)
+    yAxis <- seq(ylim[1], ylim[2], yInterval)
+
+    axis(side = 1, at = xAxis, labels = getCoordsAxes(xAxis, "lon"))
+    axis(side = 2, at = yAxis, labels = getCoordsAxes(yAxis, "lat"), las = 2)
+    box()
+  }
+
+  if(isTRUE(includeRaster)){
+    image.plot(intensityMatrix, add = TRUE, col = col, legend.only = TRUE, ...)
+  }
+
+
+  return(invisible())
 }
