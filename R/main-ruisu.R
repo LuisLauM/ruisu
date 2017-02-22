@@ -1339,3 +1339,54 @@ makeWindPlot <- function(intensityMatrix, angleMatrix, maxLength = 1, densityfac
 
   return(invisible())
 }
+
+#' @title Extract info from AIP codes
+#'
+#' @param aipVector Vector of AIP.See Details
+#'
+#' @details AIP codes must be written in format DDLLPP, where DD is value of Distance to coast (mn/10),
+#' LL are values of Latitude (as integer) and PP is position (up or down).
+#'
+#' @return A \code{data.frame} with variables dc, lat and upDown.
+#' @export
+#'
+#' @examples
+#' getAIPInfo(c(30073, 1020, 2010))
+getAIPInfo <- function(aipVector){
+  ncharAip <- nchar(aipVector)
+
+  dc <- an(substr(aipVector, 1, ifelse(ncharAip == 4, 1, 2)))
+  lat <- dc <- an(substr(aipVector, ifelse(ncharAip == 4, 2, 3), ncharAip - 1))
+  upDown <- an(substr(aipVector, ncharAip, ncharAip))
+
+  if(any(!is.element(upDown, c(0, 3)))){
+    warning(paste("Values #", paste(which(!is.element(upDown, c(0, 3))), collapse = ", "), "have wrong values for up-down info."))
+  }
+
+  return(data.frame(dc, lat, upDown, stringsAsFactors = FALSE))
+}
+
+#' @title Add a box with a text inside
+#'
+#' @param xLimits x-Axis limits for box.
+#' @param yLimits y-Axis limits for box.
+#' @param text A character or \link{expression} vector specifying the text to be written.
+#' @param border the color to draw the border. The default, NULL, means to use par("fg"). Use border = NA to omit borders. See Details.
+#' @param col The color for filling the box polygon.
+#' @param lty The line type to be used, as in par.
+#' @param ... Extra arguments passed from \link{text} function.
+#'
+#' @details For extra details about \code{border}, \code{col} and \code{lty}, check the description of \link{polygon}.
+#'
+#' @export
+#'
+#' @examples
+#' plot(1, 1, pch = NA)
+#' addTextBox(xLimits = c(0.9, 1.1), yLimits = c(0.9, 1.1), text = "Hello World!", col = "indianred1", font = 2)
+addTextBox <- function(xLimits, yLimits, text, border = NULL, col = "white", lty = par("lty"), ...){
+
+  polygon(x = c(xLimits, rev(xLimits)), y = rep(yLimits, each = 2), border = border, col = col)
+  text(x = mean(xLimits), y = mean(yLimits), labels = text, ...)
+
+  return(invisible())
+}
