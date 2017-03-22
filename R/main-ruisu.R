@@ -1277,8 +1277,13 @@ makeWindPlot <- function(uComponent, vComponent, maxLength = 1, densityfactor = 
                          add = TRUE, includeRaster = TRUE, col = tim.colors(1e3),
                          xInterval = NULL, yInterval = NULL, ...){
 
-  intensityMatrix <- sqrt(uComponent$z^2 + vComponent$z^2)
-  angleMatrix <- atan(vComponent$z/uComponent$z)
+  intensityMatrix <- list(x = uComponent$x,
+                          y = uComponent$y,
+                          z = sqrt(uComponent$z^2 + vComponent$z^2))
+
+  angleMatrix <- list(x = uComponent$x,
+                      y = uComponent$y,
+                      z = atan(vComponent$z/uComponent$z))
 
   if(is.null(list(...)$xlim)){
     if(is.list(intensityMatrix)){
