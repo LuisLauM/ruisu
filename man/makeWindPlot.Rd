@@ -4,15 +4,14 @@
 \alias{makeWindPlot}
 \title{Plot typical wind arrows from wind velocity data}
 \usage{
-makeWindPlot(intensityMatrix, angleMatrix, maxLength = 1,
-  densityfactor = 0.98, arrowCol = "black", add = TRUE,
-  includeRaster = TRUE, col = tim.colors(1000), xInterval = NULL,
-  yInterval = NULL, ...)
+makeWindPlot(uComponent, vComponent, maxLength = 1, densityfactor = 0.98,
+  arrowCol = "black", add = TRUE, includeRaster = TRUE,
+  col = tim.colors(1000), xInterval = NULL, yInterval = NULL, ...)
 }
 \arguments{
-\item{intensityMatrix}{Matrix with values of intensity of wind (velocity).}
+\item{uComponent}{Matrix with values of velocity in x component See Details.}
 
-\item{angleMatrix}{Matrix with angle values of wind.}
+\item{vComponent}{Matrix with values of velocity in y component See Details.}
 
 \item{maxLength}{For changing length of arrows (\code{numeric}).}
 
@@ -32,4 +31,8 @@ makeWindPlot(intensityMatrix, angleMatrix, maxLength = 1,
 }
 \value{
 A plot of arrows indicating the intensity and direction of winds.
+}
+\details{
+Both \code{uComponent} and \code{vComponent} must be list objects with levels x (vector of longitudes),
+y (vector of latitudes) and z (matrix of values).
 }

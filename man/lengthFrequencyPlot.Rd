@@ -15,9 +15,10 @@ lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
   juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
   juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol = NULL,
   cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
-  smooth = FALSE, oma = c(5, 5, 1, 3), xlab = NULL,
-  ylab = "Frecuencia (\%)", noDataLabel = "Sin datos", ylabFactor = 1,
-  relative = TRUE)
+  title_text = NULL, title_line = 2, title_cex = NULL,
+  title_col = "black", title_font = 1, smooth = FALSE, oma = NULL,
+  xlab = NULL, ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
+  ylabFactor = 1, relative = TRUE)
 }
 \arguments{
 \item{file1}{Indicates the table from the main length distribution will be drawn. See details.}
@@ -96,9 +97,19 @@ xlim, juvLine, xInterval and xlab.}
 
 \item{namesAdj}{adj (see \code{\link{mtext}}) parameter for categories (column names) text.}
 
+\item{title_text}{Text for title. If not \code{NULL}, default \code{oma = c(5, 5, 3, 3)}}
+
+\item{title_line}{line (see \code{\link{mtext}}) parameter for title text.}
+
+\item{title_cex}{Size for title text.}
+
+\item{title_col}{col (see \code{\link{par}}) parameter for title text.}
+
+\item{title_font}{font (see \code{\link{par}}) parameter for title text.}
+
 \item{smooth}{\code{logical} Do you want to smooth the length distribution lines?}
 
-\item{oma}{oma (see \code{\link{par}}) parameter for plot.}
+\item{oma}{oma (see \code{\link{par}}) parameter for plot. Default \code{c(5, 5, 1, 3)}.}
 
 \item{xlab}{Label for x axis.}
 

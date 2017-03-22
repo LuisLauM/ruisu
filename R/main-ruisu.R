@@ -661,8 +661,13 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #' @param cex.lab cex.lab (see \code{\link{par}}) parameter for x and y axes.
 #' @param ylab_line line (see \code{\link{mtext}}) parameter for ylab text.
 #' @param namesAdj adj (see \code{\link{mtext}}) parameter for categories (column names) text.
+#' @param title_text Text for title. If not \code{NULL}, default \code{oma = c(5, 5, 3, 3)}
+#' @param title_line line (see \code{\link{mtext}}) parameter for title text.
+#' @param title_cex Size for title text.
+#' @param title_col col (see \code{\link{par}}) parameter for title text.
+#' @param title_font font (see \code{\link{par}}) parameter for title text.
 #' @param smooth \code{logical} Do you want to smooth the length distribution lines?
-#' @param oma oma (see \code{\link{par}}) parameter for plot.
+#' @param oma oma (see \code{\link{par}}) parameter for plot. Default \code{c(5, 5, 1, 3)}.
 #' @param xlab Label for x axis.
 #' @param ylab Label for y axis.
 #' @param noDataLabel \code{character}. If there is no data in a column, the function will show
@@ -685,7 +690,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
                                 showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
                                 juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol = NULL,
                                 cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
-                                smooth = FALSE, oma = c(5, 5, 1, 3), xlab = NULL, ylab = "Frecuencia (%)",
+                                title_text = NULL, title_line = 2, title_cex = NULL, title_col = "black", title_font = 1,
+                                smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
                                 noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE){
 
   if(is.element(class(file1), c("data.frame", "matrix"))){
@@ -732,10 +738,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     index <- match(tolower(profile), rownames(speciesInfo))
 
-    if(is.null(xlim)){
-      xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
-    }
-
+    xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
     juvLimit <- an(speciesInfo$juvenile[index])
     xInterval <- an(speciesInfo$bin[index])
 
@@ -763,6 +766,14 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
   if(isTRUE(newPlot)){
     dev.new()
+  }
+
+  if(is.null(oma)){
+    if(is.null(title_text)){
+      oma <- c(5, 5, 1, 3)
+    }else{
+      oma <- c(5, 5, 3, 3)
+    }
   }
 
   par(mfrow = c(ncol(file1), 1), mar = c(rep(0, 4)), oma = oma, xaxs = "i", yaxs = "i")
@@ -850,6 +861,11 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     mtext(text = colnames(file1)[i], side = 3, adj = namesAdj, line = -2)
 
     box()
+  }
+
+  if(!is.null(title_text)){
+    mtext(text = title_text, side = 3, line = title_line, outer = TRUE, cex = title_cex,
+          col = title_col, font = title_font)
   }
 
   mtext(text = ifelse(is.null(xlab), "Longitud", xlab), side = 1, line = 3, outer = TRUE,
@@ -1241,8 +1257,8 @@ getOverlay <- function(points1, points2, fillBase = NULL){
 
 #' @title Plot typical wind arrows from wind velocity data
 #'
-#' @param intensityMatrix Matrix with values of intensity of wind (velocity).
-#' @param angleMatrix Matrix with angle values of wind.
+#' @param uComponent Matrix with values of velocity in x component See Details.
+#' @param vComponent Matrix with values of velocity in y component See Details.
 #' @param maxLength For changing length of arrows (\code{numeric}).
 #' @param densityfactor For changing the quantity of arrows on plot. Value from 0 to 1.
 #' @param arrowCol Color of arrows.
@@ -1252,11 +1268,17 @@ getOverlay <- function(points1, points2, fillBase = NULL){
 #' @param col Color table to use for image.
 #' @param ... Extra arguments passed to \code{image} function. It will only be used if \code{add = FALSE}.
 #'
+#' @details Both \code{uComponent} and \code{vComponent} must be list objects with levels x (vector of longitudes),
+#' y (vector of latitudes) and z (matrix of values).
+#'
 #' @return A plot of arrows indicating the intensity and direction of winds.
 #' @export
-makeWindPlot <- function(intensityMatrix, angleMatrix, maxLength = 1, densityfactor = 0.98, arrowCol = "black",
+makeWindPlot <- function(uComponent, vComponent, maxLength = 1, densityfactor = 0.98, arrowCol = "black",
                          add = TRUE, includeRaster = TRUE, col = tim.colors(1e3),
                          xInterval = NULL, yInterval = NULL, ...){
+
+  intensityMatrix <- sqrt(uComponent$z^2 + vComponent$z^2)
+  angleMatrix <- atan(vComponent$z/uComponent$z)
 
   if(is.null(list(...)$xlim)){
     if(is.list(intensityMatrix)){
