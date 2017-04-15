@@ -1382,8 +1382,8 @@ makeWindPlot <- function(uComponent, vComponent, maxLength = 1, densityfactor = 
 getAIPInfo <- function(aipVector){
   ncharAip <- nchar(aipVector)
 
-  dc <- an(substr(aipVector, 1, ifelse(ncharAip == 4, 1, 2)))
-  lat <- dc <- an(substr(aipVector, ifelse(ncharAip == 4, 2, 3), ncharAip - 1))
+  dc <- an(substr(aipVector, 1, ifelse(ncharAip == 4, 1, 2)))*10
+  lat <- an(substr(aipVector, ifelse(ncharAip == 4, 2, 3), ncharAip - 1))
   upDown <- an(substr(aipVector, ncharAip, ncharAip))
 
   if(any(!is.element(upDown, c(0, 3)))){
