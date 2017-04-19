@@ -688,7 +688,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
                                 juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
                                 showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1, juvLabel1 = "juveniles_1 = ",
                                 showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
-                                juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol = NULL,
+                                juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL, juvTextCol2 = NULL,
                                 cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
                                 title_text = NULL, title_line = 2, title_cex = NULL, title_col = "black", title_font = 1,
                                 smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
@@ -795,14 +795,22 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     allLengths$y[allLengths$y < 0.001] <- NA
 
 
+
+
     # Add juveniles 1 text
     if(sum(!is.na(allLengths$y)) < 2){
       mtext(text = noDataLabel, side = juvSide, adj = juvAdj, line = juvLine1, cex = juvCex1)
     }else if(!is.null(juvLimit)){
       if(isTRUE(showJuv1)){
+        if(is.null(juvTextCol1)){
+          juvTextCol1 <- col1
+        }else{
+          juvTextCol1 <- rep(juvTextCol1, len = length(col1))
+        }
+
         juvValue <- sum(allLengths$y[allLengths$x < juvLimit], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
         mtext(text = paste0(juvLabel1, round(juvValue*100, juvRound), " %"), cex = juvCex1,
-              col = ifelse(is.null(juvTextCol), col1, juvTextCol), side = juvSide, line = juvLine1, adj = juvAdj)
+              col = juvTextCol1[i], side = juvSide, line = juvLine1, adj = juvAdj)
       }
 
       abline(v = juvLimit, lty = juvLty, lwd = juvLwd, col = juvCol)
@@ -822,9 +830,15 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
         mtext(text = noDataLabel, side = juvSide, adj = juvAdj, line = juvLine2, cex = juvCex2)
       }else if(!is.null(juvLimit)){
         if(isTRUE(showJuv2)){
+          if(is.null(juvTextCol2)){
+            juvTextCol2 <- col2
+          }else{
+            juvTextCol2 <- rep(juvTextCol2, len = length(col2))
+          }
+
           juvValue <- sum(allLengths$y[allLengths$x < juvLimit], na.rm = TRUE)/sum(allLengths$y, na.rm = TRUE)
           mtext(text = paste0(juvLabel2, round(juvValue*100, juvRound), " %"), cex = juvCex2,
-                col = ifelse(is.null(juvTextCol), col2, juvTextCol), side = juvSide, line = juvLine2, adj = juvAdj)
+                col = juvTextCol2[i], side = juvSide, line = juvLine2, adj = juvAdj)
         }
       }
 

@@ -13,9 +13,9 @@ lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
   juvLwd = 1, juvCol = "red", showJuv1 = TRUE, juvLine1 = -2,
   juvCex1 = 1, juvLabel1 = "juveniles_1 = ", showJuv2 = TRUE,
   juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
-  juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol = NULL,
-  cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
-  title_text = NULL, title_line = 2, title_cex = NULL,
+  juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL,
+  juvTextCol2 = NULL, cex.axis = 1, cex.lab = 1, ylab_line = 3,
+  namesAdj = 0.01, title_text = NULL, title_line = 2, title_cex = NULL,
   title_col = "black", title_font = 1, smooth = FALSE, oma = NULL,
   xlab = NULL, ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
   ylabFactor = 1, relative = TRUE)
@@ -86,9 +86,6 @@ xlim, juvLine, xInterval and xlab.}
 
 \item{juvSide}{side (see \code{\link{mtext}}) parameter for juvenile text.}
 
-\item{juvTextCol}{col (see \code{\link{par}}) parameter for juvenile text. If \code{NULL}
-(default), function will use \code{col1} and \code{col2} values.}
-
 \item{cex.axis}{cex.axis (see \code{\link{par}}) parameter for x and y axes.}
 
 \item{cex.lab}{cex.lab (see \code{\link{par}}) parameter for x and y axes.}
@@ -121,6 +118,9 @@ what this parameter indicates.}
 \item{ylabFactor}{\code{numeric}. Value that multiplies all values in both main and secondary matrices.}
 
 \item{relative}{\code{logical} Do you want to plot relatives or absolutes values?}
+
+\item{juvTextCol}{col (see \code{\link{par}}) parameter for juvenile text. If \code{NULL}
+(default), function will use \code{col1} and \code{col2} values.}
 }
 \details{
 This function takes a length frequency data and returns an stacking plot of that frequencies.
