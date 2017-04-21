@@ -738,9 +738,17 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     index <- match(tolower(profile), rownames(speciesInfo))
 
-    xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
-    juvLimit <- an(speciesInfo$juvenile[index])
-    xInterval <- an(speciesInfo$bin[index])
+    if(is.null(xlim)){
+      xlim <- c(speciesInfo[index, c("Lmin", "Lmax")])
+    }
+
+    if(is.null(juvLimit)){
+      juvLimit <- an(speciesInfo$juvenile[index])
+    }
+
+    if(is.null(xInterval)){
+      xInterval <- an(speciesInfo$bin[index])
+    }
 
     if(is.null(xlab)){
       xlab <- paste0("Longitud ", speciesInfo$lengthType[index], " (", speciesInfo$unit[index], ")")
