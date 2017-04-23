@@ -301,7 +301,7 @@ counterZOO <- function(spList = NULL, filepath = "conteo.csv", reset = TRUE){
     }
 
     # Ubicar la posicion de la fila segun el caracter asociado digitado
-    pos <- match(command, as.character(spList[,2]))
+    pos <- match(command, ac(spList[,2]))
 
     # Procedimientos para el comando 'corr' (correccion)
     if(grepl(x = command, pattern = "corr")){
@@ -314,18 +314,18 @@ counterZOO <- function(spList = NULL, filepath = "conteo.csv", reset = TRUE){
       correction <- tolower(scan(what = "character", nmax = 1, quiet = TRUE))
 
       # Ubicar la posicion de la fila segun el caracter asociado digitado
-      pos <- match(corrChar, as.character(spList[,2]))
+      pos <- match(corrChar, ac(spList[,2]))
 
       # Extraer valores a corregir
-      a <- as.numeric(spList[pos, 3])
-      b <- as.numeric(substr(correction, 2, nchar(correction)))
+      a <- an(spList[pos, 3])
+      b <- an(substr(correction, 2, nchar(correction)))
 
       # Realiza la correccion
       spList[pos, 3] <- switch(substr(correction, 1, 1),
-                               "+" = as.character(a + b),
-                               "-" = as.character(a - b),
-                               "*" = as.character(a * b),
-                               "/" = as.character(a / b))
+                               "+" = ac(a + b),
+                               "-" = ac(a - b),
+                               "*" = ac(a * b),
+                               "/" = ac(a / b))
 
       # Mostrar tabla
       showPlots(spList)
@@ -345,7 +345,7 @@ counterZOO <- function(spList = NULL, filepath = "conteo.csv", reset = TRUE){
     }
 
     # Si el caracter asociado es valido, incrementar el conteo de esa especie
-    spList[pos, 3] <- as.character(as.numeric(spList[pos, 3]) + 1)
+    spList[pos, 3] <- ac(an(spList[pos, 3]) + 1)
 
     # Mostrar tabla
     showPlots(spList)
@@ -1436,6 +1436,71 @@ addTextBox <- function(xLimits, yLimits, text, border = NULL, col = "white", lty
 
   polygon(x = c(xLimits, rev(xLimits)), y = rep(yLimits, each = 2), border = border, col = col)
   text(x = mean(xLimits), y = mean(yLimits), labels = text, ...)
+
+  return(invisible())
+}
+
+#' Functions for making an interactive test
+#'
+#' @param testName The name for the test
+#' @param questions \code{character} vector indicating the questions.
+#' @param answers \code{list} with the options for each question.
+#' @param correctAnswers \code{numeric} vector indicating the index for correct answers.
+#'
+#' @details Of course, arguments for questions, answers and correct answers must have the same length.
+#'
+#' @return Nothing.
+#' @export
+#'
+#' @examples
+#' sillyTest(testName = "Harry Potter", questions = testExample$questions,
+#'           answers = testExample$answers, correctAnswers = testExample$correctAnswers)
+sillyTest <- function(testName, questions, answers, correctAnswers){
+
+  if(length(unique(c(length(questions), length(answers), length(correctAnswers)))) > 1){
+    stop("Arguments for questions, answers and correct answers must have the same length.")
+  }
+
+  cat(paste0("Hola, bienvenido(a) a este Test de ", testName[1],
+             ". \n\n \u00bfCu\u00e1l es tu nombre?"))
+
+  gamerName <- scan(what = character(), n = 1, quiet = TRUE)
+
+  cat("\n ", sprintf("\u00a1Genial %s!", gamerName),
+      " \nEl test completo se compone de ", length(questions),
+      " preguntas, \u00bfCu\u00e1ntas deseas resolver? ", sep = "")
+
+  qstNumber <- suppressWarnings(as.integer(an(scan(what = character(), nmax = 1, quiet = TRUE))))
+
+  while(is.na(qstNumber) || (qstNumber > length(questions) | qstNumber < 1)){
+    cat("\n ", sprintf("Elecci\u00f3n incorrecta %s, selecciona un n\u00famero entre 1 y ",
+                       length(questions), " \n\n", gamerName),
+        "\n", sep = "")
+
+
+    cat("Tu respuesta ")
+
+    qstNumber <- suppressWarnings(as.integer(an(scan(what = character(), nmax = 1, quiet = TRUE))))
+  }
+
+  qstIndex <- sample(x = seq_along(questions), size = qstNumber, replace = FALSE)
+
+  allAns <- NULL
+  for(i in qstIndex){
+    allAns <- rbind(allAns, c(i, setQuestion(qst = questions[i], ans = answers[[i]]), correctAnswers[i]))
+  }
+
+  colnames(allAns) <- c("question", "answer", "correct")
+
+  correction <- apply(allAns[,-1], 1, function(x) abs(diff(x)))
+
+  score <- round(sum(correction < 1, na.rm = TRUE)/qstNumber*100, 0)
+
+  scorePlace <- ac(cut(score, breaks = c(-Inf, 20, 50, 75, 90, Inf),
+                                 labels = c("Muy mal", "Mal", "Bien", "Muy bien", "Genial")))
+
+  cat("\n ", sprintf("\u00a1%s, %s!", scorePlace, gamerName),
+      "\n", sprintf("Tu puntaje fue de %s", score), "%!", sep = "")
 
   return(invisible())
 }

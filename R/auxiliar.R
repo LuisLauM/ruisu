@@ -236,9 +236,9 @@ getSatellitalMaps_internal <- function(initialDate, finalDate, timeRes, what, at
     # If URL is incorrect or if file is not available, show warning message and save failed URL
     if(!url.exists(url = tempURL)){
       errorList <- c(errorList, tempURL)
-      errorNames <- c(errorNames, as.character(seqTime[i]))
+      errorNames <- c(errorNames, ac(seqTime[i]))
 
-      cat(paste0("\n ", as.character(seqTime[i]), " ...... Failed! \n"))
+      cat(paste0("\n ", ac(seqTime[i]), " ...... Failed! \n"))
 
       next
     }
@@ -252,7 +252,7 @@ getSatellitalMaps_internal <- function(initialDate, finalDate, timeRes, what, at
     suppressWarnings(download.file(url = tempURL, destfile = file.path(outputDir, outputFile), quiet = TRUE,
                                    mode = "wb"))
 
-    cat(paste0("\n ", as.character(seqTime[i]), " ...... OK \n"))
+    cat(paste0("\n ", ac(seqTime[i]), " ...... OK \n"))
   }
 
   if(!is.null(errorNames))
@@ -265,10 +265,10 @@ getSatellitalMaps_internal <- function(initialDate, finalDate, timeRes, what, at
 .digitSum <- function(x, recursive = FALSE){
   if(recursive){
     while(nchar(x) > 1){
-      x <- sum(as.numeric(unlist(strsplit(as.character(x), ""))), na.rm = TRUE)
+      x <- sum(an(unlist(strsplit(ac(x), ""))), na.rm = TRUE)
     }
   }else{
-    x <- sum(as.numeric(unlist(strsplit(as.character(x), ""))), na.rm = TRUE)
+    x <- sum(an(unlist(strsplit(ac(x), ""))), na.rm = TRUE)
   }
 }
 
@@ -297,4 +297,43 @@ getSatellitalMaps_internal <- function(initialDate, finalDate, timeRes, what, at
   output <- paste0(round(abs(coord), 3), sufix)
 
   return(output)
+}
+
+setQuestion <- function(qst, ans){
+  cat("\n", qst, "\n\n")
+
+  ansIndex <- data.frame(real = seq_along(ans),
+                         random = sample(x = seq_along(ans), size = length(ans), replace = FALSE))
+
+  for(i in seq_along(ansIndex$random)){
+    cat(paste0(i, ". "), ans[ansIndex$random[i]], "\n", sep = "")
+  }
+
+  cat("\n Tu respuesta: ")
+
+  tempAns <- scan(what = character(), nmax = 1, quiet = TRUE)
+
+  while(length(tempAns) < 1 || !(tempAns %in% seq_along(ans))){
+    if(length(tempAns) < 1){
+      cat("\u00bfDeseas salir del test? (s/n): ")
+
+      quitAns <- scan(what = character(), nmax = 1, quiet = TRUE)
+
+      if(tolower(quitAns) == "s"){
+        cat("Ve a releer tus libros, te falta mucho")
+
+        return(invisible())
+      }
+    }
+
+    cat("Elecci\u00f3n incorrecta, selecciona un n\u00famero entre 1 y ", length(ans), "\n\n", sep = "")
+
+    cat("Tu respuesta: ")
+
+    tempAns <- scan(what = character(), nmax = 1, quiet = TRUE)
+  }
+
+  tempAns <- an(tempAns)
+
+  return(ansIndex$random[tempAns])
 }
