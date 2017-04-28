@@ -739,7 +739,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     index <- match(tolower(profile), rownames(speciesInfo))
 
     if(is.null(xlim)){
-      xlim <- c(speciesInfo[index, c("Lmin", "Lmax")])
+      xlim <- an(speciesInfo[index, c("Lmin", "Lmax")])
     }
 
     if(is.null(juvLimit)){
