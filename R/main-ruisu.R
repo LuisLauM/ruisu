@@ -40,6 +40,76 @@ NULL
 #' @references Instituto del Mar del Peru.
 NULL
 
+#' @title \code{shapefile} with old (original) AIP information.
+#' @name AIPShapefile_old
+#' @description \code{SpatialPolygonsDataFrame} object.
+#' @aliases AIPShapefile_old
+#' @docType data
+#' @usage AIPShapefile_old
+#' @format A \code{SpatialPolygonsDataFrame}
+#' @references Instituto del Mar del Peru.
+NULL
+
+#' @title \code{shapefile} with new (corrected) AIP information.
+#' @name AIPShapefile_new
+#' @description \code{SpatialPolygonsDataFrame} object.
+#' @aliases AIPShapefile_new
+#' @docType data
+#' @usage AIPShapefile_new
+#' @format A \code{SpatialPolygonsDataFrame}
+#' @references Instituto del Mar del Peru.
+NULL
+
+#' @title \code{data.frame} with information of the main Peruvian harbors
+#' @name harborData
+#' @description Some detailed information of the main Peruvian harbors.
+#' @aliases harborData
+#' @docType data
+#' @usage harborData
+#' @format A \code{data.frame} with information of Peruvian harbors: name, pattern, lon, lat, area, importance. See Details
+#' @details \code{pattern} information is used by \code{getHarbor} funtion for making a match between given strings and
+#' the harbor names of \code{harbordata}.
+#' \code{importance} column separates the principal harbors (1 value) from the secondary ones (0 values).
+#' @references Instituto del Mar del Peru.
+NULL
+
+#' @title \code{data.frame} with coordinates of the eastern side of the American coast.
+#' @name coastline
+#' @description coordinates of the eastern side of the American coast.
+#' @aliases coastline
+#' @docType data
+#' @usage coastline
+#' @format A \code{data.frame} with coordinates of the eastern side of the American coast: country, lon, lat
+#' @references Instituto del Mar del Peru.
+NULL
+
+#' @title \code{charcater} vector with names of months in Spanish.
+#' @name month.name_spanish
+#' @description Similar to \code{month.name} but in Spanish.
+#' @aliases month.name_spanish
+#' @docType data
+#' @usage month.name_spanish
+#' @format A \code{charcater} vector with names of months in Spanish.
+NULL
+
+#' @title \code{charcater} vector with the three-letter abbreviations for names of months in Spanish.
+#' @name month.abb_spanish
+#' @description Similar to \code{month.abb} but in Spanish.
+#' @aliases month.abb_spanish
+#' @docType data
+#' @usage month.abb_spanish
+#' @format A \code{charcater} vector with the three-letter abbreviations for names of months in Spanish.
+NULL
+
+#' @title \code{data.frame} with main information about some Peruvian fishes.
+#' @name speciesInfo
+#' @description A table with information of scientific name, type of measurement of length, typycal unit
+#' for expresing this measurements, Minimum length, Maximum length, typical interval length, juvenile length.
+#' @aliases speciesInfo
+#' @docType data
+#' @usage speciesInfo
+#' @format A \code{data.frame} with main information about some Peruvian fishes.
+NULL
 
 #' @title Abbreviation for \code{as.numeric}
 #'
@@ -180,39 +250,7 @@ counterZOO <- function(spList = NULL, filepath = "conteo.csv", reset = TRUE){
   cat("\n end     : Finalizar conteo (mostrar y guardar tabla de conteo).\n")
   cat("\n help    : Mostrar lista de comandos.\n")
 
-  # Definir funcion para mostrar la tabla de conteo
-  showPlots <- function(spList){
 
-    # Eliminar plots anteriores (si hubiera)
-    if(!is.null(dev.list()))
-      dev.off()
-
-    # Definir parametros de ploteo
-    par(mfrow = c(1, 1), mar = rep(0, 4), xaxs = "i", yaxs = "i", oma = rep(0, 4))
-
-    # Definir el maximo numero de filas
-    maxXlim <- ifelse(test = nrow(spList) <= 9,
-                      yes = 10, no = 1 + nrow(spList))
-
-    # Generar las lineas de la tabla de conteo
-    plot.new()
-    plot.window(xlim = c(0, 10), ylim = c(maxXlim, 0))
-    abline(v = c(6, 8), col = "gray50")
-    grid(nx = 0, ny = maxXlim, col = "gray50")
-    box()
-
-    # Mostrar los header de la tabla
-    text(x = 3, y = 0.5, labels = "Especie")
-    text(x = 7, y = 0.5, labels = "Caracter")
-    text(x = 9, y = 0.5, labels = "Conteo")
-
-    # Mostrar cada fila (Nombre, caracter asociado y conteo)
-    for(i in 1:nrow(spList)){
-      text(x = 3, y = 0.5 + i, labels = spList[i, 1])
-      text(x = 7, y = 0.5 + i, labels = spList[i, 2])
-      text(x = 9, y = 0.5 + i, labels = spList[i, 3])
-    }
-  }
 
   command <- "start"
 
@@ -1440,6 +1478,56 @@ addTextBox <- function(xLimits, yLimits, text, border = NULL, col = "white", lty
   return(invisible())
 }
 
+#' Title
+#'
+#' @param x A \code{data.frame} containing the variables required by the indicated \code{criteria}.
+#' @param criteria A \code{chracter} indicating the method used for the definition.
+#' @param newCriteria A \code{list} with information for a new watermass definition. See Details.
+#' @param ... Extra arguments (at moment, with no sense).
+#'
+#' @return A \code{factor} vector with the definitions.
+#'
+#' @details The \code{newCriteria} argument allows the users to define their own criteria for classify the
+#' water masses. To do that, \code{newCriteria} must be a list with values of ranges and definitions, just
+#' like \code{swartzman2008_ranges} and \code{swartzman2008_definitions} objects.
+#' @export
+getWatermasses <- function(x, criteria = "swartzman2008", newCriteria = NULL, ...){
+
+  if(!is.null(newCriteria)){
+    if(!is.list(newCriteria) || length(newCriteria) != 2){
+      stop("newCriteria must be a list with ranges and definitions.")
+    }else{
+      criteriaRanges <-newCriteria$ranges
+      criteriaDefinitions <- newCriteria$definitions
+    }
+  }else{
+    criteriaRanges <- watermassDefinitions[[criteria]]$ranges
+    criteriaDefinitions <- watermassDefinitions[[criteria]]$definitions
+  }
+
+  colnames(x) <- tolower(colnames(x))
+
+  selectedDefinition <- getDefinitions(ranges = criteriaRanges, definitionTable = criteriaDefinitions)
+  criteriaLevels <- sort(unique(selectedDefinition$watermass))
+
+  if(!all(is.element(colnames(selectedDefinition)[-1], colnames(x)))){
+    stop("x and the selected criteria have different variable names.")
+  }else{
+    x <- x[,colnames(selectedDefinition)[-1]]
+  }
+
+  output <- NULL
+  for(i in 1:ncol(x)){
+    output <- cbind(output,
+                    anc(cut(x = x[[i]], breaks = criteriaRanges[[i]], labels = seq(length(criteriaRanges[[i]]) - 1))))
+
+  }
+
+  index <- match(apply(output, 1, paste, collapse = "-"), apply(selectedDefinition[,-1], 1, paste, collapse = "-"))
+
+  return(factor(x = selectedDefinition$watermass[index], levels = criteriaLevels, labels = criteriaLevels))
+}
+
 #' Functions for making an interactive test
 #'
 #' @param testName The name for the test
@@ -1501,6 +1589,79 @@ sillyTest <- function(testName, questions, answers, correctAnswers){
 
   cat("\n ", sprintf("\u00a1%s, %s!", scorePlace, gamerName),
       "\n", sprintf("Tu puntaje fue de %s", score), "%!", sep = "")
+
+  return(invisible())
+}
+
+#' Add artist name to (music) file
+#'
+#' @param albumFolder Folder where the files are located.
+#' @param artistName Name of the artist. It will be located at the beginning of the file.
+#' @param deleteSpaces Number of chracters that will be removed in order to replace with \code{artistName}.
+#' @param musicExtension Extension of the files that will be matched for the substitution.
+#'
+#' @return \code{NULL}. This function just makes changes on filen names.
+#' @export
+addAuthor <- function(albumFolder, artistName, deleteSpaces, musicExtension = ".mp3"){
+
+  fileList <- list.files(path = albumFolder, pattern = musicExtension, full.names = TRUE)
+
+  myDirnames <- dirname(fileList)
+  myFilenames <- substr(basename(fileList), start = deleteSpaces + 1, stop = 1e3)
+  myFilenames <- paste(artistName, "-", myFilenames)
+
+  myFilenames <- file.path(myDirnames, myFilenames)
+
+  print(basename(myFilenames))
+
+  cat("\nConfirm these new names' (y/n): ")
+  answer <- tolower(scan(what = character(), nmax = 1, quiet = TRUE))
+
+  while(!is.element(answer, c("y", "n"))){
+    cat("\nPlease, just write Y or N.\n")
+    cat("\nConfirm these new names' (y/n): ")
+    answer <- tolower(scan(what = character(), nmax = 1, quiet = TRUE))
+  }
+
+  if(answer == "y"){
+    file.rename(from = fileList, to = myFilenames)
+  }
+
+  return(invisible())
+}
+
+#' Add extra info to file
+#'
+#' @param albumFolder Folder where the files are located.
+#' @param extraInfo String with the extra info that will be located at the end of the file.
+#' @param musicExtension Extension of the files that will be matched for the substitution.
+#'
+#' @return \code{NULL}. This function just makes changes on filen names.
+#' @export
+addInfoFilename <- function(albumFolder, extraInfo, musicExtension = ".mp3"){
+
+  fileList <- list.files(path = albumFolder, pattern = musicExtension, full.names = TRUE)
+
+  myDirnames <- dirname(fileList)
+  myFilenames <- substr(basename(fileList), start = 1, stop = nchar(basename(fileList)) - nchar(musicExtension))
+  myFilenames <- paste0(myFilenames, " ", extraInfo, musicExtension)
+
+  myFilenames <- file.path(myDirnames, myFilenames)
+
+  print(basename(myFilenames))
+
+  cat("\nConfirm these new names' (y/n): ")
+  answer <- tolower(scan(what = character(), nmax = 1, quiet = TRUE))
+
+  while(!is.element(answer, c("y", "n"))){
+    cat("\nPlease, just write Y or N.\n")
+    cat("\nConfirm these new names' (y/n): ")
+    answer <- tolower(scan(what = character(), nmax = 1, quiet = TRUE))
+  }
+
+  if(answer == "y"){
+    file.rename(from = fileList, to = myFilenames)
+  }
 
   return(invisible())
 }
