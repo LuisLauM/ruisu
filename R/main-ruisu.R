@@ -1728,10 +1728,10 @@ getTopography <- function(allData, colLon = "lon", colLat = "lat", units = "m", 
     topography <- info(datasetid = "etopo180")
 
     lonRange <- range(allData[depthIndex, 1])
-    lonRange <- if(diff(lonRange) <= 1/60) c(min(lonRange) - 1, max(lonRange) + 1)
+    lonRange <- lonRange + if(diff(lonRange) <= 1/60) c(-1, 1) else 0
 
     latRange <- range(allData[depthIndex, 2])
-    latRange <- if(diff(latRange) <= 1/60) c(min(latRange) - 1, max(latRange) + 1)
+    latRange <- latRange + if(diff(latRange) <= 1/60) c(-1, 1) else 0
 
     topography <- griddap(x = topography, longitude = lonRange, latitude = latRange)
     topography <- topography$data
