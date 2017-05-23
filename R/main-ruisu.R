@@ -1708,7 +1708,8 @@ getTopography <- function(allData, colLon = "lon", colLat = "lat", units = "m", 
 
   depthIndex <- (allData[,1] > -70 | allData[,1] < -100) | (allData[,2] > 0 | allData[,2] < -20)
   # For values within the limits
-  outZ[!depthIndex] <- extract(x = bathymetry, y = allData[!depthIndex])
+  topography <- rasterFromXYZ(xyz = bathymetry, crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+  outZ[!depthIndex] <- extract(x = topography, y = allData[!depthIndex,])
 
   # For values outside the limits
   if(any(depthIndex)){

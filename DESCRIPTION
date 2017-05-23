@@ -23,5 +23,8 @@ Imports:
     magrittr,
     graphics,
     utils,
-    grDevices
+    grDevices,
+    rerddap,
+    raster,
+    spam
 RoxygenNote: 6.0.1
