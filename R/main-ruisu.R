@@ -1706,10 +1706,20 @@ getTopography <- function(allData, colLon = "lon", colLat = "lat", units = "m", 
 
   outZ <- rep(NA, nrow(allData))
 
+  mainIndex <- complete.cases(allData[,c(colLon, colLat)])
+
+  if(all(!mainIndex)){
+    warning("No row have complete information for X and Y")
+
+    return(outZ)
+  }
+
+  allData <- allData[mainIndex,]
+
   depthIndex <- (allData[,1] > -70 | allData[,1] < -100) | (allData[,2] > 0 | allData[,2] < -20)
   # For values within the limits
   topography <- rasterFromXYZ(xyz = bathymetry, crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-  outZ[!depthIndex] <- extract(x = topography, y = allData[!depthIndex,])
+  outZ[mainIndex][!depthIndex] <- extract(x = topography, y = allData[!depthIndex,])
 
   # For values outside the limits
   if(any(depthIndex)){
@@ -1717,13 +1727,19 @@ getTopography <- function(allData, colLon = "lon", colLat = "lat", units = "m", 
 
     topography <- info(datasetid = "etopo180")
 
-    topography <- griddap(x = topography, longitude = range(allData[depthIndex, 1]), latitude = range(allData[depthIndex, 2]))
+    lonRange <- range(allData[depthIndex, 1])
+    lonRange <- if(diff(lonRange) <= 1/60) c(min(lonRange) - 1, max(lonRange) + 1)
+
+    latRange <- range(allData[depthIndex, 2])
+    latRange <- if(diff(latRange) <= 1/60) c(min(latRange) - 1, max(latRange) + 1)
+
+    topography <- griddap(x = topography, longitude = lonRange, latitude = latRange)
     topography <- topography$data
     topography <- topography[,c("longitude", "latitude", "altitude")]
 
     topography <- rasterFromXYZ(xyz = topography, crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
 
-    outZ[depthIndex] <- extract(x = topography, y = allData[depthIndex,])
+    outZ[mainIndex][depthIndex] <- extract(x = topography, y = allData[depthIndex,])
   }
 
   if(is.null(units) || is.na(units) || !is.element(tolower(units)[1], c("m", "nm", "km"))){
