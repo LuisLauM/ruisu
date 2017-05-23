@@ -111,6 +111,15 @@ NULL
 #' @format A \code{data.frame} with main information about some Peruvian fishes.
 NULL
 
+#' @title \code{data.frame} with topographic information.
+#' @name bathymetry
+#' @description A table with information of longitude, latitude and topography (high and depth) in meters.
+#' @aliases bathymetry
+#' @docType data
+#' @usage bathymetry
+#' @format A \code{data.frame} with topographic information (lon, lat, altitude).
+NULL
+
 #' @title Abbreviation for \code{as.numeric}
 #'
 #' @param x Object to be coerced or tested.
@@ -1664,4 +1673,61 @@ addInfoFilename <- function(albumFolder, extraInfo, musicExtension = ".mp3"){
   }
 
   return(invisible())
+}
+
+#' Get topogaphy values from an XY table
+#'
+#' @param allData \code{matrix} or \code{data.frame} where the points are.
+#' @param colLon Name of column which contains Longitude info.
+#' @param colLat Name of column which contains Latitude info.
+#' @param units Define the unit for outputs: nm (nautical miles), kilometers (km), m (meters, default).
+#' @param useInternet \code{logical} indicating if the function will use an online source for some points out of limits. See Details.
+#'
+#' @details The function will use a fixed data base (\code{bathymetry}) which only has information for topography from 100 to 70 W
+#' and from 20 to 0 S. If there were points outside these limits, the function could use (depending on \code{useInternet} argument)
+#' an external source (\link{https://coastwatch.pfeg.noaa.gov/erddap/griddap/etopo180.graph}) for downloading information about topography
+#' for completing the output depths.
+#'
+#' @return A \code{numeric} vector with depth values.
+#' @export
+#'
+#' @examples
+#' exampleData <- data.frame(lon = c(-80.757, -80.284, -79.511, -78.738, -79.511),
+#'                           lat = c(-5.794, -7.149, -8.422, -9.983, -11.011),
+#'                           stringsAsFactors = FALSE)
+#'
+#' exampleData$depth <- getTopography(allData = exampleData)
+getTopography <- function(allData, colLon = "lon", colLat = "lat", units = "m", useInternet = TRUE){
+
+  allData <- allData[,c(colLon, colLat)]
+
+  outZ <- rep(NA, nrow(allData))
+
+  depthIndex <- (allData[,1] > -70 | allData[,1] < -100) | (allData[,2] > 0 | allData[,2] < -20)
+  # For values within the limits
+  outZ[!depthIndex] <- extract(x = bathymetry, y = allData[!depthIndex])
+
+  # For values outside the limits
+  if(any(depthIndex)){
+    message("There are some values out from the limits (LON: -100:-70; LAT: -20:0). The function will connect to ERDDAP database for downloading the necesary data.")
+
+    topography <- info(datasetid = "etopo180")
+
+    topography <- griddap(x = topography, longitude = range(allData[depthIndex, 1]), latitude = range(allData[depthIndex, 2]))
+    topography <- topography$data
+    topography <- topography[,c("longitude", "latitude", "altitude")]
+
+    topography <- rasterFromXYZ(xyz = topography, crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+
+    outZ[depthIndex] <- extract(x = topography, y = allData[depthIndex,])
+  }
+
+  if(is.null(units) || is.na(units) || !is.element(tolower(units)[1], c("m", "nm", "km"))){
+    warning("You have indicated and incorrect value for 'units'. The outputs will be shown in meters.")
+    units <- "m"
+  }
+
+  outZ <- outZ*switch(tolower(units), m = 1, nm = 1/1852, km = 0.001)
+
+  return(outZ)
 }
