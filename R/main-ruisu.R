@@ -9,6 +9,9 @@
 #' @import utils
 #' @import grDevices
 #' @import fields
+#' @import rerddap
+#' @import raster
+#' @import spam
 #'
 #' @title Miscellany functions for the IMARPE work
 #'
