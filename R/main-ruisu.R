@@ -10,8 +10,7 @@
 #' @import grDevices
 #' @import fields
 #' @import rerddap
-#' @import raster
-#' @import spam
+#' @importFrom  raster rasterFromXYZ extract
 #'
 #' @title Miscellany functions for the IMARPE work
 #'
@@ -529,48 +528,6 @@ getProportion <- function(table, group = 3)
   }
 
   return(output)
-}
-
-#' @title Get satellital information for oceanographic variables
-#' @description This function uses date and space range and get maps for Sea Surface Temperature (SST),
-#' Sea Surface Salinity (SSS), Chlorophyll-a (Chl), Topography (topo), Sea level (sealevel) and SODA
-#' estimations for Temperature (sst_soda) and Salinity (sss_soda) by depth (\code{atDepth} parameter).
-#'
-#' @param initialDate Initial date.
-#' @param finalDate Final date.
-#' @param timeRes Time resolution for maps: Monthly ('month') o daily ('day').
-#' @param what What variable do you want to download? See details.
-#' @param dateList List with dates for downloading..
-#' @param lonRange Range of longitude. If \code{NULL}, it will take values from 85 W to 90 W (Peru).
-#' @param latRange Range of latitude. If \code{NULL}, it will take values from 2 S to 20 S (Peru).
-#' @param outputFormat What extension would you like to use for download? (nc, csv, png).
-#' @param outputDir Folder for downloading.
-#' @param atDepth Depth (usually meters) of layer to downloading.
-#' @param showURL Do you want to show the URL each time?
-#'
-#' @details Function will use data bases of ERDDAP website
-#' \link{https://coastwatch.pfeg.noaa.gov/erddap/info/index.html?page=1&itemsPerPage=1000}.
-#'
-#' This function will use the dates values to choose from what source the values will be taken.
-#'
-#' @export
-#'
-#' @examples
-#' getSatellitalMaps(initialDate = "2014-3-26", finalDate = "2014-4-17", what = "sst", timeRes = "day",
-#' lonRange = c(-90, -85), latRange = c(-5, 0), outputFormat = "png",
-#' outputDir = "../")
-getSatellitalMaps <- function(initialDate = NULL, finalDate = NULL, timeRes = "month", what = "SST", atDepth = NULL,
-                              dateList = NULL, lonRange = c(-85, -70), latRange = c(-20, -2), outputFormat = "png",
-                              outputDir = ".", showURL = FALSE){
-
-  getSatellitalMaps_internal(initialDate, finalDate, timeRes, what, atDepth, dateList, lonRange, latRange, outputFormat,
-                             outputDir, showURL)
-
-  cat(paste0("\n Download finished! There were ", length(errorList), " problems. \n"))
-
-
-  # Final output will be a list with failed URLs
-  return(if(is.null(errorList)) invisible() else errorList)
 }
 
 #' @title Title Function to get AIP code from lon-lat information.
