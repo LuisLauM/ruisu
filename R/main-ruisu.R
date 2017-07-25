@@ -666,6 +666,7 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #' (default), function will use \code{col1} and \code{col2} values.
 #' @param cex.axis cex.axis (see \code{\link{par}}) parameter for x and y axes.
 #' @param cex.lab cex.lab (see \code{\link{par}}) parameter for x and y axes.
+#' @param cex.categories Size of text of categories (column names of the file1).
 #' @param ylab_line line (see \code{\link{mtext}}) parameter for ylab text.
 #' @param namesAdj adj (see \code{\link{mtext}}) parameter for categories (column names) text.
 #' @param title_text Text for title. If not \code{NULL}, default \code{oma = c(5, 5, 3, 3)}
@@ -696,7 +697,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
                                 showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1, juvLabel1 = "juveniles_1 = ",
                                 showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
                                 juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL, juvTextCol2 = NULL,
-                                cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
+                                cex.axis = 1, cex.lab = 1, cex.categories = 1, ylab_line = 3, namesAdj = 0.01,
                                 title_text = NULL, title_line = 2, title_cex = NULL, title_col = "black", title_font = 1,
                                 smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
                                 noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE){
@@ -887,7 +888,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
       }
     }
 
-    mtext(text = colnames(file1)[i], side = 3, adj = namesAdj, line = -2)
+    mtext(text = colnames(file1)[i], side = 3, adj = namesAdj, line = -2, cex = cex.categories)
 
     box()
   }

@@ -14,11 +14,11 @@ lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
   juvCex1 = 1, juvLabel1 = "juveniles_1 = ", showJuv2 = TRUE,
   juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
   juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL,
-  juvTextCol2 = NULL, cex.axis = 1, cex.lab = 1, ylab_line = 3,
-  namesAdj = 0.01, title_text = NULL, title_line = 2, title_cex = NULL,
-  title_col = "black", title_font = 1, smooth = FALSE, oma = NULL,
-  xlab = NULL, ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
-  ylabFactor = 1, relative = TRUE)
+  juvTextCol2 = NULL, cex.axis = 1, cex.lab = 1, cex.categories = 1,
+  ylab_line = 3, namesAdj = 0.01, title_text = NULL, title_line = 2,
+  title_cex = NULL, title_col = "black", title_font = 1, smooth = FALSE,
+  oma = NULL, xlab = NULL, ylab = "Frecuencia (\%)",
+  noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE)
 }
 \arguments{
 \item{file1}{Indicates the table from the main length distribution will be drawn. See details.}
@@ -89,6 +89,8 @@ xlim, juvLine, xInterval and xlab.}
 \item{cex.axis}{cex.axis (see \code{\link{par}}) parameter for x and y axes.}
 
 \item{cex.lab}{cex.lab (see \code{\link{par}}) parameter for x and y axes.}
+
+\item{cex.categories}{Size of text of categories (column names of the file1).}
 
 \item{ylab_line}{line (see \code{\link{mtext}}) parameter for ylab text.}
 
