@@ -44,6 +44,8 @@ showPlots <- function(spList){
     text(x = 7, y = 0.5 + i, labels = spList[i, 2])
     text(x = 9, y = 0.5 + i, labels = spList[i, 3])
   }
+
+  return(invisible())
 }
 
 getDefinitions <- function(ranges, definitionTable){
@@ -98,7 +100,7 @@ roundUp <- function(x, to = 10)
 
 
 
-.digitSum <- function(x, recursive = FALSE){
+digitSum <- function(x, recursive = FALSE){
   if(recursive){
     while(nchar(x) > 1){
       x <- sum(an(unlist(strsplit(ac(x), ""))), na.rm = TRUE)
@@ -108,7 +110,7 @@ roundUp <- function(x, to = 10)
   }
 }
 
-.getCoordsAxes <- function(coord, what){
+getCoordsAxesInternal <- function(coord, what){
 
   if(tolower(what) == "lon"){
     if(coord < 0){

@@ -25,5 +25,6 @@ Imports:
     utils,
     grDevices,
     rerddap,
-    raster
+    raster,
+    rgeos
 RoxygenNote: 6.0.1
