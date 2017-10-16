@@ -691,7 +691,7 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #'
 #' @export
 lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
-                                profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50), yInterval = NULL,
+                                profile = NULL, xlim = NULL, xInterval = NULL, ylim = c(0, 50), yInterval = NULL,
                                 ylimList = NULL, yIntervalList = NULL,
                                 ltys1 = "solid", lwds1 = "1", col1 = "black", ltys2 = "solid", lwds2 = "1", col2 = "blue",
                                 juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
@@ -777,6 +777,10 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
   if(is.null(xlim)){
     xlim <- range(an(rownames(file1)))
+  }
+
+  if(is.null(xInterval)){
+    xInterval <- 1
   }
 
   ltys1 <- rep(ltys1, length.out = ncol(file1))

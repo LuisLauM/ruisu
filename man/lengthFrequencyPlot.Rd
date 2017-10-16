@@ -6,7 +6,7 @@
 category (months, latitudes, years, etc.).}
 \usage{
 lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
-  profile = NULL, xlim = NULL, xInterval = 1, ylim = c(0, 50),
+  profile = NULL, xlim = NULL, xInterval = NULL, ylim = c(0, 50),
   yInterval = NULL, ylimList = NULL, yIntervalList = NULL,
   ltys1 = "solid", lwds1 = "1", col1 = "black", ltys2 = "solid",
   lwds2 = "1", col2 = "blue", juvLimit = NULL, juvLty = "dotted",
