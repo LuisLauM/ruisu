@@ -13,12 +13,14 @@ lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
   juvLwd = 1, juvCol = "red", showJuv1 = TRUE, juvLine1 = -2,
   juvCex1 = 1, juvLabel1 = "juveniles_1 = ", showJuv2 = TRUE,
   juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
-  juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL,
-  juvTextCol2 = NULL, cex.axis = 1, cex.lab = 1, cex.categories = 1,
-  ylab_line = 3, namesAdj = 0.01, title_text = NULL, title_line = 2,
-  title_cex = NULL, title_col = "black", title_font = 1, smooth = FALSE,
-  oma = NULL, xlab = NULL, ylab = "Frecuencia (\%)",
-  noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE)
+  namesLine1 = -2, namesCex1 = 1, namesCol1 = NULL, showNames2 = FALSE,
+  namesLine2 = -2, namesCex2 = 1, namesCol2 = NULL, juvAdj = 0.99,
+  juvRound = 0, juvSide = 3, juvTextCol1 = NULL, juvTextCol2 = NULL,
+  cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
+  title_text = NULL, title_line = 2, title_cex = NULL,
+  title_col = "black", title_font = 1, smooth = FALSE, oma = NULL,
+  xlab = NULL, ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
+  ylabFactor = 1, relative = TRUE)
 }
 \arguments{
 \item{file1}{Indicates the table from the main length distribution will be drawn. See details.}
@@ -80,17 +82,33 @@ xlim, juvLine, xInterval and xlab.}
 
 \item{juvLabel2}{Text before juvenile 2 value.}
 
+\item{namesLine1}{line (see \code{\link{mtext}}) parameter for text of category for file 1.}
+
+\item{namesCex1}{cex (see \code{\link{mtext}}) parameter for text of category for file 1.}
+
+\item{namesCol1}{col (see \code{\link{mtext}}) parameter for text of category for file 1.}
+
+\item{showNames2}{\code{logical} do you want to show the names of categories of file 2?}
+
+\item{namesLine2}{line (see \code{\link{mtext}}) parameter for text of category for file 2.}
+
+\item{namesCex2}{cex (see \code{\link{mtext}}) parameter for text of category for file 2.}
+
+\item{namesCol2}{col (see \code{\link{mtext}}) parameter for text of category for file 2.}
+
 \item{juvAdj}{adj (see \code{\link{mtext}}) parameter for juvenile text.}
 
 \item{juvRound}{Number of decimals places used to show juveniles' values.}
 
 \item{juvSide}{side (see \code{\link{mtext}}) parameter for juvenile text.}
 
+\item{juvTextCol1}{col (see \code{\link{mtext}}) parameter for text of juveniles for file 1.}
+
+\item{juvTextCol2}{col (see \code{\link{mtext}}) parameter for text of juveniles for file 2.}
+
 \item{cex.axis}{cex.axis (see \code{\link{par}}) parameter for x and y axes.}
 
 \item{cex.lab}{cex.lab (see \code{\link{par}}) parameter for x and y axes.}
-
-\item{cex.categories}{Size of text of categories (column names of the file1).}
 
 \item{ylab_line}{line (see \code{\link{mtext}}) parameter for ylab text.}
 
@@ -120,9 +138,6 @@ what this parameter indicates.}
 \item{ylabFactor}{\code{numeric}. Value that multiplies all values in both main and secondary matrices.}
 
 \item{relative}{\code{logical} Do you want to plot relatives or absolutes values?}
-
-\item{juvTextCol}{col (see \code{\link{par}}) parameter for juvenile text. If \code{NULL}
-(default), function will use \code{col1} and \code{col2} values.}
 }
 \details{
 This function takes a length frequency data and returns an stacking plot of that frequencies.

@@ -663,11 +663,8 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #' @param juvAdj adj (see \code{\link{mtext}}) parameter for juvenile text.
 #' @param juvRound Number of decimals places used to show juveniles' values.
 #' @param juvSide side (see \code{\link{mtext}}) parameter for juvenile text.
-#' @param juvTextCol col (see \code{\link{par}}) parameter for juvenile text. If \code{NULL}
-#' (default), function will use \code{col1} and \code{col2} values.
 #' @param cex.axis cex.axis (see \code{\link{par}}) parameter for x and y axes.
 #' @param cex.lab cex.lab (see \code{\link{par}}) parameter for x and y axes.
-#' @param cex.categories Size of text of categories (column names of the file1).
 #' @param ylab_line line (see \code{\link{mtext}}) parameter for ylab text.
 #' @param namesAdj adj (see \code{\link{mtext}}) parameter for categories (column names) text.
 #' @param title_text Text for title. If not \code{NULL}, default \code{oma = c(5, 5, 3, 3)}
@@ -683,6 +680,15 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #' what this parameter indicates.
 #' @param ylabFactor \code{numeric}. Value that multiplies all values in both main and secondary matrices.
 #' @param relative \code{logical} Do you want to plot relatives or absolutes values?
+#' @param namesLine1 line (see \code{\link{mtext}}) parameter for text of category for file 1.
+#' @param namesCex1 cex (see \code{\link{mtext}}) parameter for text of category for file 1.
+#' @param namesCol1 col (see \code{\link{mtext}}) parameter for text of category for file 1.
+#' @param showNames2 \code{logical} do you want to show the names of categories of file 2?
+#' @param namesLine2 line (see \code{\link{mtext}}) parameter for text of category for file 2.
+#' @param namesCex2 cex (see \code{\link{mtext}}) parameter for text of category for file 2.
+#' @param namesCol2 col (see \code{\link{mtext}}) parameter for text of category for file 2.
+#' @param juvTextCol1 col (see \code{\link{mtext}}) parameter for text of juveniles for file 1.
+#' @param juvTextCol2 col (see \code{\link{mtext}}) parameter for text of juveniles for file 2.
 #'
 #' @details This function takes a length frequency data and returns an stacking plot of that frequencies.
 #' smooth: logical. If TRUE, function uses an spline function to plot by categories.
@@ -697,8 +703,10 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
                                 juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
                                 showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1, juvLabel1 = "juveniles_1 = ",
                                 showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
+                                namesLine1 = -2, namesCex1 = 1, namesCol1 = NULL,
+                                showNames2 = FALSE, namesLine2 = -2, namesCex2 = 1, namesCol2 = NULL,
                                 juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL, juvTextCol2 = NULL,
-                                cex.axis = 1, cex.lab = 1, cex.categories = 1, ylab_line = 3, namesAdj = 0.01,
+                                cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
                                 title_text = NULL, title_line = 2, title_cex = NULL, title_col = "black", title_font = 1,
                                 smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
                                 noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE){
@@ -725,7 +733,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     if(is.element(class(file2), c("data.frame", "matrix"))){
       file2Names <- list(an(file2[,1]), colnames(file2)[-1])
       file2 <- data.frame(file2[,-1], stringsAsFactors = FALSE)
-      dimnames(file2) <- file1Names
+      dimnames(file2) <- file2Names
     }else{
       file2 <- read.csv(file = file2, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
     }
@@ -745,6 +753,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     ltys2 <- rep(ltys2, length.out = ncol(file2))
     lwds2 <- rep(lwds2, length.out = ncol(file2))
     col2 <- rep(col2, length.out = ncol(file2))
+    namesCol2 <- if(is.null(namesCol2)) col2 else rep(namesCol2, length.out = ncol(file2))
   }
 
   if(!is.null(profile)){
@@ -766,7 +775,6 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     if(is.null(xlab)){
       xlab <- paste0("Longitud ", speciesInfo$lengthType[index], " (", speciesInfo$unit[index], ")")
     }
-
   }
 
   file1[file1 <= 0 | is.na(file1)] <- 0
@@ -786,6 +794,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
   ltys1 <- rep(ltys1, length.out = ncol(file1))
   lwds1 <- rep(lwds1, length.out = ncol(file1))
   col1 <- rep(col1, length.out = ncol(file1))
+  namesCol1 <- if(is.null(namesCol1)) col1 else rep(namesCol1, length.out = ncol(file1))
 
   file1[file1 <= 0 | is.na(file1)] <- 0
 
@@ -867,6 +876,11 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
       allLengths$y[allLengths$y < 0.001] <- NA
 
       lines(allLengths, lty = ltys2[i], lwd = lwds2[i], col = col2[i])
+
+      if(isTRUE(showNames2)){
+        mtext(text = colnames(file2)[i], side = 3, adj = namesAdj, line = namesLine2, cex = namesCex2,
+              col = namesCol2[i])
+      }
     }
 
     if(is.null(yInterval)){
@@ -894,7 +908,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
       }
     }
 
-    mtext(text = colnames(file1)[i], side = 3, adj = namesAdj, line = -2, cex = cex.categories)
+    mtext(text = colnames(file1)[i], side = 3, adj = namesAdj, line = namesLine1, cex = namesCex1,
+          col = namesCol1[i])
 
     box()
   }
@@ -964,7 +979,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
     countryFilter <- chartr(old = "\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1",
                             new = "aeiouun", x = tolower(countryFilter))
 
-    index <- tolower(coastline$country) == tolower(countryFilter)
+    index <- is.element(tolower(coastline$country), tolower(countryFilter))
   }else{
     index <- range(data[,colLat]) + c(-20, 20)
     index <- coastline$lat > index[1] & coastline$lat < index[2]
