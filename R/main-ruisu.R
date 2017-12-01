@@ -743,7 +743,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     }
 
     if(isTRUE(relative)){
-      file2 <- sweep(as.matrix(file2), 2, colSums(file2, na.rm = TRUE), "/")*100
+      file2 <- data.frame(sweep(as.matrix(file2), 2, colSums(file2, na.rm = TRUE), "/")*100)
+      dimnames(file2) <- file2Names
     }
 
     # file2[file2 <= 0 | is.na(file2)] <- 0
