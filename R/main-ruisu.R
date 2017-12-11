@@ -470,6 +470,51 @@ getCoordsAxes <- function(coord, what){
   return(output)
 }
 
+#' Add labels for XY axis
+#'
+#' @param xParams Parameters for X axis.
+#' @param yParams Parameters for Y axis.
+#' @param what \code{character} vector indicating whether to show the labels for axis X, Y or both.
+#'
+#' @details \code{xParams} and \code{yParams} must contain axis information as a 3-length vector: \code{c(from, to, by)}.
+#' For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
+#'
+#' @export
+#'
+#' @examples
+#' par(mar = c(2, 3, 1, 1), xaxs = "i", yaxs = "i")
+#'
+#' xlim <- c(-85, -70)
+#' ylim <- c(-20, -2)
+#'
+#' plot(1, 1, type = "n", axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
+#'
+#' addCoordsAxes(yParams = c(ylim, 2))
+#'
+#' box()
+addCoordsAxes <- function(xParams = NULL, yParams = NULL, what = c("x", "y")){
+
+  xParams <- if(is.null(xParams)) c(-180, 180, 5) else sort(xParams)
+  yParams <- if(is.null(yParams)) c(-90, 90, 5) else sort(yParams)
+
+  for(i in c("xParams", "yParams")){
+    msg <- sprintf("'%s' must be a numeric vector of length 3. See ?addCoordsAxes", i)
+    if(!is.numeric(get(i)) || length(get(i)) != 3) stop(msg)
+  }
+
+  if(is.element("x", what)){
+    xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
+    axis(side = 1, at = xCoords, labels = getCoordsAxes(coord = xCoords, what = "lon"))
+  }
+
+  if(is.element("y", what)){
+    yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
+    axis(side = 2, at = yCoords, labels = getCoordsAxes(coord = yCoords, what = "lat"), las = 2)
+  }
+
+  return(invisible())
+}
+
 #' @title Get harbor information from name
 #'
 #' @param myHarbor \code{character}. Text with the name of harbor.

@@ -2,6 +2,7 @@
 
 export(ac)
 export(addAuthor)
+export(addCoordsAxes)
 export(addInfoFilename)
 export(addTextBox)
 export(an)
