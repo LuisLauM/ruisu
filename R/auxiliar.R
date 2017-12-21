@@ -48,39 +48,6 @@ showPlots <- function(spList){
   return(invisible())
 }
 
-getDefinitions <- function(ranges, definitionTable){
-
-  # Checking number of definition given
-  rangesLength <- unlist(lapply(ranges, length)) - 1
-  if(sum(rangesLength) != (ncol(definitionTable) - 1)){
-    stop("Incorrect number of definitions. They must be\n", paste(names(rangesLength), collapse = "\t"),
-         "\n", paste(rangesLength, collapse = "\t"))
-  }
-
-  # Set definition table
-  waterMassesNames <- definitionTable[,1]
-  definitionTable <- definitionTable[,-1]
-
-  allCombinations <- NULL
-  for(i in seq(nrow(definitionTable))){
-
-    outIndex <- list()
-    for(j in seq_along(ranges)){
-
-      envirIndex <- seq(from = ifelse(j == 1, 1, cumsum(rangesLength)[j - 1] + 1), by = 1, length.out = rangesLength[j])
-      outIndex[[j]] <- which(!is.na(as.logical(definitionTable[i, envirIndex])))
-    }
-    names(outIndex) <- names(ranges)
-
-    allCombinations <- rbind(allCombinations, cbind(watermass = waterMassesNames[i], do.call(expand.grid, outIndex)))
-  }
-
-  allCombinations <- data.frame(as.matrix(allCombinations), stringsAsFactors = FALSE)
-  colnames(allCombinations) <- tolower(colnames(allCombinations))
-
-  return(allCombinations)
-}
-
 VectorInVector = function(pattern, tag)
 {
   lenTag <- length(pattern) - 1

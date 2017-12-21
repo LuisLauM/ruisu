@@ -9,22 +9,5 @@ Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
 Description: Tools for common tasks
 License: GPL (>= 2)
 LazyData: true
-Depends: maps, sp, R (>= 3.2.0)
-Imports:
-    lubridate,
-    raster,
-    fields,
-    rgdal,
-    stats,
-    RCurl,
-    bitops,
-    stringr,
-    stringi,
-    magrittr,
-    graphics,
-    utils,
-    grDevices,
-    rerddap,
-    raster,
-    rgeos
+Depends: sp, lubridate, rstudioapi, raster, fields, rgeos, mapdata, R (>= 3.2.0)
 RoxygenNote: 6.0.1

@@ -1,17 +1,11 @@
-#' @import lubridate
-#' @importFrom raster intersect
-#' @import maps
-#' @import rgdal
-#' @import RCurl
-#' @import stats
 #' @import sp
-#' @import graphics
-#' @import utils
-#' @import grDevices
+#' @import rstudioapi
+#' @import raster
 #' @import fields
-#' @import rerddap
-#' @importFrom  rgeos gBuffer
-#' @importFrom  raster rasterFromXYZ extract
+#' @import rgeos
+#' @import graphics
+#' @import mapdata
+#' @importFrom lubridate year month day
 #'
 #' @title Miscellany functions for the IMARPE work
 #'
@@ -163,40 +157,6 @@ ac <- function(x, ...){
 #' anc(cut(x = exampleVector, breaks = seq(0, 100, 20), labels = 1:5))
 anc <- function(x, ...){
   return(as.numeric(as.character(x, ...)))
-}
-
-#' @title Title Function to identify water mass from different sources.
-#'
-#' @param data \code{data.frame} including SST, SSS, month, depth, longitude and latitude information (see Details).
-#' @param method Select method for water mass estimation: Oliveros (2020), Swartzman (2008, default) and Zuta (1978).
-#' @param sst Name of column which contains Sea Surface Temperature info.
-#' @param sss Name of column which contains Sea Surface Salinity info.
-#' @param lon Name of column which contains Longitude info.
-#' @param lat Name of column which contains Latitude info.
-#' @param month Name of column which contains Month info.
-#' @param depth Name of column which contains Depth info.
-#' @param dc Name of column which contains Distance to Coast info.
-#' @param asFactors \code{logical}. If \code{TRUE}, output will returned as a \code{factor} object, otherwise as
-#' a \code{character} vector.
-#'
-#' @details Variables in \code{data} must be as next: SST ( C), SSS (PSU), depth (m), longitude ( W) and
-#' latitude ( E).
-#'
-#' @export
-calculateWaterMass <- function(data, method = "swartzman", sst = "sst", sss = "sss", lon = "lon",
-                               lat = "lat", month = "month", depth = "depth", dc = "dc",
-                               asFactors = TRUE){
-
-  output <- switch(tolower(method),
-                   oliveros = .watermass_oliveros(data = data, sst = sst, sss = sss, lon = lon,
-                                                  lat = lat, month = month, dc = dc,
-                                                  asFactors = asFactors),
-                   swartzman = .watermass_swartzman(data = data, sst = sst, sss = sss, lat = lat,
-                                                    month = month, dc = dc, asFactors = asFactors),
-                   zuta = .watermass_zuta(data = data, sst = sst, sss = sss, lat = lat,
-                                          depth = depth, asFactors = asFactors))
-
-  return(output)
 }
 
 #' @name centroidAssigner
@@ -976,7 +936,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 #'
 #' @param data \code{data.frame} with coords that will be used to calculate min distance to coast line.
 #' @param colLon Name or position of column for longitude. As default, it will be \code{lon}.
-#' @param colLat Name or position of column for latitude As default, it will be \code{lat}.
+#' @param colLat Name or position of column for latitude. As default, it will be \code{lat}.
 #' @param countryFilter Select the country for make comparation
 #' @param unit Define the unit for outputs: nm (nautical miles), kilometers (km), m (meters).
 #'
@@ -1201,7 +1161,7 @@ plotIsoparalitoral <- function(codeList = NULL, add = FALSE, old = TRUE,
 #' \dontrun{
 #' prepareProjFolder(folder = "../exampleFolder", type = 3)
 #' }
-prepareProjFolder <- function(folder, type = 1){
+prepareProjFolder <- function(folder, addRProj = TRUE, type = 1){
 
   folderList <- switch(type,
                        "1" = c("code", "data", "figures", "outputs"),
@@ -1211,6 +1171,8 @@ prepareProjFolder <- function(folder, type = 1){
                        "Incorrect value for 'type'.")
 
   sapply(file.path(folder, folderList), dir.create, showWarnings = FALSE, recursive = TRUE)
+
+  if(isTRUE(addRProj)) initializeProject(path = folder)
 
   return(invisible())
 }
@@ -1513,56 +1475,6 @@ addTextBox <- function(xLimits, yLimits, text, border = NULL, col = "white", lty
   text(x = mean(xLimits), y = mean(yLimits), labels = text, ...)
 
   return(invisible())
-}
-
-#' Title
-#'
-#' @param x A \code{data.frame} containing the variables required by the indicated \code{criteria}.
-#' @param criteria A \code{chracter} indicating the method used for the definition.
-#' @param newCriteria A \code{list} with information for a new watermass definition. See Details.
-#' @param ... Extra arguments (at moment, with no sense).
-#'
-#' @return A \code{factor} vector with the definitions.
-#'
-#' @details The \code{newCriteria} argument allows the users to define their own criteria for classify the
-#' water masses. To do that, \code{newCriteria} must be a list with values of ranges and definitions, just
-#' like \code{swartzman2008_ranges} and \code{swartzman2008_definitions} objects.
-#' @export
-getWatermasses <- function(x, criteria = "swartzman2008", newCriteria = NULL, ...){
-
-  if(!is.null(newCriteria)){
-    if(!is.list(newCriteria) || length(newCriteria) != 2){
-      stop("newCriteria must be a list with ranges and definitions.")
-    }else{
-      criteriaRanges <-newCriteria$ranges
-      criteriaDefinitions <- newCriteria$definitions
-    }
-  }else{
-    criteriaRanges <- watermassDefinitions[[criteria]]$ranges
-    criteriaDefinitions <- watermassDefinitions[[criteria]]$definitions
-  }
-
-  colnames(x) <- tolower(colnames(x))
-
-  selectedDefinition <- getDefinitions(ranges = criteriaRanges, definitionTable = criteriaDefinitions)
-  criteriaLevels <- sort(unique(selectedDefinition$watermass))
-
-  if(!all(is.element(colnames(selectedDefinition)[-1], colnames(x)))){
-    stop("x and the selected criteria have different variable names.")
-  }else{
-    x <- x[,colnames(selectedDefinition)[-1]]
-  }
-
-  output <- NULL
-  for(i in 1:ncol(x)){
-    output <- cbind(output,
-                    anc(cut(x = x[[i]], breaks = criteriaRanges[[i]], labels = seq(length(criteriaRanges[[i]]) - 1))))
-
-  }
-
-  index <- match(apply(output, 1, paste, collapse = "-"), apply(selectedDefinition[,-1], 1, paste, collapse = "-"))
-
-  return(factor(x = selectedDefinition$watermass[index], levels = criteriaLevels, labels = criteriaLevels))
 }
 
 #' Functions for making an interactive test
@@ -1976,6 +1888,155 @@ brokenBarplot <- function(height, ylim1, yAxis1 = list(), ylim2, yAxis2 = list()
   axis(side = 2, at = c(ylim1[2], ylim1[2] + extra), labels = NA, tcl = -0.25)
   abline(h = ylim1[2] + extra, lty = "dashed")
   box(bty = "u")
+
+  return(invisible())
+}
+
+#' Function for pltting Parallel maps
+#'
+#' @param file Indicates the table from the main length distribution will be drawn. See details.
+#' @param colCategories Name or number of columns which will be used for make categorization.
+#' @param allCategories Vector for categories (optional). It must contain all values on 'colCategories'.
+#' @param colLon Name or position of column for longitude. As default, it will be \code{lon}.
+#' @param colLat Name or position of column for latitude As default, it will be \code{lat}.
+#' @param xlim Limits of X axis.
+#' @param ylim Limits of Y axis.
+#' @param yInterval Number of intervals for y axis labels.
+#' @param xDelay Argument which controls separation between maps.
+#' @param newPlot If \code{TRUE}, the plot will be opened in a new window (using \code{x11} command).
+#' @param seaCol Color for sea background.
+#' @param landCol Color for land.
+#' @param textBoxLimits A \code{list} (two vector: x and y) with values for limiting text box.
+#' @param textBox String with text included inside the text box.
+#' @param textBox_line \code{line} (see \code{\link{mtext}}) parameter for text box.
+#' @param textBox_cex \code{cex} (see \code{\link{mtext}}) parameter for text box.
+#' @param textBox_font \code{font} (see \code{\link{mtext}}) parameter for text box.
+#' @param textBoxXCF Correction Factor on X for text box.
+#' @param catNames_col \code{col} (see \code{\link{mtext}}) parameter for Categories' text.
+#' @param catNames_cex \code{cex} (see \code{\link{mtext}}) parameter for Categories' text.
+#' @param catNames_font \code{font} (see \code{\link{mtext}}) parameter for Categories' text.
+#' @param addHarbors \code{logical}. Add harbor text/points over the coastline?
+#'
+#' @return A plot with parallel maps.
+#' @export
+paralelMaps <- function(file, colCategories, allCategories = NULL, categoriesNames = NULL, colLon = "lon", colLat = "lat",
+                        xlim = NULL, ylim = NULL, yInterval = NULL, xDelay = NULL,
+                        newPlot = FALSE, seaCol = "lightblue1", landCol = "lightgoldenrod1", showBoxText = TRUE,
+                        textBoxLimits = NULL, textBox = NULL, textBox_line = -2, textBox_cex = 1.2, textBox_font = 2,
+                        textBoxXCF = 0, catNames_col = "black", catNames_cex = 1, catNames_font = 2,
+                        addHarbors = TRUE){
+
+  # Preserve par values before make graphics
+  old.par <- par(no.readonly = TRUE)
+  on.exit(par(old.par))
+
+  # Read file
+  if(is.element(class(file), c("data.frame"))){
+    allData <- file
+  }else if(length(file) == 1 && is.character(file) && file.exists(file)){
+    allData <- read.csv(file = file, check.names = FALSE, stringsAsFactors = FALSE)
+  }else{
+    stop("Incorrect value for file. It must be a 'data.frame' or it must indicate the path of input data.")
+  }
+
+  # Check values for colLon, colLat and colCategories
+  if(any(!is.element(c(colLon, colLat, colCategories), colnames(allData)))){
+    stop("Incorrect value for 'colLon', 'colLat' or 'colCategories'.")
+  }
+
+  # Get lon/lat and category columns
+  allData$lon <- as.numeric(allData[,colLon])
+  allData$lat <- as.numeric(allData[,colLat])
+  allData$colCategories <- allData[,colCategories]
+  allCategories <- if(is.null(allCategories)) sort(unique(allData$colCategories)) else allCategories
+
+  # Remove rows with NA values
+  allData <- allData[complete.cases(allData[,c("lon", "lat", "colCategories")]),]
+  if(nrow(allData) < 1) stop("No enought valid rows for make a plot.")
+
+  # Check lengths of categoriesNames and allCategories
+  if(!is.null(categoriesNames)){
+    if(length(categoriesNames) != length(allCategories)){
+      stop("'allCategories' and 'categoriesNames' must have the same length.")
+    }
+  }else{
+    categoriesNames <- allCategories
+  }
+
+  # Check allCategories and colCategories
+  if(!is.null(allCategories) & any(is.element(unique(colCategories), allCategories))){
+    stop("At least one element on 'colCategories' is  not within 'allCategories'.")
+  }
+
+  # Set xlim/ylim
+  xlim <- if(is.null(xlim)) range(allData$lon) else xlim[1:2]
+  ylim <- if(is.null(ylim)) range(allData$lat) else ylim[1:2]
+  xDelay <- if(is.null(xDelay)) abs(diff(xlim))/4 else xDelay[1]
+
+  # Extend xlim by length of categoryVector
+  prevXlim <- xlim
+  xlim <- c(xlim[1] - xDelay*length(allCategories), xlim[2])
+
+  # Create (or not) an empty canvas
+  if(isTRUE(newPlot)){
+    dev.new()
+  }
+
+  # Set plot params
+  par(mar = c(2, 4, 1, 1), xaxs = "i", yaxs = "i")
+
+  # Create empty canvas including sea...
+  plot(1, 1, pch = NA, xlim = xlim, ylim = ylim, axes = FALSE, xlab = NA, ylab = NA)
+  polygon(x = c(xlim, rev(xlim)), y = rep(ylim, each = 2), col = seaCol, border = FALSE)
+
+  # ...and land
+  map(database = "worldHires", add = TRUE, fill = TRUE, col = landCol, lty = "blank")
+  map(database = "worldHires", add = TRUE, interior = FALSE)
+
+  # Draw box text
+  if(diff(xlim)/2){
+    textBoxLimits <- list(x = xlim[2] - c(diff(prevXlim)/2, 0), y = ylim[2] - c(diff(ylim)/10, 0))
+  }
+  with(textBoxLimits, polygon(x = c(x, rev(x)), y = rep(y, each = 2), col = "white", border = TRUE))
+
+  # Add text inside box
+  textBox <- if(is.null(textBox)) "[Add some text here]" else textBox
+  mtext(text = textBox, side = 3, adj = 0.99, line = textBox_line, cex = textBox_cex, font = textBox_font)
+
+  # Draw lines by categories
+  for(i in seq_along(allCategories)){
+    index <- allData$colCategories == allCategories[i]
+    tempData <- allData[index,]
+
+    delayFactor <- xDelay*(1 - i)
+
+    # Add coast line
+    if(i != 1){
+      lines(coastline$lon + delayFactor, coastline$lat)
+    }
+
+    # Add points
+    if(nrow(tempData) > 0){
+      points(tempData$lon + delayFactor, tempData$lat, pch = 16, cex = 0.5)
+    }
+
+    # Add text of categories
+    if(isTRUE(showBoxText)){
+      text(x = prevXlim[1] + delayFactor + textBoxXCF, y = ylim[2] - 1, labels = categoriesNames[i],
+           font = catNames_font, cex = catNames_cex, col = rep(catNames_col, length.out = length(allCategories))[i])
+    }
+  }
+
+  # Add harbors
+  if(isTRUE(addHarbors)){
+    with(harborData[harborData[,"importance"] == 1,], points(x = lon, y = lat, pch = 17, col = "red"))
+    with(harborData[harborData[,"importance"] == 1,], text(x = lon, y = lat, labels = name, pos = 4, offset = .5))
+  }
+
+  # Add axis
+  yInterval <- if(is.null(yInterval)) diff(ylim)/5 else yInterval[1]
+  addCoordsAxes(yParams = c(ylim, yInterval), what = "y")
+  box()
 
   return(invisible())
 }

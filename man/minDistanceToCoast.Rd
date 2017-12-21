@@ -12,7 +12,7 @@ minDistanceToCoast(data, colLon = "lon", colLat = "lat",
 
 \item{colLon}{Name or position of column for longitude. As default, it will be \code{lon}.}
 
-\item{colLat}{Name or position of column for latitude As default, it will be \code{lat}.}
+\item{colLat}{Name or position of column for latitude. As default, it will be \code{lat}.}
 
 \item{countryFilter}{Select the country for make comparation}
 
