@@ -4,7 +4,7 @@
 \alias{addCoordsAxes}
 \title{Add labels for XY axis}
 \usage{
-addCoordsAxes(xParams = NULL, yParams = NULL, what = c("x", "y"))
+addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2))
 }
 \arguments{
 \item{xParams}{Parameters for X axis.}

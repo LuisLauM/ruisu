@@ -452,7 +452,7 @@ getCoordsAxes <- function(coord, what){
 #' addCoordsAxes(yParams = c(ylim, 2))
 #'
 #' box()
-addCoordsAxes <- function(xParams = NULL, yParams = NULL, what = c("x", "y")){
+addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2)){
 
   xParams <- if(is.null(xParams)) c(-180, 180, 5) else sort(xParams)
   yParams <- if(is.null(yParams)) c(-90, 90, 5) else sort(yParams)
@@ -462,14 +462,18 @@ addCoordsAxes <- function(xParams = NULL, yParams = NULL, what = c("x", "y")){
     if(!is.numeric(get(i)) || length(get(i)) != 3) stop(msg)
   }
 
-  if(is.element("x", what)){
-    xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
-    axis(side = 1, at = xCoords, labels = getCoordsAxes(coord = xCoords, what = "lon"))
+  if(length(where) > 4 | length(where) < 1 | any(!is.element(where, 1:4))){
+    stop("'where' must be an integer between 1 and 4.")
   }
 
-  if(is.element("y", what)){
-    yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
-    axis(side = 2, at = yCoords, labels = getCoordsAxes(coord = yCoords, what = "lat"), las = 2)
+  for(i in seq_along(where)){
+    if(is.element(where[i], c(1, 3))){
+      xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
+      axis(side = where[i], at = xCoords, labels = getCoordsAxes(coord = xCoords, what = "lon"))
+    }else{
+      yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
+      axis(side = where[i], at = yCoords, labels = getCoordsAxes(coord = yCoords, what = "lat"), las = 2)
+    }
   }
 
   return(invisible())
@@ -1161,7 +1165,7 @@ plotIsoparalitoral <- function(codeList = NULL, add = FALSE, old = TRUE,
 #' \dontrun{
 #' prepareProjFolder(folder = "../exampleFolder", type = 3)
 #' }
-prepareProjFolder <- function(folder, addRProj = TRUE, type = 1){
+prepareProjFolder <- function(folder, type = 1, addRProj = TRUE, openAtFinish = TRUE){
 
   folderList <- switch(type,
                        "1" = c("code", "data", "figures", "outputs"),
@@ -1172,7 +1176,13 @@ prepareProjFolder <- function(folder, addRProj = TRUE, type = 1){
 
   sapply(file.path(folder, folderList), dir.create, showWarnings = FALSE, recursive = TRUE)
 
-  if(isTRUE(addRProj)) initializeProject(path = folder)
+  if(isTRUE(addRProj)){
+    initializeProject(path = folder)
+
+    if(isTRUE(openAtFinish)){
+      openProject(path = folder, newSession = TRUE)
+    }
+  }
 
   return(invisible())
 }
