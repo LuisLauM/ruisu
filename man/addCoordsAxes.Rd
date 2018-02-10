@@ -2,7 +2,7 @@
 % Please edit documentation in R/main-ruisu.R
 \name{addCoordsAxes}
 \alias{addCoordsAxes}
-\title{Add labels for XY axis}
+\title{Add labels for XY axis on a map}
 \usage{
 addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2))
 }
@@ -11,24 +11,24 @@ addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2))
 
 \item{yParams}{Parameters for Y axis.}
 
-\item{what}{\code{character} vector indicating whether to show the labels for axis X, Y or both.}
+\item{where}{\code{character} vector indicating where to show the labels for axis: 1 (bottom), 2 (left), 3 (top) or 4 (right).}
 }
 \description{
-Add labels for XY axis
+Add labels for XY axis on a map
 }
 \details{
 \code{xParams} and \code{yParams} must contain axis information as a 3-length vector: \code{c(from, to, by)}.
 For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
 }
 \examples{
-par(mar = c(2, 3, 1, 1), xaxs = "i", yaxs = "i")
+par(mar = c(2, 3, 1, 3), xaxs = "i", yaxs = "i")
 
 xlim <- c(-85, -70)
 ylim <- c(-20, -2)
 
 plot(1, 1, type = "n", axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
 
-addCoordsAxes(yParams = c(ylim, 2))
+addCoordsAxes(xParams = c(xlim, 5), yParams = c(ylim, 2), where = c(1, 2, 4))
 
 box()
 }
