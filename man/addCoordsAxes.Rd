@@ -4,21 +4,27 @@
 \alias{addCoordsAxes}
 \title{Add labels for XY axis on a map}
 \usage{
-addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2))
+addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1,
+  ...)
 }
 \arguments{
 \item{xParams}{Parameters for X axis.}
 
 \item{yParams}{Parameters for Y axis.}
 
-\item{where}{\code{character} vector indicating where to show the labels for axis: 1 (bottom), 2 (left), 3 (top) or 4 (right).}
+\item{where}{\code{character} vector indicating where to show the labels for axis: 1 (bottom), 2 (left),
+3 (top) or 4 (right).}
+
+\item{las}{\code{numeric} in {0,1,2,3}; the style of axis labels. See \link{par}.}
+
+\item{...}{Extra arguments passed to \link{axis} function (e.g. \code{cex.axis}), which is used internaly for ploting.}
 }
 \description{
 Add labels for XY axis on a map
 }
 \details{
-\code{xParams} and \code{yParams} must contain axis information as a 3-length vector: \code{c(from, to, by)}.
-For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
+\code{xParams} and \code{yParams} must contain axis information as a 3-length vector:
+\code{c(from, to, by)}. For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
 }
 \examples{
 par(mar = c(2, 3, 1, 3), xaxs = "i", yaxs = "i")

@@ -5,7 +5,7 @@
 \title{Get the minumim distance to coast}
 \usage{
 minDistanceToCoast(data, colLon = "lon", colLat = "lat",
-  countryFilter = "peru", unit = "nm")
+  countryFilter = "peru", unit = "nm", multicore = FALSE, ncores = 1)
 }
 \arguments{
 \item{data}{\code{data.frame} with coords that will be used to calculate min distance to coast line.}
@@ -17,10 +17,22 @@ minDistanceToCoast(data, colLon = "lon", colLat = "lat",
 \item{countryFilter}{Select the country for make comparation}
 
 \item{unit}{Define the unit for outputs: nm (nautical miles), kilometers (km), m (meters).}
+
+\item{multicore}{\code{logical} indicating whether to use multiple cores for calculate distances.
+See Details.}
+
+\item{ncores}{If \code{multicore = TRUE}, how many cores are you going to use?}
 }
 \value{
-It returns a list with both the minimum distance to coast line and the point where this
-distance is reached.
+It returns a list with 2 levels: \code{value}, The minimum distance to coast line and
+\code{position}, the point where this minimum distance is reached.
+}
+\details{
+This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument
+\code{longlat = TRUE}.
+
+It is recommended to use multicore mode only when the database exceeds 2000 rows, less than
+this, single core mode have proved to be faster.
 }
 \examples{
 

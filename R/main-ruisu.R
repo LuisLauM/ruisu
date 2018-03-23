@@ -434,10 +434,13 @@ getCoordsAxes <- function(coord, what){
 #'
 #' @param xParams Parameters for X axis.
 #' @param yParams Parameters for Y axis.
-#' @param where \code{character} vector indicating where to show the labels for axis: 1 (bottom), 2 (left), 3 (top) or 4 (right).
+#' @param where \code{character} vector indicating where to show the labels for axis: 1 (bottom), 2 (left),
+#' 3 (top) or 4 (right).
+#' @param las \code{numeric} in {0,1,2,3}; the style of axis labels. See \link{par}.
+#' @param ... Extra arguments passed to \link{axis} function (e.g. \code{cex.axis}), which is used internaly for ploting.
 #'
-#' @details \code{xParams} and \code{yParams} must contain axis information as a 3-length vector: \code{c(from, to, by)}.
-#' For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
+#' @details \code{xParams} and \code{yParams} must contain axis information as a 3-length vector:
+#' \code{c(from, to, by)}. For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
 #'
 #' @export
 #'
@@ -452,7 +455,7 @@ getCoordsAxes <- function(coord, what){
 #' addCoordsAxes(xParams = c(xlim, 5), yParams = c(ylim, 2), where = c(1, 2, 4))
 #'
 #' box()
-addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2)){
+addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, ...){
 
   xParams <- if(is.null(xParams)) c(-180, 180, 5) else sort(xParams)
   yParams <- if(is.null(yParams)) c(-90, 90, 5) else sort(yParams)
@@ -469,10 +472,12 @@ addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2)){
   for(i in seq_along(where)){
     if(is.element(where[i], c(1, 3))){
       xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
-      axis(side = where[i], at = xCoords, labels = getCoordsAxes(coord = xCoords, what = "lon"))
+      axis(side = where[i], at = xCoords, labels = getCoordsAxes(coord = xCoords, what = "lon"),
+           las = las, ...)
     }else{
       yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
-      axis(side = where[i], at = yCoords, labels = getCoordsAxes(coord = yCoords, what = "lat"), las = 2)
+      axis(side = where[i], at = yCoords, labels = getCoordsAxes(coord = yCoords, what = "lat"),
+           las = las, ...)
     }
   }
 
@@ -943,9 +948,18 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 #' @param colLat Name or position of column for latitude. As default, it will be \code{lat}.
 #' @param countryFilter Select the country for make comparation
 #' @param unit Define the unit for outputs: nm (nautical miles), kilometers (km), m (meters).
+#' @param multicore \code{logical} indicating whether to use multiple cores for calculate distances.
+#' See Details.
+#' @param ncores If \code{multicore = TRUE}, how many cores are you going to use?
 #'
-#' @return It returns a list with both the minimum distance to coast line and the point where this
-#' distance is reached.
+#' @details This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument
+#' \code{longlat = TRUE}.
+#'
+#' It is recommended to use multicore mode only when the database exceeds 2000 rows, less than
+#' this, single core mode have proved to be faster.
+#'
+#' @return It returns a list with 2 levels: \code{value}, The minimum distance to coast line and
+#' \code{position}, the point where this minimum distance is reached.
 #'
 #' @export
 #'
@@ -981,10 +995,17 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 #' axis(side = 2, at = seq(ylim[1], ylim[2], length.out = 10),
 #'      labels = getCoordsAxes(seq(ylim[1], ylim[2], length.out = 10), "lat"), las = 2)
 #' box()
-minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilter = "peru", unit = "nm"){
+minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilter = "peru", unit = "nm",
+                               multicore = FALSE, ncores = 1){
 
-  pointsRange <- range(data[,colLat], na.rm = TRUE)
+  # Check data
+  if(class(data) != "data.frame" || nrow(data) < 1 || any(!is.element(c(colLon, colLat), colnames(data))) ||
+     !is.numeric(data[,colLon]) || !is.numeric(data[,colLat]) || length(colLon) != 1 || length(colLat) != 1 ||
+     sum(complete.cases(data[,c(colLon, colLat)])) < 1){
+    stop("'data' must be a valid 'data.frame' with numeric columns for lon/lat.")
+  }
 
+  # Get index for filter reference points
   if(!is.null(countryFilter)){
     countryFilter <- chartr(old = "\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1",
                             new = "aeiouun", x = tolower(countryFilter))
@@ -995,17 +1016,59 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
     index <- coastline$lat > index[1] & coastline$lat < index[2]
   }
 
-  refLines <- coastline[index,]
-  allDistances <- spDists(x = as.matrix(coastline[index, c("lon", "lat")]),
-                          y = as.matrix(data[,c(colLon, colLat)]), longlat = TRUE)
-  minDistancesValue <- apply(allDistances, 2, min)
-  minDistancesPosition <- refLines[,c("lon", "lat")][apply(allDistances, 2, which.min),]
+  # Filter reference points
+  refLines <- as.matrix(coastline[index, c("lon", "lat")])
 
+  # Get coords from data
+  data <- data[,c(colLon, colLat)]
+  data$chkValue <- complete.cases(data) & data[,1] >= -180 & data[,1] <= 180 & data[,2] >= -90 & data[,2] <= 90
+
+  # Get min distances using single or multithread processes
+  if(isTRUE(multicore)){
+    # Add an index for each row
+    data$n <- seq(nrow(data))
+
+    # Registering cluster
+    cl <- makeCluster(ncores)
+    registerDoSNOW(cl)
+
+    # Run multithread process
+    allDistances <- foreach(i = seq(nrow(data)), .inorder = FALSE, .packages = "sp") %dopar% {
+      getDistance(data, refLines, i)
+    }
+
+    # Finish cluster
+    stopCluster(cl)
+
+    # Sort outputs
+    index <- order(sapply(allDistances, "[[", 3))
+    allDistances <- allDistances[index]
+
+    # Get distances and positions
+    minDistancesValue <- sapply(allDistances, "[[", 1)
+    minDistancesPosition <- t(sapply(allDistances, "[[", 2))
+  }else{
+    # Get min distances
+    allDistances <- spDists(x = refLines,
+                            y = as.matrix(data[,c(colLon, colLat)]),
+                            longlat = TRUE)
+
+    # Get distances and positions
+    minDistancesValue <- apply(allDistances, 2, min)
+
+    index <- apply(allDistances, 2, which.min)
+    minDistancesPosition <- refLines[index,]
+  }
+
+  dimnames(minDistancesPosition) <- list(rownames(data), c("lon", "lat"))
+
+  # Get a factor using unit argument
   unitFactor <- switch(tolower(unit),
                        nm = 1/1.852,
                        km = 1,
                        m = 1e-3)
 
+  # Return a list with results
   return(list(value = minDistancesValue*unitFactor,
               position = minDistancesPosition))
 }
@@ -1187,32 +1250,38 @@ prepareProjFolder <- function(folder, type = 1, addRProj = TRUE, openAtFinish = 
   return(invisible())
 }
 
-#' @title Title Draw colorful squares
+#' @title Draw colorful squares
 #'
-#' @param nsquares How much squares do you desire? (500, as default).
+#' @param nsquares \code{numeric} How much squares do you desire? (500, as default).
+#' @param borders \code{logical} Do you want yo show borders around rectangles?
+#' @param colPalette \code{character} Vector of colors that will be used for plotting.
 #'
 #' @export
 #'
 #' @examples
 #' randomRectangles(nsquares = 120)
-randomRectangles <- function(nsquares = 500){
-  nsquares <- as.integer(nsquares)
+randomRectangles <- function(nsquares = 500, borders = TRUE, colPalette = rainbow(n = 2e3)){
+  x11()
 
-  par(bg = "black")
-  par(mar = c(0,0,0,0))
-  plot(c(0, 1), c(0, 1), col = "white", pch = ".", xlim = c(0, 1), ylim = c(0, 1))
+  allCols <- sample(x = colPalette, size = nsquares, replace = TRUE)
 
-  for(i in seq(nsquares))
-  {
-    center <- runif(2)
-    size <- rbeta(2, 1, 50)
+  squareData <- data.frame(center_x = runif(n = nsquares),
+                           center_y = runif(n = nsquares),
+                           size_x   = rbeta(n = nsquares, shape1 = 1, shape2 = 50),
+                           size_y   = rbeta(n = nsquares, shape1 = 1, shape2 = 50),
+                           color    = allCols,
+                           border   = if(isTRUE(borders)) rev(allCols) else NA,
+                           stringsAsFactors = FALSE)
 
-    color <- sample(c(seq(9), "A", "B", "C", "D", "E", "F"), 12, replace = T)
-    fill <- paste("#", paste(color[seq(6)], collapse = ""), sep = "")
-    brdr <- paste("#", paste(color[seq(7, 12)], collapse = ""), sep = "")
+  par(bg = "black", mar = rep(0, 4))
+  plot(1, 1, type = "n", axes = FALSE, xlab = NA, ylab = NA, xlim = c(0, 1), ylim = c(0, 1))
 
-    rect(center[1] - size[1], center[2] - size[2], center[1] + size[1], center[2] + size[2],
-         col = fill, border = brdr, density = NA, lwd = 1.5)
+  for(i in seq(nsquares)){
+    with(squareData, rect(xleft = center_x[i] - size_x[i],
+                          ybottom = center_y[i] - size_y[i],
+                          xright = center_x[i] + size_x[i],
+                          ytop = center_y[i] + size_y[i],
+                          col = color[i], border = border[i], lwd = 1.5))
   }
 
   return(invisible())

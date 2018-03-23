@@ -2,12 +2,17 @@
 % Please edit documentation in R/main-ruisu.R
 \name{randomRectangles}
 \alias{randomRectangles}
-\title{Title Draw colorful squares}
+\title{Draw colorful squares}
 \usage{
-randomRectangles(nsquares = 500)
+randomRectangles(nsquares = 500, borders = TRUE, colPalette = rainbow(n =
+  2000))
 }
 \arguments{
-\item{nsquares}{How much squares do you desire? (500, as default).}
+\item{nsquares}{\code{numeric} How much squares do you desire? (500, as default).}
+
+\item{borders}{\code{logical} Do you want yo show borders around rectangles?}
+
+\item{colPalette}{\code{character} Vector of colors that will be used for plotting.}
 }
 \examples{
 randomRectangles(nsquares = 120)
