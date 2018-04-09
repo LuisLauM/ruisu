@@ -757,6 +757,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     }
 
     if(isTRUE(relative)){
+      file2Names <- dimnames(file2)
       file2 <- data.frame(sweep(as.matrix(file2), 2, colSums(file2, na.rm = TRUE), "/")*100)
       dimnames(file2) <- file2Names
     }
@@ -955,6 +956,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 #' @details This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument
 #' \code{longlat = TRUE}.
 #'
+#' If \code{data} is a matrix, \code{colLon} and \code{colLat} must be ONLY numeric values.
+#'
 #' It is recommended to use multicore mode only when the database exceeds 2000 rows, less than
 #' this, single core mode have proved to be faster.
 #'
@@ -999,10 +1002,12 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
                                multicore = FALSE, ncores = 1){
 
   # Check data
-  if(class(data) != "data.frame" || nrow(data) < 1 || any(!is.element(c(colLon, colLat), colnames(data))) ||
-     !is.numeric(data[,colLon]) || !is.numeric(data[,colLat]) || length(colLon) != 1 || length(colLat) != 1 ||
+  if(!is.element(class(data), c("data.frame", "matrix")) ||
+     nrow(data) < 1 || (class(data) == "data.frame" & any(!is.element(c(colLon, colLat), colnames(data)))) ||
+     !is.numeric(data[,colLon]) || !is.numeric(data[,colLat]) ||
+     length(colLon) != 1 || length(colLat) != 1 ||
      sum(complete.cases(data[,c(colLon, colLat)])) < 1){
-    stop("'data' must be a valid 'data.frame' with numeric columns for lon/lat.")
+    stop("'data' must be a valid 'data.frame' or 'matrix' with numeric columns for lon/lat.")
   }
 
   # Get index for filter reference points
@@ -1020,7 +1025,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
   refLines <- as.matrix(coastline[index, c("lon", "lat")])
 
   # Get coords from data
-  data <- data[,c(colLon, colLat)]
+  data <- as.data.frame(data[,c(colLon, colLat)])
   data$chkValue <- complete.cases(data) & data[,1] >= -180 & data[,1] <= 180 & data[,2] >= -90 & data[,2] <= 90
 
   # Get min distances using single or multithread processes
@@ -1058,6 +1063,10 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
 
     index <- apply(allDistances, 2, which.min)
     minDistancesPosition <- refLines[index,]
+  }
+
+  if(class(minDistancesPosition) != "matrix"){
+    minDistancesPosition <- matrix(data = minDistancesPosition, nrow = 1)
   }
 
   dimnames(minDistancesPosition) <- list(rownames(data), c("lon", "lat"))
@@ -2118,4 +2127,91 @@ paralelMaps <- function(file, colCategories, allCategories = NULL, categoriesNam
   box()
 
   return(invisible())
+}
+
+
+#' ATM banknotes' optimizer algorithm
+#'
+#' @param amount The amount to optimize.
+#' @param d_Banknotes Denomination of banknotes.
+#' @param n_Banknotes Quantity of available banknotes.
+#' @param d_symbol Symbol of banknote currency.
+#'
+#' @details For now, the algorithm compares all the possible solutions, so it is a brute-force search.
+#'
+#' @return A vector with the quantity of banknotes.
+#' @export
+#'
+#' @examples
+#' amount <- 70
+#'
+#' d_Banknotes <- c(20, 50, 100, 200)
+#' n_Banknotes <- rep(10, length(d_Banknotes))
+#'
+#' notebanks_ATM(amount = amount, d_Banknotes = d_Banknotes,
+#'               n_Banknotes = n_Banknotes, d_symbol = "S/")
+notebanks_ATM <- function(amount, d_Banknotes, n_Banknotes, d_symbol = "US$"){
+  # Default output if no solutions were found
+  defaultOut <- numeric(length(d_Banknotes))
+  names(defaultOut) <- d_Banknotes
+
+  # Make a table with all posible solutions
+  out <- amount %/% d_Banknotes
+  out <- expand.grid(sapply(out, seq, from = 0))
+
+  # Calculate the sum of amounts for each solution
+  outSums <- sweep(x = out, MARGIN = 2,  STATS = d_Banknotes, FUN = "*")
+
+  # Which solutions are equal to the amount?
+  index <- rowSums(outSums) == amount
+
+  # If any solution is equal to amount, it returns a message
+  if(sum(index) == 0){
+    message("\nThe amount cannot be divided by banknotes of ",
+            paste(paste0(d_symbol, d_Banknotes), collapse = ", "), ".\n")
+
+    return(defaultOut)
+  }else{
+    out <- out[index,]
+  }
+
+  # Which solutions no exceed the quantity of notebanks?
+  index <- rowSums(sweep(x = out, MARGIN = 2, STATS = n_Banknotes, FUN = ">")) == 0
+
+  if(sum(index) == 0){
+    message("\nNot enough banknotes to achive the amount.\n")
+    return(defaultOut)
+  }else{
+    out <- out[index,]
+  }
+
+  # Weight the solutions accordng to the denomination of notebanks
+  index <- sweep(x = out, MARGIN = 2, STATS = rev(d_Banknotes), FUN = "*")
+  index <- which.min(rowSums(index))
+
+  # Prepare output
+  out <- as.numeric(out[index,])
+  names(out) <- d_Banknotes
+
+  return(out)
+}
+
+
+#' Creates a zigurat matrix
+#'
+#' @param n Number of floors of zigurat (size of matrix).
+#'
+#' @return A square matrix \eqn{n * n}.
+#' @export
+#'
+#' @examples
+#' out <- zigguratCreator(n = 10)
+#' image(out)
+zigguratCreator <- function(n){
+  out <- mat.or.vec(nr = (n - 1)*2 + 1, nc = (n - 1)*2 + 1) + 1
+  for(i in seq(n - 1)){
+    out[seq(i + 1, nrow(out) - i), seq(i + 1, ncol(out) - i)] <- i + 1
+  }
+
+  return(out)
 }

@@ -31,6 +31,8 @@ It returns a list with 2 levels: \code{value}, The minimum distance to coast lin
 This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument
 \code{longlat = TRUE}.
 
+If \code{data} is a matrix, \code{colLon} and \code{colLat} must be ONLY numeric values.
+
 It is recommended to use multicore mode only when the database exceeds 2000 rows, less than
 this, single core mode have proved to be faster.
 }
