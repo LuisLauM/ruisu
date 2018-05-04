@@ -457,8 +457,8 @@ getCoordsAxes <- function(coord, what){
 #' box()
 addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, ...){
 
-  xParams <- if(is.null(xParams)) c(-180, 180, 5) else sort(xParams)
-  yParams <- if(is.null(yParams)) c(-90, 90, 5) else sort(yParams)
+  xParams <- if(is.null(xParams)) c(-180, 180, 5) else c(sort(xParams[1:2]), xParams[3])
+  yParams <- if(is.null(yParams)) c(-90, 90, 5) else c(sort(yParams[1:2]), yParams[3])
 
   for(i in c("xParams", "yParams")){
     msg <- sprintf("'%s' must be a numeric vector of length 3. See ?addCoordsAxes", i)
