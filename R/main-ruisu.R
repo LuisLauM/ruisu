@@ -1241,7 +1241,7 @@ prepareProjFolder <- function(folder, type = 1, addRProj = TRUE, openAtFinish = 
 
   folderList <- switch(type,
                        "1" = c("code", "data", "figures", "outputs"),
-                       "2" = c("code", "data", "figures", "raw", "outputs", "bib"),
+                       "2" = c("code", "data", "docs", "figures", "raw", "outputs", "bib"),
                        "3" = c("bib", "drafts", "presentations", "results/raw", "results/data", "results/figures",
                                "results/code/figures", "results/code/analysis"),
                        "Incorrect value for 'type'.")
