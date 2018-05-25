@@ -9,5 +9,5 @@ Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
 Description: Tools for common tasks
 License: GPL (>= 2)
 LazyData: true
-Depends: sp, lubridate, rstudioapi, raster, fields, rgeos, mapdata, foreach, doSNOW, R (>= 3.2.0)
+Depends: sp, lubridate, rstudioapi, raster, fields, rgeos, mapdata, foreach, doSNOW, ncdf4, zoo, R (>= 3.2.0)
 RoxygenNote: 6.0.1

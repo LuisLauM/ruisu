@@ -163,3 +163,13 @@ getDistance <- function(data, refLines, i){
 
   return(output)
 }
+
+getRangesNC <- function(filename){
+  ncFile <- nc_open(filename = filename)
+
+  output <- range(as.Date(as.POSIXct(ncFile$dim$time$vals, origin = "1970-1-1 00:00:00")))
+
+  nc_close(nc = ncFile)
+
+  return(as.character(output))
+}
