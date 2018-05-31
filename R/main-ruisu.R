@@ -117,6 +117,16 @@ NULL
 #' @format A \code{data.frame} with topographic information (lon, lat, altitude).
 NULL
 
+#' @title \code{data.frame} with environmental scenarios given by IGP
+#' @name envirScenarios
+#' @description A table with information of El Nino/La Nina events classification from 1951 to 2016.
+#' @aliases envirScenarios
+#' @docType data
+#' @usage envirScenarios
+#' @format A \code{data.frame} with environmental scenarios given by IGP (year_start, month_start,
+#' year_end, month_end, magnitude, what).
+NULL
+
 #' @title Abbreviation for \code{as.numeric}
 #'
 #' @param x Object to be coerced or tested.
@@ -1300,41 +1310,43 @@ randomRectangles <- function(nsquares = 500, borders = TRUE, colPalette = rainbo
 #'
 #' @param i Step of the iteration.
 #' @param n Total number of iteration
-#' @param stepText Text before 'n'.
+#' @param iterator If 'i' belongs to a vector of iterators, define it here.
 #'
 #' @return The function returns only messages (from \code{cat}).
 #' @export
 #'
 #' @examples
-#' n = 1000
+#' n = 1234
 #' for(i in seq(n)){
 #'   Sys.sleep(0.01)
 #'   progressBar(i = i, n = n)
 #' }
-progressBar <- function(i, n, stepText = "n"){
+progressBar <- function(i, n = NULL, iterator = NULL){
 
-  if(i > n){
-    stop("Incorrect value for 'i' or 'n'.")
-  }
-
-  index <- floor(i/n*100)
-
-  if(index == floor((i - 1)/n*100)){
-    return(invisible())
-  }
-
-  if(index %% 5 == 0){
-    if(index %% 25 == 0){
-      if(i != n){
-        cat(paste0("  ", index, "% (", stepText, " = ", i, ")\n"))
-      }else{
-        cat(paste0(" 100% (", stepText, " = ", i, ")\n"))
-      }
-    }else{
-      cat("|")
+  if(is.null(n)){
+    if(is.null(iterator)){
+      stop("You must indicate a valid value for 'i' or 'iterator'.")
     }
-  }else{
-    cat(".")
+
+    n <- length(iterator)
+    i <- match(i, iterator)
+  }
+
+  if(i == 1){
+    cat("\n", paste(rep("....|", 10), collapse = ""), "\n")
+  }
+
+  a <- i/n*100
+  b <- (i - 1)/n*100
+
+  allMarks <- seq(0, 100, 2)
+
+  nBars <- sum(allMarks >= b & allMarks < a)
+
+  cat(paste(rep("=", nBars), collapse = ""))
+
+  if(i == n){
+    cat(" Complete!\n")
   }
 
   return(invisible())
@@ -2251,7 +2263,7 @@ getEnvirData <- function(x, environmentalDir,
                          dimVars_x = list(lon = "lon", lat = "lat", date = "date", date_format = "%F"),
                          dimVars_nc = list(lon = "longitude", lat = "latitude", date = "time",
                                            date_origin = "1970-01-01T00:00:00Z"),
-                         groupBy = "day", varName = NULL,
+                         regridSize = NULL, groupBy = "day", varName = NULL,
                          justVarValues = TRUE, quiet = FALSE){
 
   if(is.null(dimVars_x)){
@@ -2305,6 +2317,18 @@ getEnvirData <- function(x, environmentalDir,
 
     nc_close(nc = ncFile)
 
+    if(!is.null(regridSize)){
+      rangeCoord <- range(envirList$x)
+      newX <- seq(floor(rangeCoord[1]), ceiling(rangeCoord[2]), regridSize)
+      newX <- newX[newX >= rangeCoord[1] & newX <= rangeCoord[2]]
+
+      rangeCoord <- range(envirList$y)
+      newY <- seq(floor(rangeCoord[1]), ceiling(rangeCoord[2]), regridSize)
+      newY <- newY[newY >= rangeCoord[1] & newY <= rangeCoord[2]]
+
+      newGrid <- expand.grid(x = newX, y = newY, stringsAsFactors = FALSE)
+    }
+
     envirList$x <- seq(min(envirList$x), max(envirList$x), length.out = length(envirList$x))
     envirList$y <- seq(min(envirList$y), max(envirList$y), length.out = length(envirList$y))
 
@@ -2322,18 +2346,31 @@ getEnvirData <- function(x, environmentalDir,
       ncDates <- monthlyDate
     }
 
-    for(j in indexData){
-      if(j == 1 || x$date[j] != x$date[j - 1]){
+    for(j in seq_along(indexData)){
+      k <- indexData[j]
+      if(j == 1 || x$date[k] != x$date[indexData[j - 1]]){
+        index <- ncDates == x$date[k]
+        if(sum(index) < 1) next
+
         tempRaster <- envirList
 
         if(length(dim(tempRaster$z)) == 3){
-          tempRaster$z <- tempRaster$z[,,ncDates == x$date[j]]
+          tempRaster$z <- tempRaster$z[,,index]
         }
 
         tempRaster <- raster(tempRaster)
+
+        if(!is.null(regridSize)){
+          tempGrid <- newGrid
+
+          tempGrid$z <- extract(x = tempRaster, y = tempGrid)
+
+          tempRaster <- aggregate(x = tempRaster, fact = regridSize/res(tempRaster),
+                                  fun = mean, na.rm = TRUE)
+        }
       }
 
-      output[j] <- extract(x = tempRaster, y = x[j, 1:2])
+      output[k] <- extract(x = tempRaster, y = x[k, 1:2])
     }
 
     if(!isTRUE(quiet)){

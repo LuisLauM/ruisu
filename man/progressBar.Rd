@@ -4,20 +4,20 @@
 \alias{progressBar}
 \title{Make a progress bar}
 \usage{
-progressBar(i, n, stepText = "n")
+progressBar(i, n = NULL, iterator = NULL)
 }
 \arguments{
 \item{i}{Step of the iteration.}
 
 \item{n}{Total number of iteration}
 
-\item{stepText}{Text before 'n'.}
+\item{iterator}{If 'i' belongs to a vector of iterators, define it here.}
 }
 \value{
 The function returns only messages (from \code{cat}).
 }
 \examples{
-n = 1000
+n = 1234
 for(i in seq(n)){
   Sys.sleep(0.01)
   progressBar(i = i, n = n)

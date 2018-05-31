@@ -7,7 +7,8 @@
 getEnvirData(x, environmentalDir, dimVars_x = list(lon = "lon", lat = "lat",
   date = "date", date_format = "\%F"), dimVars_nc = list(lon = "longitude",
   lat = "latitude", date = "time", date_origin = "1970-01-01T00:00:00Z"),
-  groupBy = "day", varName = NULL, justVarValues = TRUE, quiet = FALSE)
+  regridSize = NULL, groupBy = "day", varName = NULL,
+  justVarValues = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{x}{A \code{data.frame} with spatial-time information.}
