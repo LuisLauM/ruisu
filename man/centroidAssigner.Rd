@@ -2,19 +2,26 @@
 % Please edit documentation in R/main-ruisu.R
 \name{centroidAssigner}
 \alias{centroidAssigner}
-\title{Returns centroid values from Isoparalitoral-area codes.}
+\title{Returns centroid values from grid codes.}
 \usage{
-centroidAssigner(isoCode, old = TRUE)
+centroidAssigner(code, what = "isoparalitoral", ...)
 }
 \arguments{
-\item{isoCode}{Vector with AIP codes.}
+\item{code}{Vector with grid codes.}
 
-\item{old}{\code{logical}. Specifying whether to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).}
+\item{...}{}
 }
 \description{
-This function takes a vector of AIP codes and returns centroids (center of mass) in lon-lat values.
+This function takes a vector of grid codes and returns centroids (center of mass) in lon-lat values.
+}
+\details{
+For \code{what = "isoparalitoral"} (default), it allows to use argument \code{old}, for specifying whether
+to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).
 }
 \examples{
-areaCodes <- c(1050, 4043, 17073, 27103)
-centroidAssigner(isoCode = areaCodes)
+isopCodes <- c(1050, 4043, 17073, 27103)
+centroidAssigner(code = areaCodes, what = "isoparalitoral")
+
+marsdenCodes <- c("A6", "B8", "c12")
+centroidAssigner(code = marsdenCodes, what = "marsden")
 }

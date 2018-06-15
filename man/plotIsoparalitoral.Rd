@@ -2,7 +2,7 @@
 % Please edit documentation in R/main-ruisu.R
 \name{plotIsoparalitoral}
 \alias{plotIsoparalitoral}
-\title{Title plotIsoparalitoral}
+\title{Plot Isoparalitoral shapes}
 \usage{
 plotIsoparalitoral(codeList = NULL, add = FALSE, old = TRUE,
   plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE, xlab =

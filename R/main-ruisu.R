@@ -171,29 +171,32 @@ anc <- function(x, ...){
 
 #' @name centroidAssigner
 #' @aliases centroidAssigner
-#' @title Returns centroid values from Isoparalitoral-area codes.
+#' @title Returns centroid values from grid codes.
 #'
-#' @description This function takes a vector of AIP codes and returns centroids (center of mass) in lon-lat values.
+#' @description This function takes a vector of grid codes and returns centroids (center of mass) in lon-lat values.
 #'
-#' @usage centroidAssigner(isoCode, old = TRUE)
+#' @param code Vector with grid codes.
+#' @param ...
 #'
-#' @param isoCode Vector with AIP codes.
-#' @param old \code{logical}. Specifying whether to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).
+#' @details For \code{what = "isoparalitoral"} (default), it allows to use argument \code{old}, for specifying whether
+#' to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).
 #'
 #' @export
 #'
 #' @examples
-#' areaCodes <- c(1050, 4043, 17073, 27103)
-#' centroidAssigner(isoCode = areaCodes)
-centroidAssigner <- function(isoCode, old = TRUE)
-{
-  isoAreas <- ifelse(isTRUE(old), "AIPData_old", "AIPData_new")
+#' isopCodes <- c(1050, 4043, 17073, 27103)
+#' centroidAssigner(code = areaCodes, what = "isoparalitoral")
+#'
+#' marsdenCodes <- c("A6", "B8", "c12")
+#' centroidAssigner(code = marsdenCodes, what = "marsden")
+centroidAssigner <- function(code, what = "isoparalitoral", ...){
 
-  isoAreas <- get(isoAreas)
+  output <- switch(what,
+                   isoparalitoral = centroidAssigner_isop(code = code, ...),
+                   marsden = centroidAssigner_marsden(code = tolower(code), ...),
+                   "Incorrect value for 'what'. See help for checking available methods.")
 
-  index <- match(isoCode, isoAreas$code)
-  output <- data.frame(isoCode, isoAreas[index, c("x", "y")])
-  colnames(output) <- c("area", "lon", "lat")
+  colnames(output) <- c("code", "lon", "lat")
   rownames(output) <- seq(nrow(output))
 
   return(output)
@@ -551,46 +554,6 @@ getProportion <- function(table, group = 3)
   }else if(group == 3){
     output <- table/sum(table, na.rm = TRUE)
   }
-
-  return(output)
-}
-
-#' @title Title Function to get AIP code from lon-lat information.
-#'
-#' @param dataPoints \code{data.frame} which has Longitude and Latitude information.
-#' @param colLon Name of column which contains Longitude info.
-#' @param colLat Name of column which contains Latitude info.
-#' @param old \code{logical}. Do you prefer to use old or new AIP data?
-#'
-#' @return A numeric vector indicating the AIP values for each coord.
-#'
-#' @export
-#'
-#' @examples
-#' exampleCoords <- data.frame(lon = runif(n = 10, min = -80, max = -78),
-#'                             lat = runif(n = 10, min = -14, max = -12))
-#'
-#' isopArea.assigner(dataPoints = exampleCoords)
-isopArea.assigner <- function(dataPoints, colLon = "lon", colLat = "lat", old = TRUE){
-
-  referenceShapefile <- get(ifelse(test = isTRUE(old), yes = "AIPShapefile_old", no = "AIPShapefile_new"))
-
-  dataPoints <- switch(class(dataPoints),
-                       "data.frame" = as.data.frame(dataPoints[,c(colLon, colLat)]),
-                       "numeric" = data.frame(lon = dataPoints[1], lat = dataPoints[2], stringsAsFactors = FALSE))
-
-  output <- rep(NA, nrow(dataPoints))
-
-  index <- complete.cases(dataPoints)
-  dataPoints <- dataPoints[index,]
-
-  coordinates(dataPoints) <- dataPoints
-
-  proj4string(dataPoints) <- proj4string(referenceShapefile)
-
-  dataPoints <- over(x = dataPoints, y = referenceShapefile)
-
-  output[index] <- dataPoints$code
 
   return(output)
 }
@@ -1180,7 +1143,7 @@ newYear <- function(message, delay = 4, nroBombs = 100, dispersion = 10, cex.tex
   return(invisible())
 }
 
-#' @title Title plotIsoparalitoral
+#' @title Plot Isoparalitoral shapes
 #'
 #' @param codeList AIP codes to plot.
 #' @param add logical flag that specifies whether to add to the current plot. If FALSE, a new plot is begun, using
@@ -1634,7 +1597,7 @@ sillyTest <- function(testName, questions, answers, correctAnswers){
   score <- round(sum(correction < 1, na.rm = TRUE)/qstNumber*100, 0)
 
   scorePlace <- ac(cut(score, breaks = c(-Inf, 20, 50, 75, 90, Inf),
-                                 labels = c("Muy mal", "Mal", "Bien", "Muy bien", "Genial")))
+                       labels = c("Muy mal", "Mal", "Bien", "Muy bien", "Genial")))
 
   cat("\n ", sprintf("\u00a1%s, %s!", scorePlace, gamerName),
       "\n", sprintf("Tu puntaje fue de %s", score), "%!", sep = "")
@@ -2385,4 +2348,85 @@ getEnvirData <- function(x, environmentalDir,
   }
 
   return(outputData)
+}
+
+#' Function to get main grid codes used at IMARPE from lon-lat information.
+#'
+#' @param dataPoints \code{data.frame} which has Longitude and Latitude information.
+#' @param colLon Name of column which contains Longitude info.
+#' @param colLat Name of column which contains Latitude info. See Details for default values.
+#' @param what \code{character} string indicating the grid (i.e. the method) that will be used for the matching.
+#' @param ... Extra arguments passed to the selected method.
+#'
+#' @details If \code{colLon} or \code{colLat} were \code{NULL}, the default values will depend on the class of
+#' \code{dataPoints}. So, if it was a \code{matrix} or a \code{numeric} vector, \code{colLon} and \code{colLat}
+#' will take values 1 or 2, respectively. Otherwise, if \code{dataPoints} is a \code{data.frame}, the values will
+#' be "lon" and "lat", respectively.
+#'
+#' @return A \code{character} vector with the code for ,depending on 'what', the assigned Marsden/Isoparalitoral grid.
+#' @rdname peruvianGrid.assigner
+#' @export
+peruvianGrid.assigner <- function(dataPoints, colLon = NULL, colLat = NULL, what = "isoparalitoral", ...){
+  if(is.null(colLon)){
+    colLon <- switch(class(dataPoints),
+                     "matrix" = 1,
+                     "data.frame" = "lon",
+                     "numeric" = 1)
+  }
+
+  if(is.null(colLat)){
+    colLat <- switch(class(dataPoints),
+                     "matrix" = 2,
+                     "data.frame" = "lat",
+                     "numeric" = 2)
+  }
+
+  dataPoints <- switch(class(dataPoints),
+                       "matrix" = dataPoints[,c(colLon, colLat)],
+                       "data.frame" = data.frame(lon = dataPoints[,colLon], lat = dataPoints[,colLat], stringsAsFactors = FALSE),
+                       "numeric" = data.frame(lon = dataPoints[colLon], lat = dataPoints[colLat], stringsAsFactors = FALSE))
+
+  output <- rep(NA, nrow(dataPoints))
+
+  index <- complete.cases(dataPoints)
+  dataPoints <- dataPoints[index,]
+
+  output[index] <- switch(what,
+                          isoparalitoral = assigner_isoparalitoral(dataPoints = dataPoints, ...),
+                          marsden = assigner_marsdenSquare(dataPoints = dataPoints, ...),
+                          "Incorrect value for 'what', check available methods in help.")
+
+  return(output)
+}
+
+#' Wrapper function peruvianGrid.assigner
+#'
+#' @name marsdenSquare.assigner
+#' @rdname peruvianGrid.assigner
+#' @export
+#' @examples
+#' ## isopArea.assigner
+#' exampleCoords <- data.frame(lon = runif(n = 10, min = -80, max = -78),
+#'                             lat = runif(n = 10, min = -14, max = -12))
+#'
+#' isopArea.assigner(dataPoints = exampleCoords)
+isopArea.assigner <- function(dataPoints, colLon = NULL, colLat = NULL, old = FALSE){
+  output <- peruvianGrid.assigner(dataPoints = dataPoints, colLon = colLon, colLat = colLat, what = "isoparalitoral", old = old)
+
+  return(output)
+}
+
+#' Wrapper function peruvianGrid.assigner
+#'
+#' @name marsdenSquare.assigner
+#' @rdname peruvianGrid.assigner
+#' @export
+#'
+#' @examples
+#' ## marsdenSquare.assigner
+#' marsdenSquare.assigner(dataPoints = c(-84.32, -11.87))
+marsdenSquare.assigner <- function(dataPoints, colLon = NULL, colLat = NULL){
+  output <- peruvianGrid.assigner(dataPoints = dataPoints, colLon = colLon, colLat = colLat, what = "marsden")
+
+  return(output)
 }

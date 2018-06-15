@@ -173,3 +173,51 @@ getRangesNC <- function(filename){
 
   return(as.character(output))
 }
+
+assigner_isoparalitoral <- function(dataPoints, old = FALSE){
+  referenceShapefile <- get(ifelse(test = isTRUE(old), yes = "AIPShapefile_old", no = "AIPShapefile_new"))
+
+  coordinates(dataPoints) <- dataPoints
+
+  proj4string(dataPoints) <- proj4string(referenceShapefile)
+
+  dataPoints <- over(x = dataPoints, y = referenceShapefile)
+
+  return(dataPoints$code)
+}
+
+assigner_marsdenSquare <- function(dataPoints){
+  output <- paste0(ac(cut(x = abs(dataPoints$lat), breaks = seq(3, 20), labels = LETTERS[seq(17)])),
+                   anc(cut(x = abs(dataPoints$lon), breaks = seq(70, 180), labels = seq(110))))
+
+  return(output)
+}
+
+centroidAssigner_isop <- function(code, old = TRUE){
+  isoAreas <- ifelse(isTRUE(old), "AIPData_old", "AIPData_new")
+
+  isoAreas <- get(isoAreas)
+
+  index <- match(code, isoAreas$code)
+
+  output <- data.frame(code, isoAreas[index, c("x", "y")])
+
+  return(output)
+}
+
+centroidAssigner_marsden <- function(code){
+
+  code <- gsub(x = code, pattern = "[[:space:]]|[[:punct:]]", replacement = "", perl = TRUE)
+  letterCode <- gsub(x = code, pattern = "[0-9]", replacement = "", perl = TRUE)
+  numberCode <- an(gsub(x = code, pattern = "[a-z]", replacement = "", perl = TRUE))
+
+  letterCode <- -seq(3.5, 19.5)[sapply(letterCode, function(x) match(letters[1:17], x = x))]
+  numberCode <- -(numberCode + 69.5)
+
+  numberCode[is.na(letterCode)] <- NA
+
+  output <- data.frame(toupper(code), numberCode, letterCode,
+                       stringsAsFactors = FALSE)
+
+  return(output)
+}
