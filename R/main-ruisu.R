@@ -455,6 +455,9 @@ getCoordsAxes <- function(coord, what){
 #' @details \code{xParams} and \code{yParams} must contain axis information as a 3-length vector:
 #' \code{c(from, to, by)}. For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
 #'
+#' If \code{labels} is specified at \code{...}, the function will consider this values for both \code{xParams} and
+#' \code{yParams}, so be carefull and use it separately (run the function twice for lon and lat).
+#'
 #' @export
 #'
 #' @examples
@@ -468,7 +471,7 @@ getCoordsAxes <- function(coord, what){
 #' addCoordsAxes(xParams = c(xlim, 5), yParams = c(ylim, 2), where = c(1, 2, 4))
 #'
 #' box()
-addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, ...){
+addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, labels = NULL, ...){
 
   xParams <- if(is.null(xParams)) c(-180, 180, 5) else c(sort(xParams[1:2]), xParams[3])
   yParams <- if(is.null(yParams)) c(-90, 90, 5) else c(sort(yParams[1:2]), yParams[3])
@@ -485,12 +488,12 @@ addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las =
   for(i in seq_along(where)){
     if(is.element(where[i], c(1, 3))){
       xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
-      axis(side = where[i], at = xCoords, labels = getCoordsAxes(coord = xCoords, what = "lon"),
-           las = las, ...)
+      tempLabs <- if(is.null(labels)) getCoordsAxes(coord = xCoords, what = "lon") else labels
+      axis(side = where[i], at = xCoords, labels = tempLabs, las = las, ...)
     }else{
       yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
-      axis(side = where[i], at = yCoords, labels = getCoordsAxes(coord = yCoords, what = "lat"),
-           las = las, ...)
+      tempLabs <- if(is.null(labels)) getCoordsAxes(coord = yCoords, what = "lat") else labels
+      axis(side = where[i], at = yCoords, labels = tempLabs, las = las, ...)
     }
   }
 
@@ -972,7 +975,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 #'      labels = getCoordsAxes(seq(ylim[1], ylim[2], length.out = 10), "lat"), las = 2)
 #' box()
 minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilter = "peru", unit = "nm",
-                               multicore = FALSE, ncores = 1){
+                               multicore = FALSE, ncores = 1, out = c("value", "position")){
 
   # Check data
   if(!is.element(class(data), c("data.frame", "matrix")) ||
@@ -1051,8 +1054,9 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
                        m = 1e-3)
 
   # Return a list with results
-  return(list(value = minDistancesValue*unitFactor,
-              position = minDistancesPosition))
+  output <- list(value = minDistancesValue*unitFactor,
+                 position = minDistancesPosition)[out]
+  return(if(length(output) == 1) output[[1]] else output)
 }
 
 #' @title Calculate the moving average for a numeric vector
@@ -2195,8 +2199,8 @@ zigguratCreator <- function(n){
 #' Get environmental info from lon-lat-time data frame
 #'
 #' @param x A \code{data.frame} with spatial-time information.
-#' @param dimVars_x A \code{list} with info about names (or position) for lon-lat-time columns on \code{x}. See Details.
 #' @param environmentalDir A \code{character} string for nc files.
+#' @param dimVars_x A \code{list} with info about names (or position) for lon-lat-time columns on \code{x}. See Details.
 #' @param dimVars_nc A \code{list} with info about names for lon-lat-time on nc files.
 #' @param groupBy \code{character} string indicating whether to use data by 'month' or 'day' (default). See Details.
 #' @param varName \code{character} strings with the name of the value for nc data. See Details.
@@ -2211,9 +2215,9 @@ zigguratCreator <- function(n){
 #' This funtion has been developed for using nc files downloaded from ERDDAP server. Please check that your nc files
 #' before to use.
 #'
-#' Environmental data are storaged (nc files) by day. If \code{groupBy="month"}, the function will average
-#' the matrices. Also, it will substitute day values of \code{x} (just internally) and nc data by 15 (the middle day
-#' in a month).
+#' Environmental data must be storaged as nc files which each file will contain daily info for a certain month, so if the
+#' user has monthly data, it must be (externally) splited by day (repeating the monthly values) and save in monthly files.
+#' If \code{groupBy="month"}, the function will average the matrices
 #'
 #' If \code{varName} is not specified, the function will take the only available variable (if nc file has only one),
 #' otherwise the function will stop and show the available variables for the nc. For this last option, function will
@@ -2228,13 +2232,22 @@ getEnvirData <- function(x, environmentalDir,
                                            date_origin = "1970-01-01T00:00:00Z"),
                          regridSize = NULL, groupBy = "day", varName = NULL,
                          justVarValues = TRUE, quiet = FALSE){
+  # Preserve original x
+  oldX <- x
 
-  if(is.null(dimVars_x)){
-    dimVars_x <- list(lon = "lon", lat = "lat", date = "date", date_format = "%F")
+  # Extract Dates from x data
+  if(!is.Date(x[,dimVars_x$date]) && !is.POSIXt(x[,dimVars_x$date])){
+    xDates <- as.Date(x[,dimVars_x$date], format = dimVars_x$date_format)
+  }else{
+    xDates <- as.Date(x[,dimVars_x$date])
   }
 
-  oldX <- x
-  xDates <- as.Date(x[,dimVars_x$date], format = dimVars_x$date_format)
+  dateBreaks <- c(seq(from = min(xDates, na.rm = TRUE), to = max(xDates, na.rm = TRUE), by = groupBy),
+                  as.Date(1e7, origin = "1970-1-1"))
+
+  xDates <- as.Date(ac(cut(x = xDates, breaks = dateBreaks,  labels = dateBreaks[-length(dateBreaks)])))
+
+
 
   if(groupBy == "month"){
     xDates <- as.Date(paste(year(xDates), month(xDates), 15, sep = "-"))

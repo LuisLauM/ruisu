@@ -5,21 +5,23 @@
 \title{Given a frequency table size, it generates a vertical array of graphics for each specified
 category (months, latitudes, years, etc.).}
 \usage{
-lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
-  profile = NULL, xlim = NULL, xInterval = NULL, ylim = c(0, 50),
-  yInterval = NULL, ylimList = NULL, yIntervalList = NULL,
-  ltys1 = "solid", lwds1 = "1", col1 = "black", ltys2 = "solid",
-  lwds2 = "1", col2 = "blue", juvLimit = NULL, juvLty = "dotted",
-  juvLwd = 1, juvCol = "red", showJuv1 = TRUE, juvLine1 = -2,
-  juvCex1 = 1, juvLabel1 = "juveniles_1 = ", showJuv2 = TRUE,
-  juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
-  namesLine1 = -2, namesCex1 = 1, namesCol1 = NULL, showNames2 = FALSE,
+lengthFrequencyPlot(file1, file2 = NULL, dataFactor = 1,
+  newPlot = FALSE, profile = NULL, xlim = NULL, xInterval = NULL,
+  ylim = c(0, 50), yInterval = NULL, ylimList = NULL,
+  yIntervalList = NULL, ltys1 = "solid", lwds1 = "1",
+  col1 = "black", ltys2 = "solid", lwds2 = "1", col2 = "blue",
+  juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
+  showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1,
+  juvLabel1 = "juveniles_1 = ", showJuv2 = TRUE, juvLine2 = -4,
+  juvCex2 = 1, juvLabel2 = "juveniles_2 = ", namesLine1 = -2,
+  namesCex1 = 1, namesCol1 = NULL, showNames2 = FALSE,
   namesLine2 = -2, namesCex2 = 1, namesCol2 = NULL, juvAdj = 0.99,
-  juvRound = 0, juvSide = 3, juvTextCol1 = NULL, juvTextCol2 = NULL,
-  cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
-  title_text = NULL, title_line = 2, title_cex = NULL,
-  title_col = "black", title_font = 1, smooth = FALSE, oma = NULL,
-  xlab = NULL, ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
+  juvRound = 0, juvSide = 3, juvTextCol1 = NULL,
+  juvTextCol2 = NULL, cex.axis = 1, cex.lab = 1, ylab_line = 3,
+  namesAdj = 0.01, title_text = NULL, title_line = 2,
+  title_cex = NULL, title_col = "black", title_font = 1,
+  smooth = FALSE, oma = NULL, xlab = NULL,
+  ylab = "Frecuencia (\%)", noDataLabel = "Sin datos",
   ylabFactor = 1, relative = TRUE)
 }
 \arguments{
@@ -138,6 +140,10 @@ what this parameter indicates.}
 \item{ylabFactor}{\code{numeric}. Value that multiplies all values in both main and secondary matrices.}
 
 \item{relative}{\code{logical} Do you want to plot relatives or absolutes values?}
+}
+\description{
+Given a frequency table size, it generates a vertical array of graphics for each specified
+category (months, latitudes, years, etc.).
 }
 \details{
 This function takes a length frequency data and returns an stacking plot of that frequencies.

@@ -4,11 +4,11 @@
 \alias{getEnvirData}
 \title{Get environmental info from lon-lat-time data frame}
 \usage{
-getEnvirData(x, environmentalDir, dimVars_x = list(lon = "lon", lat = "lat",
-  date = "date", date_format = "\%F"), dimVars_nc = list(lon = "longitude",
-  lat = "latitude", date = "time", date_origin = "1970-01-01T00:00:00Z"),
-  regridSize = NULL, groupBy = "day", varName = NULL,
-  justVarValues = TRUE, quiet = FALSE)
+getEnvirData(x, environmentalDir, dimVars_x = list(lon = "lon", lat =
+  "lat", date = "date", date_format = "\%F"), dimVars_nc = list(lon =
+  "longitude", lat = "latitude", date = "time", date_origin =
+  "1970-01-01T00:00:00Z"), regridSize = NULL, groupBy = "day",
+  varName = NULL, justVarValues = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{x}{A \code{data.frame} with spatial-time information.}
@@ -42,9 +42,9 @@ original data frame and nc data, respectively. For details about valid values fo
 This funtion has been developed for using nc files downloaded from ERDDAP server. Please check that your nc files
 before to use.
 
-Environmental data are storaged (nc files) by day. If \code{groupBy="month"}, the function will average
-the matrices. Also, it will substitute day values of \code{x} (just internally) and nc data by 15 (the middle day
-in a month).
+Environmental data must be storaged as nc files which each file will contain daily info for a certain month, so if the
+user has monthly data, it must be (externally) splited by day (repeating the monthly values) and save in monthly files.
+If \code{groupBy="month"}, the function will average the matrices
 
 If \code{varName} is not specified, the function will take the only available variable (if nc file has only one),
 otherwise the function will stop and show the available variables for the nc. For this last option, function will

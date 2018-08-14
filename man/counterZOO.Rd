@@ -14,6 +14,9 @@ requires columns "Especie", "Caracter", "Conteo".}
 
 \item{reset}{Would you want to continue with the previous count (\code{FALSE}) or reset (put in zeros)?}
 }
+\description{
+Laboratory Counter simulator
+}
 \details{
 This function uses next commands:
 \itemize{

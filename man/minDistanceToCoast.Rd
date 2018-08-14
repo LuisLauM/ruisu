@@ -5,7 +5,8 @@
 \title{Get the minumim distance to coast}
 \usage{
 minDistanceToCoast(data, colLon = "lon", colLat = "lat",
-  countryFilter = "peru", unit = "nm", multicore = FALSE, ncores = 1)
+  countryFilter = "peru", unit = "nm", multicore = FALSE,
+  ncores = 1, out = c("value", "position"))
 }
 \arguments{
 \item{data}{\code{data.frame} with coords that will be used to calculate min distance to coast line.}
@@ -26,6 +27,9 @@ See Details.}
 \value{
 It returns a list with 2 levels: \code{value}, The minimum distance to coast line and
 \code{position}, the point where this minimum distance is reached.
+}
+\description{
+Get the minumim distance to coast
 }
 \details{
 This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument

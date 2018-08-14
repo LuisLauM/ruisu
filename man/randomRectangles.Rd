@@ -4,8 +4,8 @@
 \alias{randomRectangles}
 \title{Draw colorful squares}
 \usage{
-randomRectangles(nsquares = 500, borders = TRUE, colPalette = rainbow(n =
-  2000))
+randomRectangles(nsquares = 500, borders = TRUE,
+  colPalette = rainbow(n = 2000))
 }
 \arguments{
 \item{nsquares}{\code{numeric} How much squares do you desire? (500, as default).}
@@ -13,6 +13,9 @@ randomRectangles(nsquares = 500, borders = TRUE, colPalette = rainbow(n =
 \item{borders}{\code{logical} Do you want yo show borders around rectangles?}
 
 \item{colPalette}{\code{character} Vector of colors that will be used for plotting.}
+}
+\description{
+Draw colorful squares
 }
 \examples{
 randomRectangles(nsquares = 120)

@@ -18,6 +18,9 @@ newYear(message, delay = 4, nroBombs = 100, dispersion = 10,
 
 \item{cex.text}{Size of text.}
 }
+\description{
+Curious way to show a message.
+}
 \examples{
 newYear("Happy new year_2017!")
 }

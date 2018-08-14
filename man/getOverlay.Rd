@@ -17,6 +17,9 @@ joining the first and the last point. For extra ways, see details.}
 \value{
 An \code{SpatialPolygons} object.
 }
+\description{
+Get an overlay polygon from two set of points
+}
 \details{
 \code{points1} and \code{points2} must be a \code{list} or \code{data.frame} with 'x' and 'y' levels as
 coordinates.

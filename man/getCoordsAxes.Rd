@@ -15,6 +15,9 @@ latitude (\code{what = "lat"}) values.}
 \value{
 A \code{character} vector, ready to put as coords labels.
 }
+\description{
+Easy way to get the labels of coordinates from a vector.
+}
 \examples{
 myLongitudes <- seq(-20, -15, 0.5)
 getCoordsAxes(coord = myLongitudes, what = "lat")

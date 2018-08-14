@@ -5,9 +5,10 @@
 \title{Function for pltting Parallel maps}
 \usage{
 paralelMaps(file, colCategories, allCategories = NULL,
-  categoriesNames = NULL, colLon = "lon", colLat = "lat", xlim = NULL,
-  ylim = NULL, yInterval = NULL, xDelay = NULL, newPlot = FALSE,
-  seaCol = "lightblue1", landCol = "lightgoldenrod1", showBoxText = TRUE,
+  categoriesNames = NULL, colLon = "lon", colLat = "lat",
+  xlim = NULL, ylim = NULL, yInterval = NULL, xDelay = NULL,
+  newPlot = FALSE, seaCol = "lightblue1",
+  landCol = "lightgoldenrod1", showBoxText = TRUE,
   textBoxLimits = NULL, textBox = NULL, textBox_line = -2,
   textBox_cex = 1.2, textBox_font = 2, textBoxXCF = 0,
   catNames_col = "black", catNames_cex = 1, catNames_font = 2,

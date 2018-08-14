@@ -4,8 +4,8 @@
 \alias{addCoordsAxes}
 \title{Add labels for XY axis on a map}
 \usage{
-addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1,
-  ...)
+addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2),
+  las = 1, labels = NULL, ...)
 }
 \arguments{
 \item{xParams}{Parameters for X axis.}
@@ -25,6 +25,9 @@ Add labels for XY axis on a map
 \details{
 \code{xParams} and \code{yParams} must contain axis information as a 3-length vector:
 \code{c(from, to, by)}. For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
+
+If \code{labels} is specified at \code{...}, the function will consider this values for both \code{xParams} and
+\code{yParams}, so be carefull and use it separately (run the function twice for lon and lat).
 }
 \examples{
 par(mar = c(2, 3, 1, 3), xaxs = "i", yaxs = "i")

@@ -5,8 +5,8 @@
 \title{Plot Isoparalitoral shapes}
 \usage{
 plotIsoparalitoral(codeList = NULL, add = FALSE, old = TRUE,
-  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE, xlab =
-  NA, ylab = NA), mapParams = list(database = "world"), ...)
+  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE,
+  xlab = NA, ylab = NA), mapParams = list(database = "world"), ...)
 }
 \arguments{
 \item{codeList}{AIP codes to plot.}
@@ -21,6 +21,9 @@ coordinates for Peruvian shore.}
 \item{mapParams}{Extra parameters passed to \code{\link{map}} function. This argument is ignored if \code{add = TRUE}.}
 
 \item{...}{Extra parameters passed to \code{plot.SpatialPolygons} function.}
+}
+\description{
+Plot Isoparalitoral shapes
 }
 \details{
 \code{plot.SpatialPolygons} is an internal function of \code{\link{sp}}. Some important parameters are: \code{border} which

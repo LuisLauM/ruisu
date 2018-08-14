@@ -11,6 +11,9 @@ an(x, ...)
 
 \item{...}{Further arguments passed to \code{as.numeric}.}
 }
+\description{
+Abbreviation for \code{as.numeric}
+}
 \examples{
 as.numeric("02.33")
 an("02.33")

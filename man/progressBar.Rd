@@ -16,6 +16,9 @@ progressBar(i, n = NULL, iterator = NULL)
 \value{
 The function returns only messages (from \code{cat}).
 }
+\description{
+Make a progress bar
+}
 \examples{
 n = 1234
 for(i in seq(n)){

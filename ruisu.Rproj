@@ -4,7 +4,7 @@ RestoreWorkspace: Default
 SaveWorkspace: Default
 AlwaysSaveHistory: Default
 
-EnableCodeIndexing: Yes
+EnableCodeIndexing: No
 UseSpacesForTab: Yes
 NumSpacesForTab: 2
 Encoding: WINDOWS-1252
@@ -14,6 +14,7 @@ LaTeX: pdfLaTeX
 
 AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
+LineEndingConversion: None
 
 BuildType: Package
 PackageUseDevtools: Yes

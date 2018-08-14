@@ -22,6 +22,9 @@ addTextBox(xLimits, yLimits, text, border = NULL, col = "white",
 
 \item{...}{Extra arguments passed from \link{text} function.}
 }
+\description{
+Add a box with a text inside
+}
 \details{
 For extra details about \code{border}, \code{col} and \code{lty}, check the description of \link{polygon}.
 }

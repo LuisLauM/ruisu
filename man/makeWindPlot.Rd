@@ -4,9 +4,10 @@
 \alias{makeWindPlot}
 \title{Plot typical wind arrows from wind velocity data}
 \usage{
-makeWindPlot(uComponent, vComponent, maxLength = 1, densityfactor = 0.98,
-  arrowCol = "black", add = TRUE, includeRaster = TRUE,
-  col = tim.colors(1000), xInterval = NULL, yInterval = NULL, ...)
+makeWindPlot(uComponent, vComponent, maxLength = 1,
+  densityfactor = 0.98, arrowCol = "black", add = TRUE,
+  includeRaster = TRUE, col = tim.colors(1000), xInterval = NULL,
+  yInterval = NULL, ...)
 }
 \arguments{
 \item{uComponent}{Matrix with values of velocity in x component See Details.}
@@ -31,6 +32,9 @@ makeWindPlot(uComponent, vComponent, maxLength = 1, densityfactor = 0.98,
 }
 \value{
 A plot of arrows indicating the intensity and direction of winds.
+}
+\description{
+Plot typical wind arrows from wind velocity data
 }
 \details{
 Both \code{uComponent} and \code{vComponent} must be list objects with levels x (vector of longitudes),

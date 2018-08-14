@@ -12,6 +12,9 @@ getAIPInfo(aipVector)
 \value{
 A \code{data.frame} with variables dc, lat and upDown.
 }
+\description{
+Extract info from AIP codes
+}
 \details{
 AIP codes must be written in format DDLLPP, where DD is value of Distance to coast (mn/10),
 LL are values of Latitude (as integer) and PP is position (up or down).

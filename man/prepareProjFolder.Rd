@@ -4,12 +4,16 @@
 \alias{prepareProjFolder}
 \title{Easy way to prepare a folder for a typical R Project}
 \usage{
-prepareProjFolder(folder, type = 1, addRProj = TRUE, openAtFinish = TRUE)
+prepareProjFolder(folder, type = 1, addRProj = TRUE,
+  openAtFinish = TRUE)
 }
 \arguments{
 \item{folder}{\code{character}. Path of the folder that will be created.}
 
 \item{type}{Indicates the type of sub directories that will be created (see Details).}
+}
+\description{
+Easy way to prepare a folder for a typical R Project
 }
 \details{
 You can indicate the set of directories that will be created using \code{type} as follows:

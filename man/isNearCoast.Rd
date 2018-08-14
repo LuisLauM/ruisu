@@ -22,6 +22,9 @@ isNearCoast(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 A \code{logical} vector indicating whether the coordinates belong to the area between
 the coast line and a buffer of the selected distance.
 }
+\description{
+Determine the proximity to coast of points
+}
 \examples{
 isNearCoast(c(-81.191, -5.211), distance = 20)
 isNearCoast(c(-81.191, -5.211), distance = 10)

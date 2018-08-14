@@ -11,6 +11,9 @@ ac(x, ...)
 
 \item{...}{Further arguments passed to \code{as.character}.}
 }
+\description{
+Abbreviation for \code{as.character}
+}
 \examples{
 as.character(TRUE)
 ac(TRUE)

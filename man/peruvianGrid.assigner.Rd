@@ -4,13 +4,13 @@
 \alias{peruvianGrid.assigner}
 \alias{marsdenSquare.assigner}
 \alias{isopArea.assigner}
-\alias{marsdenSquare.assigner}
 \title{Function to get main grid codes used at IMARPE from lon-lat information.}
 \usage{
 peruvianGrid.assigner(dataPoints, colLon = NULL, colLat = NULL,
   what = "isoparalitoral", ...)
 
-isopArea.assigner(dataPoints, colLon = NULL, colLat = NULL, old = FALSE)
+isopArea.assigner(dataPoints, colLon = NULL, colLat = NULL,
+  old = FALSE)
 
 marsdenSquare.assigner(dataPoints, colLon = NULL, colLat = NULL)
 }
