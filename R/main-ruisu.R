@@ -705,7 +705,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
   old.par <- par(no.readonly = TRUE)
   on.exit(par(old.par))
 
-  if(is.element(class(file1), c("data.frame", "matrix"))){
+  if(any(is.element(class(file1), c("data.frame", "matrix")))){
 
     message("First column will be taken as the values of length.")
     file1Names <- list(an(file1[,1]), colnames(file1)[-1])
@@ -720,7 +720,7 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
   file1 <- file1*dataFactor
 
   if(!is.null(file2)){
-    if(is.element(class(file2), c("data.frame", "matrix"))){
+    if(any(is.element(class(file2), c("data.frame", "matrix")))){
       file2Names <- list(an(file2[,1]), colnames(file2)[-1])
       file2 <- data.frame(file2[,-1], stringsAsFactors = FALSE)
       dimnames(file2) <- file2Names
@@ -978,13 +978,15 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
                                multicore = FALSE, ncores = 1, out = c("value", "position")){
 
   # Check data
-  if(!is.element(class(data), c("data.frame", "matrix")) ||
-     nrow(data) < 1 || (class(data) == "data.frame" & any(!is.element(c(colLon, colLat), colnames(data)))) ||
-     !is.numeric(data[,colLon]) || !is.numeric(data[,colLat]) ||
+  if(all(!is.element(c("data.frame", "matrix"), class(data))) ||
+     nrow(data) < 1 || (is.element("data.frame", class(data)) & any(!is.element(c(colLon, colLat), colnames(data)))) ||
      length(colLon) != 1 || length(colLat) != 1 ||
      sum(complete.cases(data[,c(colLon, colLat)])) < 1){
     stop("'data' must be a valid 'data.frame' or 'matrix' with numeric columns for lon/lat.")
   }
+
+  data <- data.frame(lon = an(data[,colLon]),
+                     lat = an(data[,colLat]))
 
   # Get index for filter reference points
   if(!is.null(countryFilter)){
@@ -993,7 +995,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
 
     index <- is.element(tolower(coastline$country), tolower(countryFilter))
   }else{
-    index <- range(data[,colLat]) + c(-20, 20)
+    index <- range(data$lat) + c(-20, 20)
     index <- coastline$lat > index[1] & coastline$lat < index[2]
   }
 
@@ -1001,8 +1003,15 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
   refLines <- as.matrix(coastline[index, c("lon", "lat")])
 
   # Get coords from data
-  data <- as.data.frame(data[,c(colLon, colLat)])
-  data$chkValue <- complete.cases(data) & data[,1] >= -180 & data[,1] <= 180 & data[,2] >= -90 & data[,2] <= 90
+  validRows <- complete.cases(data) & data[,1] >= -180 & data[,1] <= 180 & data[,2] >= -90 & data[,2] <= 90
+
+  # Create empty objects for outputs
+  minDistancesValue <- rep(NA, nrow(data))
+  minDistancesPosition <- as.data.frame(matrix(data = NA, nrow = nrow(data), ncol = 2,
+                                               dimnames = list(seq(nrow(data)), c("lon", "lat"))))
+
+  # Remove non valid rows
+  data <- data[validRows,]
 
   # Get min distances using single or multithread processes
   if(isTRUE(multicore)){
@@ -1026,26 +1035,26 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
     allDistances <- allDistances[index]
 
     # Get distances and positions
-    minDistancesValue <- sapply(allDistances, "[[", 1)
-    minDistancesPosition <- t(sapply(allDistances, "[[", 2))
+    minDistancesValue[validRows] <- sapply(allDistances, "[[", 1)
+    minDistancesPosition[validRows,] <- t(sapply(allDistances, "[[", 2))
   }else{
     # Get min distances
     allDistances <- spDists(x = refLines,
-                            y = as.matrix(data[,c(colLon, colLat)]),
+                            y = as.matrix(data),
                             longlat = TRUE)
 
     # Get distances and positions
-    minDistancesValue <- apply(allDistances, 2, min)
+    minDistancesValue[validRows] <- apply(allDistances, 2, min)
 
     index <- apply(allDistances, 2, which.min)
-    minDistancesPosition <- refLines[index,]
+    minDistancesPosition[validRows,] <- refLines[index,]
   }
 
   if(class(minDistancesPosition) != "matrix"){
     minDistancesPosition <- matrix(data = minDistancesPosition, nrow = 1)
   }
 
-  dimnames(minDistancesPosition) <- list(rownames(data), c("lon", "lat"))
+  dimnames(minDistancesPosition) <- list(seq(nrow(minDistancesPosition)), c("lon", "lat"))
 
   # Get a factor using unit argument
   unitFactor <- switch(tolower(unit),
@@ -1998,7 +2007,7 @@ paralelMaps <- function(file, colCategories, allCategories = NULL, categoriesNam
   on.exit(par(old.par))
 
   # Read file
-  if(is.element(class(file), c("data.frame"))){
+  if(is.element("data.frame", class(file))){
     allData <- file
   }else if(length(file) == 1 && is.character(file) && file.exists(file)){
     allData <- read.csv(file = file, check.names = FALSE, stringsAsFactors = FALSE)

@@ -145,21 +145,15 @@ setQuestion <- function(qst, ans){
 
 getDistance <- function(data, refLines, i){
 
-  if(isTRUE(data$chkValue[i])){
+  allDistances <- spDistsN1(pts = refLines,
+                            pt = as.numeric(data[i, 1:2]),
+                            longlat = TRUE)
 
-    allDistances <- spDistsN1(pts = refLines,
-                              pt = as.numeric(data[i, 1:2]),
-                              longlat = TRUE)
+  index <- which.min(allDistances)
 
-    index <- which.min(allDistances)
-
-    output <- list(value = allDistances[index],
-                   posValue = as.numeric(refLines[index,]),
-                   nrow = data$n[i])
-  }else{
-    output <- list(value = NA,
-                   posValue = c(NA, NA))
-  }
+  output <- list(value = allDistances[index],
+                 posValue = as.numeric(refLines[index,]),
+                 nrow = data$n[i])
 
   return(output)
 }
