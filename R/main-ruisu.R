@@ -686,8 +686,9 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
 #'
 #'
 #' @export
-lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE,
-                                profile = NULL, xlim = NULL, xInterval = NULL, ylim = c(0, 50), yInterval = NULL,
+lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE, profile = NULL,
+                                xlim = NULL, xInterval = NULL,
+                                ylim = c(0, 50), yInterval = NULL,
                                 ylimList = NULL, yIntervalList = NULL,
                                 ltys1 = "solid", lwds1 = "1", col1 = "black", ltys2 = "solid", lwds2 = "1", col2 = "blue",
                                 juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
@@ -977,6 +978,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilter = "peru", unit = "nm",
                                multicore = FALSE, ncores = 1, out = c("value", "position")){
 
+  data(coastline, package = "ruisu")
+
   # Check data
   if(all(!is.element(c("data.frame", "matrix"), class(data))) ||
      nrow(data) < 1 || (is.element("data.frame", class(data)) & any(!is.element(c(colLon, colLat), colnames(data)))) ||
@@ -1231,6 +1234,9 @@ prepareProjFolder <- function(folder, type = 1, addRProj = TRUE, openAtFinish = 
                        "3" = c("bib", "drafts", "presentations", "results/raw", "results/data", "results/figures",
                                "results/code/figures", "results/code/analysis"),
                        "Incorrect value for 'type'.")
+
+  lastChar <- substr(x = folder, start = nchar(folder), stop = nchar(folder))
+  folder <- paste0(folder, ifelse(lastChar == "/", "", "/"))
 
   sapply(file.path(folder, folderList), dir.create, showWarnings = FALSE, recursive = TRUE)
 
