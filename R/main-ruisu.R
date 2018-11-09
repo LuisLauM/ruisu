@@ -1236,7 +1236,8 @@ prepareProjFolder <- function(folder, type = 1, addRProj = TRUE, openAtFinish = 
                        "Incorrect value for 'type'.")
 
   lastChar <- substr(x = folder, start = nchar(folder), stop = nchar(folder))
-  folder <- paste0(folder, ifelse(lastChar == "/", "", "/"))
+  # folder <- paste0(folder, ifelse(lastChar == "/", "", "/"))
+  folder <- substr(x = folder, start = 1, stop = nchar(folder) - ifelse(lastChar == "/", 1, 0))
 
   sapply(file.path(folder, folderList), dir.create, showWarnings = FALSE, recursive = TRUE)
 
