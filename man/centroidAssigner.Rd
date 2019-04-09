@@ -20,7 +20,7 @@ to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new
 }
 \examples{
 isopCodes <- c(1050, 4043, 17073, 27103)
-centroidAssigner(code = areaCodes, what = "isoparalitoral")
+centroidAssigner(code = isopCodes, what = "isoparalitoral")
 
 marsdenCodes <- c("A6", "B8", "c12")
 centroidAssigner(code = marsdenCodes, what = "marsden")

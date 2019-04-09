@@ -4,13 +4,20 @@
 \alias{prepareProjFolder}
 \title{Easy way to prepare a folder for a typical R Project}
 \usage{
-prepareProjFolder(folder, type = 1, addRProj = TRUE,
-  openAtFinish = TRUE)
+prepareProjFolder(folder, type = 1, folderList = NULL,
+  addRProj = TRUE, openAtFinish = TRUE)
 }
 \arguments{
 \item{folder}{\code{character}. Path of the folder that will be created.}
 
 \item{type}{Indicates the type of sub directories that will be created (see Details).}
+
+\item{folderList}{\code{character} vector which can be used to indicate the folders that will be
+created inside the project folder.}
+
+\item{addRProj}{If \code{TRUE} (default), it will load a RStudio project inside the \code{folder}.}
+
+\item{openAtFinish}{If \code{TRUE} (default), the RStudio project will be opened in a RStudio window.}
 }
 \description{
 Easy way to prepare a folder for a typical R Project
@@ -18,11 +25,15 @@ Easy way to prepare a folder for a typical R Project
 \details{
 You can indicate the set of directories that will be created using \code{type} as follows:
 \itemize{
- \item{"1"}{"code", "data", "figures", "outputs"}
- \item{"2"}{"code", "data", "figures", "raw", "outputs", "bib"}
- \item{"3"}{"bib", "drafts", "presentations", "results/raw", "results/data", "results/figures",
-            "results/code/figures", "results/code/analysis"}
+ \item{1: }{code, data, figures, outputs}
+ \item{2: }{code, data, figures, outputs, presentations}
+ \item{3: }{code, data, figures, outputs, presentations, docs}
+ \item{4: }{code, data, figures, outputs, presentations, docs, bib}
+ \item{5: }{code, data, figures, outputs, presentations, docs, bib, raw}
 }
+
+The function will creates folder recursively, so the non created folders (or sub folders) specified
+in 'folder' will be also created.
 }
 \examples{
 \dontrun{
