@@ -17,3 +17,4 @@ vignettes/*.pdf
 /src/*.dll
 /src/*.o
 /src/RcppExports.cpp
+/*.Rprof
