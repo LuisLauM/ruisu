@@ -4,9 +4,9 @@
 \name{ruisu-package}
 \alias{ruisu-package}
 \alias{ruisu}
-\title{Miscellany functions for the IMARPE work}
+\title{Tools for habitual tasks (and another fancy things) at IMARPE.}
 \description{
-Package with useful tools and functions for everyday IMARPE work.
+Tools for common tasks as well as some fancy functions.
 }
 \author{
 Wencheng Lau-Medrano, \email{llau@imarpe.gob.pe}
