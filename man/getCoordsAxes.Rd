@@ -4,7 +4,7 @@
 \alias{getCoordsAxes}
 \title{Easy way to get the labels of coordinates from a vector.}
 \usage{
-getCoordsAxes(coord, what)
+getCoordsAxes(coord, what, dms = "d")
 }
 \arguments{
 \item{coord}{Numeric vector of coordinates.}

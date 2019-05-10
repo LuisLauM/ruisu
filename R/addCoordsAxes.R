@@ -27,7 +27,8 @@
 #' addCoordsAxes(xParams = c(xlim, 5), yParams = c(ylim, 2), where = c(1, 2, 4))
 #'
 #' box()
-addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, labels = NULL, ...){
+addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, labels = NULL,
+                          dms = "d", ...){
 
   xParams <- if(is.null(xParams)) c(-180, 180, 5) else c(sort(xParams[1:2]), xParams[3])
   yParams <- if(is.null(yParams)) c(-90, 90, 5) else c(sort(yParams[1:2]), yParams[3])
@@ -44,11 +45,11 @@ addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las =
   for(i in seq_along(where)){
     if(is.element(where[i], c(1, 3))){
       xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
-      tempLabs <- if(is.null(labels)) getCoordsAxes(coord = xCoords, what = "lon") else labels
+      tempLabs <- if(is.null(labels)) getCoordsAxes(coord = xCoords, what = "lon", dms = dms) else labels
       axis(side = where[i], at = xCoords, labels = tempLabs, las = las, ...)
     }else{
       yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
-      tempLabs <- if(is.null(labels)) getCoordsAxes(coord = yCoords, what = "lat") else labels
+      tempLabs <- if(is.null(labels)) getCoordsAxes(coord = yCoords, what = "lat", dms = dms) else labels
       axis(side = where[i], at = yCoords, labels = tempLabs, las = las, ...)
     }
   }

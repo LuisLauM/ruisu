@@ -13,9 +13,9 @@
 #' @examples
 #' myLongitudes <- seq(-20, -15, 0.5)
 #' getCoordsAxes(coord = myLongitudes, what = "lat")
-getCoordsAxes <- function(coord, what){
+getCoordsAxes <- function(coord, what, dms = "d"){
 
-  output <- sapply(coord, getCoordsAxesInternal, what = what)
+  output <- sapply(coord, getCoordsAxesInternal, what = what, dms = dms)
 
   return(output)
 }
@@ -23,29 +23,42 @@ getCoordsAxes <- function(coord, what){
 
 # Auxiliar fx -------------------------------------------------------------
 
-getCoordsAxesInternal <- function(coord, what){
+getCoordsAxesInternal <- function(coord, what, dms){
 
   if(tolower(what) == "lon"){
     if(coord < 0){
-      sufix <- "\u00b0 W"
+      sufix <- "W"
     }else if(coord > 0){
-      sufix <- "\u00b0 E"
+      sufix <- "E"
     }else{
-      sufix <- "\u00b0"
+      sufix <- ""
     }
   }else if(tolower(what) == "lat"){
     if(coord < 0){
-      sufix <- "\u00b0 S"
+      sufix <- "S"
     }else if(coord > 0){
-      sufix <- "\u00b0 N"
+      sufix <- "N"
     }else{
-      sufix <- "\u00b0"
+      sufix <- ""
     }
   }else{
     stop("Incorrect value for 'what' parameter.")
   }
 
-  output <- paste0(round(abs(coord), 3), sufix)
+  coord <- dd2dms(coord)
+
+  degrees <- coord@deg
+  minutes <- coord@min
+  seconds <- round(coord@sec, 1)
+
+  degrees <- paste0(degrees, "\u00b0")
+  minutes <- paste0(ifelse(minutes < 10, "0", ""), minutes, "'")
+  seconds <- paste0(ifelse(seconds < 10, "0", ""), seconds, "\"")
+
+  output <- paste0(ifelse(grepl(x = dms, pattern = "d"), degrees, ""),
+                   ifelse(grepl(x = dms, pattern = "m"), minutes, ""),
+                   ifelse(grepl(x = dms, pattern = "s"), seconds, ""),
+                   sufix)
 
   return(output)
 }

@@ -5,7 +5,7 @@
 \title{Add labels for XY axis on a map}
 \usage{
 addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2),
-  las = 1, labels = NULL, ...)
+  las = 1, labels = NULL, dms = "d", ...)
 }
 \arguments{
 \item{xParams}{Parameters for X axis.}
