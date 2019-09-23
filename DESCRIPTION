@@ -1,7 +1,7 @@
 Package: ruisu
 Type: Package
 Title: Tools for habitual tasks (and another fancy things) at IMARPE.
-Version: 1.3.1
+Version: 1.3.2
 Date: 2019-04-25
 Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "luis.laum@gmail.com"))
 Author: Wencheng Lau-Medrano [aut, cre]

@@ -3,7 +3,7 @@
 #' @importFrom stats median complete.cases spline filter runif rnorm rbeta approx
 #' @importFrom rerddap info griddap
 #' @importFrom lubridate year month day is.Date is.POSIXt
-#' @importFrom zoo as.yearmon
+#' @importFrom zoo as.yearmon rollmean
 #' @importFrom grDevices dev.new dev.list dev.off rainbow
 #' @importFrom foreach foreach
 #' @importFrom doSNOW registerDoSNOW
