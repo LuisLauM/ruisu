@@ -4,8 +4,7 @@
 \alias{newYear}
 \title{Curious way to show a message.}
 \usage{
-newYear(message, delay = 4, nroBombs = 100, dispersion = 10,
-  cex.text = 3)
+newYear(message, delay = 4, nroBombs = 100, dispersion = 10, cex.text = 3)
 }
 \arguments{
 \item{message}{What message do you want to show?}

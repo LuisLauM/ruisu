@@ -4,9 +4,16 @@
 \alias{minDistanceToCoast}
 \title{Get the minumim distance to coast}
 \usage{
-minDistanceToCoast(data, colLon = "lon", colLat = "lat",
-  countryFilter = "peru", unit = "nm", multicore = FALSE,
-  ncores = 1, out = c("value", "position"))
+minDistanceToCoast(
+  data,
+  colLon = "lon",
+  colLat = "lat",
+  countryFilter = "peru",
+  unit = "nm",
+  multicore = FALSE,
+  ncores = 1,
+  out = c("value", "position")
+)
 }
 \arguments{
 \item{data}{\code{data.frame} with coords that will be used to calculate min distance to coast line.}

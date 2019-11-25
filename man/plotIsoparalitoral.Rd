@@ -4,9 +4,15 @@
 \alias{plotIsoparalitoral}
 \title{Plot Isoparalitoral shapes}
 \usage{
-plotIsoparalitoral(codeList = NULL, add = FALSE, old = TRUE,
-  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE,
-  xlab = NA, ylab = NA), mapParams = list(database = "world"), ...)
+plotIsoparalitoral(
+  codeList = NULL,
+  add = FALSE,
+  old = TRUE,
+  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE, xlab = NA, ylab
+    = NA),
+  mapParams = list(database = "world"),
+  ...
+)
 }
 \arguments{
 \item{codeList}{AIP codes to plot.}

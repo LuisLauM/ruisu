@@ -4,8 +4,15 @@
 \alias{brokenBarplot}
 \title{Make a barplot with a broken Y axis}
 \usage{
-brokenBarplot(height, ylim1, yAxis1 = list(), ylim2, yAxis2 = list(),
-  names.arg = NULL, ...)
+brokenBarplot(
+  height,
+  ylim1,
+  yAxis1 = list(),
+  ylim2,
+  yAxis2 = list(),
+  names.arg = NULL,
+  ...
+)
 }
 \arguments{
 \item{height}{Typical \code{height} parameter from \link{barplot}.}

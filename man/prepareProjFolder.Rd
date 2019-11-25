@@ -4,8 +4,13 @@
 \alias{prepareProjFolder}
 \title{Easy way to prepare a folder for a typical R Project}
 \usage{
-prepareProjFolder(folder, type = 1, folderList = NULL,
-  addRProj = TRUE, openAtFinish = TRUE)
+prepareProjFolder(
+  folder,
+  type = 1,
+  folderList = NULL,
+  addRProj = TRUE,
+  openAtFinish = TRUE
+)
 }
 \arguments{
 \item{folder}{\code{character}. Path of the folder that will be created.}

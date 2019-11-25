@@ -4,8 +4,13 @@
 \alias{isNearCoast}
 \title{Determine the proximity to coast of points}
 \usage{
-isNearCoast(dataPoints, colLon = "lon", colLat = "lat", units = "m",
-  distance = 20)
+isNearCoast(
+  dataPoints,
+  colLon = "lon",
+  colLat = "lat",
+  units = "m",
+  distance = 20
+)
 }
 \arguments{
 \item{dataPoints}{\code{data.frame} which has Longitude and Latitude information.}

@@ -7,13 +7,17 @@
 \alias{peruvianGrid.assigner}
 \title{Wrapper function peruvianGrid.assigner}
 \usage{
-isopArea.assigner(dataPoints, colLon = NULL, colLat = NULL,
-  old = FALSE)
+isopArea.assigner(dataPoints, colLon = NULL, colLat = NULL, old = FALSE)
 
 marsdenSquare.assigner(dataPoints, colLon = NULL, colLat = NULL)
 
-peruvianGrid.assigner(dataPoints, colLon = NULL, colLat = NULL,
-  what = "isoparalitoral", ...)
+peruvianGrid.assigner(
+  dataPoints,
+  colLon = NULL,
+  colLat = NULL,
+  what = "isoparalitoral",
+  ...
+)
 }
 \arguments{
 \item{dataPoints}{\code{data.frame} which has Longitude and Latitude information.}

@@ -16,9 +16,11 @@
 #' @param ltys1 lty (see \code{\link{par}}) parameter for main length distribution lines.
 #' @param lwds1 lwd (see \code{\link{par}}) parameter for main length distribution lines.
 #' @param col1 col (see \code{\link{par}}) parameter for main length distribution lines.
+#' @param alpha1 factor modifying the opacity alpha (typically in [0,1]) for line 1.
 #' @param ltys2 lty (see \code{\link{par}}) parameter for secondary length distribution lines.
 #' @param lwds2 lwd (see \code{\link{par}}) parameter for secondary length distribution lines.
 #' @param col2 col (see \code{\link{par}}) parameter for secondary length distribution lines.
+#' @param alpha2 factor modifying the opacity alpha (typically in [0,1]) for line 2.
 #' @param juvLimit Limit length for juveniles.
 #' @param juvLty lty (see \code{\link{par}}) parameter for juvenile line.
 #' @param juvLwd lwd (see \code{\link{par}}) parameter for juvenile line.
@@ -71,7 +73,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
                                 xlim = NULL, xInterval = NULL,
                                 ylim = c(0, 50), yInterval = NULL,
                                 ylimList = NULL, yIntervalList = NULL,
-                                ltys1 = "solid", lwds1 = "1", col1 = "black", ltys2 = "solid", lwds2 = "1", col2 = "blue",
+                                ltys1 = "solid", lwds1 = "1", col1 = "black", alpha1 = 1,
+                                ltys2 = "solid", lwds2 = "1", col2 = "blue", alpha2 = 1,
                                 juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
                                 showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1, juvLabel1 = "juveniles_1 = ",
                                 showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
@@ -221,7 +224,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
       abline(v = juvLimit, lty = juvLty, lwd = juvLwd, col = juvCol)
     }
 
-    lines(allLengths, lty = ltys1[i], lwd = lwds1[i], col = col1[i])
+    lines(allLengths, lty = ltys1[i], lwd = lwds1[i],
+          col = ifelse(isTRUE(all.equal(alpha1, 1)), col1[i], adjustcolor(col1[i], alpha1)))
 
     if(!is.null(file2)){
       if(isTRUE(smooth)){
@@ -249,7 +253,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
       allLengths$y[allLengths$y < 0.001] <- NA
 
-      lines(allLengths, lty = ltys2[i], lwd = lwds2[i], col = col2[i])
+      lines(allLengths, lty = ltys2[i], lwd = lwds2[i],
+            col = ifelse(isTRUE(all.equal(alpha2, 1)), col2[i], adjustcolor(col2[i], alpha2)))
 
       if(isTRUE(showNames2)){
         mtext(text = colnames(file2)[i], side = 3, adj = namesAdj, line = namesLine2, cex = namesCex2,

@@ -9,7 +9,7 @@
 Tools for common tasks as well as some fancy functions.
 }
 \author{
-Wencheng Lau-Medrano, \email{llau@imarpe.gob.pe}
+Wencheng Lau-Medrano, \email{luis.laum@gmail.com}
 }
 \keyword{IMARPE}
 \keyword{miscellany,}

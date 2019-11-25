@@ -4,9 +4,17 @@
 \alias{barPercentage}
 \title{Pretty customizable barplot}
 \usage{
-barPercentage(x, cols = tim.colors(length(x)), lwd = 2, digits = 1,
-  val_perc = c(1, 2), titleLab = NA, textPos = 2,
-  sameColLines = TRUE, tagPosDelay = 0)
+barPercentage(
+  x,
+  cols = tim.colors(length(x)),
+  lwd = 2,
+  digits = 1,
+  val_perc = c(1, 2),
+  titleLab = NA,
+  textPos = 2,
+  sameColLines = TRUE,
+  tagPosDelay = 0
+)
 }
 \arguments{
 \item{x}{Numeric vector for plotting. See Details.}

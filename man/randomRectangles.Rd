@@ -4,8 +4,11 @@
 \alias{randomRectangles}
 \title{Draw colorful squares}
 \usage{
-randomRectangles(nsquares = 500, borders = TRUE,
-  colPalette = rainbow(n = 2000))
+randomRectangles(
+  nsquares = 500,
+  borders = TRUE,
+  colPalette = rainbow(n = 2000)
+)
 }
 \arguments{
 \item{nsquares}{\code{numeric} How much squares do you desire? (500, as default).}

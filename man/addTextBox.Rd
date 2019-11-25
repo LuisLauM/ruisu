@@ -4,8 +4,15 @@
 \alias{addTextBox}
 \title{Add a box with a text inside}
 \usage{
-addTextBox(xLimits, yLimits, text, border = NULL, col = "white",
-  lty = par("lty"), ...)
+addTextBox(
+  xLimits,
+  yLimits,
+  text,
+  border = NULL,
+  col = "white",
+  lty = par("lty"),
+  ...
+)
 }
 \arguments{
 \item{xLimits}{x-Axis limits for box.}

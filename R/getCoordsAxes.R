@@ -6,6 +6,8 @@
 #' @param coord Numeric vector of coordinates.
 #' @param what Indicate \code{coord} belongs to longitude (\code{what = "lon"}) or
 #' latitude (\code{what = "lat"}) values.
+#' @param dms A \code{character} strings indicating what to show (d: degrees,
+#' m: minutes, s: seconds).
 #'
 #' @return A \code{character} vector, ready to put as coords labels.
 #' @export

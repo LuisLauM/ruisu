@@ -7,6 +7,8 @@
 #' @param las \code{numeric} in {0,1,2,3}; the style of axis labels. See \link{par}.
 #' @param labels \code{character} vector setting the labels for axis.
 #' @param ... Extra arguments passed to \link{axis} function (e.g. \code{cex.axis}), which is used internaly for ploting.
+#' @param dms A \code{character} strings indicating what to show (d: degrees,
+#' m: minutes, s: seconds).
 #'
 #' @details \code{xParams} and \code{yParams} must contain axis information as a 3-length vector:
 #' \code{c(from, to, by)}. For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).

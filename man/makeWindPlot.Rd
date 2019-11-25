@@ -4,10 +4,19 @@
 \alias{makeWindPlot}
 \title{Plot typical wind arrows from wind velocity data}
 \usage{
-makeWindPlot(uComponent, vComponent, maxLength = 1,
-  densityfactor = 0.98, arrowCol = "black", add = TRUE,
-  includeRaster = TRUE, col = tim.colors(1000), xInterval = NULL,
-  yInterval = NULL, ...)
+makeWindPlot(
+  uComponent,
+  vComponent,
+  maxLength = 1,
+  densityfactor = 0.98,
+  arrowCol = "black",
+  add = TRUE,
+  includeRaster = TRUE,
+  col = tim.colors(1000),
+  xInterval = NULL,
+  yInterval = NULL,
+  ...
+)
 }
 \arguments{
 \item{uComponent}{Matrix with values of velocity in x component See Details.}

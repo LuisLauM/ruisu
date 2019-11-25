@@ -4,8 +4,15 @@
 \alias{addCoordsAxes}
 \title{Add labels for XY axis on a map}
 \usage{
-addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2),
-  las = 1, labels = NULL, dms = "d", ...)
+addCoordsAxes(
+  xParams = NULL,
+  yParams = NULL,
+  where = c(1, 2),
+  las = 1,
+  labels = NULL,
+  dms = "d",
+  ...
+)
 }
 \arguments{
 \item{xParams}{Parameters for X axis.}
@@ -18,6 +25,9 @@ addCoordsAxes(xParams = NULL, yParams = NULL, where = c(1, 2),
 \item{las}{\code{numeric} in {0,1,2,3}; the style of axis labels. See \link{par}.}
 
 \item{labels}{\code{character} vector setting the labels for axis.}
+
+\item{dms}{A \code{character} strings indicating what to show (d: degrees,
+m: minutes, s: seconds).}
 
 \item{...}{Extra arguments passed to \link{axis} function (e.g. \code{cex.axis}), which is used internaly for ploting.}
 }

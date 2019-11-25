@@ -11,6 +11,9 @@ getCoordsAxes(coord, what, dms = "d")
 
 \item{what}{Indicate \code{coord} belongs to longitude (\code{what = "lon"}) or
 latitude (\code{what = "lat"}) values.}
+
+\item{dms}{A \code{character} strings indicating what to show (d: degrees,
+m: minutes, s: seconds).}
 }
 \value{
 A \code{character} vector, ready to put as coords labels.
