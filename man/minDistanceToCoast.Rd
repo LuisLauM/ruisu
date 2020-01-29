@@ -31,7 +31,8 @@ See Details.}
 
 \item{ncores}{If \code{multicore = TRUE}, how many cores are you going to use?}
 
-\item{out}{\code{character} indicating what products are going to be returned (See Details)}
+\item{out}{\code{character} indicating what products are going to be returned: \code{value} or
+\code{position}. By default, it will return both as a list.}
 }
 \value{
 It returns a list with 2 levels: \code{value}, The minimum distance to coast line and

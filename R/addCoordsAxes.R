@@ -10,8 +10,12 @@
 #' @param dms A \code{character} strings indicating what to show (d: degrees,
 #' m: minutes, s: seconds).
 #'
-#' @details \code{xParams} and \code{yParams} must contain axis information as a 3-length vector:
-#' \code{c(from, to, by)}. For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
+#' @details \code{xParams} and \code{yParams} must contain axis information as a 3 or 4 length vector.
+##' \itemize{
+##'  \item{"length 3:"}{to indicate from 100 S to 70 S by 5, the vector will be c(-100, -70, 5).}
+##'  \item{"length 4:"}{to indicate from 100 S to 70 S by 5 and draw a second set of ticks from 100 S to 70 S by 1, the
+##'  vector will be c(-100, -70, 1, 5).}
+##' }
 #'
 #' If \code{labels} is specified at \code{...}, the function will consider this values for both \code{xParams} and
 #' \code{yParams}, so be carefull and use it separately (run the function twice for lon and lat).
@@ -32,12 +36,13 @@
 addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, labels = NULL,
                           dms = "d", ...){
 
-  xParams <- if(is.null(xParams)) c(-180, 180, 5) else c(sort(xParams[1:2]), xParams[3])
-  yParams <- if(is.null(yParams)) c(-90, 90, 5) else c(sort(yParams[1:2]), yParams[3])
+  if(is.null(xParams) && is.null(yParams)) stop("You must indicate at least one xParams or yParams.")
 
   for(i in c("xParams", "yParams")){
-    msg <- sprintf("'%s' must be a numeric vector of length 3. See ?addCoordsAxes", i)
-    if(!is.numeric(get(i)) || length(get(i)) != 3) stop(msg)
+    if(is.null(get(i))) next
+
+    msg <- sprintf("'%s' must be a numeric vector of length 3 or 4. See ?addCoordsAxes", i)
+    if(!is.numeric(get(i)) || !is.element(length(get(i)), c(3, 4))) stop(msg)
   }
 
   if(length(where) > 4 | length(where) < 1 | any(!is.element(where, 1:4))){
@@ -46,10 +51,24 @@ addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las =
 
   for(i in seq_along(where)){
     if(is.element(where[i], c(1, 3))){
+      if(isTRUE(all.equal(length(xParams), 4))){
+        xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
+        axis(side = where[i], at = xCoords, labels = NA, tcl = -0.25)
+
+        xParams[3] <- xParams[4]
+      }
+
       xCoords <- seq(from = xParams[1], to = xParams[2], by = xParams[3])
       tempLabs <- if(is.null(labels)) getCoordsAxes(coord = xCoords, what = "lon", dms = dms) else labels
       axis(side = where[i], at = xCoords, labels = tempLabs, las = las, ...)
     }else{
+      if(isTRUE(all.equal(length(yParams), 4))){
+        yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
+        axis(side = where[i], at = yCoords, labels = NA, tcl = -0.25)
+
+        yParams[3] <- yParams[4]
+      }
+
       yCoords <- seq(from = yParams[1], to = yParams[2], by = yParams[3])
       tempLabs <- if(is.null(labels)) getCoordsAxes(coord = yCoords, what = "lat", dms = dms) else labels
       axis(side = where[i], at = yCoords, labels = tempLabs, las = las, ...)

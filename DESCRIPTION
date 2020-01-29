@@ -11,5 +11,5 @@ License: GPL (>= 2)
 LazyData: true
 Depends: utils, raster, fields, rgeos, sp, maps, graphics, R (>= 3.2.0)
 Imports: ncdf4, rstudioapi, stats, rerddap, lubridate, zoo, grDevices, foreach, doSNOW
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 Encoding: UTF-8

@@ -11,7 +11,8 @@
 #' @param multicore \code{logical} indicating whether to use multiple cores for calculate distances.
 #' See Details.
 #' @param ncores If \code{multicore = TRUE}, how many cores are you going to use?
-#' @param out \code{character} indicating what products are going to be returned (See Details)
+#' @param out \code{character} indicating what products are going to be returned: \code{value} or
+#' \code{position}. By default, it will return both as a list.
 #'
 #' @details This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument
 #' \code{longlat = TRUE}.

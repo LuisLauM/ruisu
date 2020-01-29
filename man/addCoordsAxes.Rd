@@ -35,8 +35,12 @@ m: minutes, s: seconds).}
 Add labels for XY axis on a map
 }
 \details{
-\code{xParams} and \code{yParams} must contain axis information as a 3-length vector:
-\code{c(from, to, by)}. For instance, to indicate from -100 S to -70 S by 5, the vector will be c(-100, -70, 5).
+\code{xParams} and \code{yParams} must contain axis information as a 3 or 4 length vector.
+\itemize{
+ \item{"length 3:"}{to indicate from 100 S to 70 S by 5, the vector will be c(-100, -70, 5).}
+ \item{"length 4:"}{to indicate from 100 S to 70 S by 5 and draw a second set of ticks from 100 S to 70 S by 1, the
+ vector will be c(-100, -70, 1, 5).}
+}
 
 If \code{labels} is specified at \code{...}, the function will consider this values for both \code{xParams} and
 \code{yParams}, so be carefull and use it separately (run the function twice for lon and lat).
