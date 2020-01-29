@@ -6,7 +6,7 @@
 \usage{
 barPercentage(
   x,
-  cols = tim.colors(length(x)),
+  cols = NULL,
   lwd = 2,
   digits = 1,
   val_perc = c(1, 2),

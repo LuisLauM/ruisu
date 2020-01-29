@@ -21,18 +21,19 @@
 #'
 #' @examples
 #' barPercentage(x = c(55, 14, 10, 2))
-barPercentage <- function(x, cols = tim.colors(length(x)), lwd = 2, digits = 1,
+barPercentage <- function(x, cols = NULL, lwd = 2, digits = 1,
                           val_perc = c(1, 2), titleLab = NA, textPos = 2,
                           sameColLines = TRUE, tagPosDelay = 0){
   # If x does not have names, create temporal ones
   if(is.null(names(x))) names(x) <- paste0("Value_", seq_along(x))
 
-  # Preserve a copy of x values
   x <- list(values = x,
             percentage = x/sum(x, na.rm = TRUE))
+
+  # Preserve a copy of x values
   x2 <- x
 
-  x <- x/sum(x, na.rm = TRUE)
+  if(is.null(cols)) cols <- tim.colors(length(x$values))
 
   if(tagPosDelay > 1 || tagPosDelay < -1) stop("'tagPosDelay' must be [-1, 1].")
 

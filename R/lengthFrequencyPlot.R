@@ -86,6 +86,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
                                 smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
                                 noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE){
 
+  utils::globalVariables("speciesInfo")
+
   # Preserve par values before make graphics
   old.par <- par(no.readonly = TRUE)
   on.exit(par(old.par))

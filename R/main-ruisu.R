@@ -15,10 +15,10 @@
 #' @import graphics
 #' @import utils
 #'
-#' @title Tools for habitual tasks (and another fancy things) at IMARPE.
+#' @title Tools for habitual tasks (and another fancy things) at IMARPE
 #' @author Wencheng Lau-Medrano, \email{luis.laum@@gmail.com}
 #' @name ruisu-package
-#' @description Tools for common tasks as well as some fancy functions.
+#' @description Tools for common tasks as well as some fancy functions
 #' @aliases ruisu-package ruisu
 #' @docType package
 #' @keywords miscellany, IMARPE
@@ -162,3 +162,10 @@ NULL
 #' @usage coastlineBuffer_nm
 #' @format \code{SpatialPolygonsDataFrame} object with a buffer in nautical miles of South America coastline.
 NULL
+
+# allDatasets <- c("AIPData_new", "AIPData_old", "AIPShapefile_new", "AIPShapefile_old", "harborData", "coastline",
+#                  "month.name_spanish", "month.abb_spanish", "speciesInfo", "bathymetry", "envirScenarios",
+#                  "testExample", "coastlineBuffer_m", "coastlineBuffer_nm")
+#
+# if(getRversion() >= "2.15.1")  utils::globalVariables(allDatasets)
+# if(getRversion() >= "3.1.0") utils::suppressForeignCheck("localvariable")
