@@ -162,10 +162,3 @@ NULL
 #' @usage coastlineBuffer_nm
 #' @format \code{SpatialPolygonsDataFrame} object with a buffer in nautical miles of South America coastline.
 NULL
-
-# allDatasets <- c("AIPData_new", "AIPData_old", "AIPShapefile_new", "AIPShapefile_old", "harborData", "coastline",
-#                  "month.name_spanish", "month.abb_spanish", "speciesInfo", "bathymetry", "envirScenarios",
-#                  "testExample", "coastlineBuffer_m", "coastlineBuffer_nm")
-#
-# if(getRversion() >= "2.15.1")  utils::globalVariables(allDatasets)
-# if(getRversion() >= "3.1.0") utils::suppressForeignCheck("localvariable")

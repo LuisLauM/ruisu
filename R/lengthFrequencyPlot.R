@@ -70,7 +70,7 @@
 #'
 #' @export
 lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE, profile = NULL,
-                                xlim = NULL, xInterval = NULL,
+                                xlim = NULL, xInterval = 1,
                                 ylim = c(0, 50), yInterval = NULL,
                                 ylimList = NULL, yIntervalList = NULL,
                                 ltys1 = "solid", lwds1 = "1", col1 = "black", alpha1 = 1,
@@ -85,8 +85,6 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
                                 title_text = NULL, title_line = 2, title_cex = NULL, title_col = "black", title_font = 1,
                                 smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
                                 noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE){
-
-  utils::globalVariables("speciesInfo")
 
   # Preserve par values before make graphics
   old.par <- par(no.readonly = TRUE)
@@ -282,11 +280,14 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     if(i == ncol(file1)){
       if(!is.null(profile) && profile == "anchoveta"){
-        axis(side = 1, at = seq(xlim[1], xlim[2], by = xInterval), labels = NA, tcl = -0.25)
-        axis(side = 1, at = seq(xlim[1], xlim[2], by = 1), cex.axis = cex.axis)
-      }else{
-        axis(side = 1, at = seq(xlim[1], xlim[2], by = xInterval), cex.axis = cex.axis)
+        xInterval <- c(1, 0.5)
       }
+
+      if(length(xInterval) == 2){
+        axis(side = 1, at = seq(xlim[1], xlim[2], by = xInterval[2]), labels = NA, tcl = -0.25)
+      }
+
+      axis(side = 1, at = seq(xlim[1], xlim[2], by = xInterval[1]), cex.axis = cex.axis)
     }
 
     mtext(text = colnames(file1)[i], side = 3, adj = namesAdj, line = namesLine1, cex = namesCex1,

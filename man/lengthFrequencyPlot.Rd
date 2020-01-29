@@ -12,7 +12,7 @@ lengthFrequencyPlot(
   newPlot = FALSE,
   profile = NULL,
   xlim = NULL,
-  xInterval = NULL,
+  xInterval = 1,
   ylim = c(0, 50),
   yInterval = NULL,
   ylimList = NULL,
