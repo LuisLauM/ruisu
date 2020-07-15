@@ -19,27 +19,35 @@ tableAdd <- function(x, side = c(1, 4), FUN = sum, label = "Total", ...){
   # Get function
   FUN <- match.fun(FUN)
 
+  output <- list(x = apply(x, 2, FUN, ...),
+                 y = apply(x, 1, FUN, ...))
+
+  if(any(is.element(c(1, 3), side)) & any(is.element(c(2, 4), side))){
+    output$x <- c(output$x, sum(output$x))
+    output$y <- c(output$y, sum(output$y))
+  }
+
   # Add info to the bottom
   if(is.element(1, side)){
-    x <- rbind(x, apply(x, 2, FUN, ...))
+    x <- rbind(x, output$x)
     rownames(x)[nrow(x)] <- label
   }
 
   # Add info to the left
   if(is.element(2, side)){
-    x <- cbind(apply(x, 1, FUN, ...), x)
+    x <- cbind(output$y, x)
     colnames(x)[1] <- label
   }
 
   # Add info to the top
   if(is.element(3, side)){
-    x <- rbind(apply(x, 2, FUN, ...), x)
+    x <- rbind(output$x, x)
     rownames(x)[1] <- label
   }
 
   # Add info to the right
   if(is.element(4, side)){
-    x <- cbind(x, apply(x, 1, FUN, ...))
+    x <- cbind(x, output$y)
     colnames(x)[ncol(x)] <- label
   }
 
