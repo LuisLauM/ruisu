@@ -4,7 +4,9 @@
 \name{harborData}
 \alias{harborData}
 \title{\code{data.frame} with information of the main Peruvian harbors}
-\format{A \code{data.frame} with information of Peruvian harbors: name, pattern, lon, lat, area, importance. See Details}
+\format{
+A \code{data.frame} with information of Peruvian harbors: name, pattern, lon, lat, area, importance. See Details
+}
 \usage{
 harborData
 }

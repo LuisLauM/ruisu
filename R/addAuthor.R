@@ -1,9 +1,12 @@
 #' Add artist name to (music) file
 #'
 #' @param albumFolder Folder where the files are located.
-#' @param artistName Name of the artist. It will be located at the beginning of the file.
-#' @param deleteSpaces Number of chracters that will be removed in order to replace with \code{artistName}.
-#' @param musicExtension Extension of the files that will be matched for the substitution.
+#' @param artistName Name of the artist. It will be located at the beginning of
+#' the file.
+#' @param deleteSpaces Number of characters that will be removed in order to
+#' replace with \code{artistName}.
+#' @param musicExtension Extension of the files that will be matched for the
+#' substitution.
 #'
 #' @return \code{NULL}. This function just makes changes on filen names.
 #' @export

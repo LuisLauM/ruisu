@@ -22,5 +22,7 @@ getProportion <- function(table, group = 3){
     output <- table/sum(table, na.rm = TRUE)
   }
 
+  .Deprecated("tableAdd")
+
   return(output)
 }

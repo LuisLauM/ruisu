@@ -4,7 +4,9 @@
 \name{coastlineBuffer_m}
 \alias{coastlineBuffer_m}
 \title{\code{SpatialPolygonsDataFrame} object with a buffer in meters of South America coastline.}
-\format{\code{SpatialPolygonsDataFrame} object with a buffer in meters of South America coastline.}
+\format{
+\code{SpatialPolygonsDataFrame} object with a buffer in meters of South America coastline.
+}
 \usage{
 coastlineBuffer_m
 }

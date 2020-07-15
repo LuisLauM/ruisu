@@ -4,7 +4,9 @@
 \name{AIPData_old}
 \alias{AIPData_old}
 \title{\code{data.frame} with old (original) AIP information.}
-\format{A \code{data.frame} with}
+\format{
+A \code{data.frame} with
+}
 \usage{
 AIPData_old
 }

@@ -4,7 +4,9 @@
 \name{month.name_spanish}
 \alias{month.name_spanish}
 \title{\code{charcater} vector with names of months in Spanish.}
-\format{A \code{charcater} vector with names of months in Spanish.}
+\format{
+A \code{charcater} vector with names of months in Spanish.
+}
 \usage{
 month.name_spanish
 }

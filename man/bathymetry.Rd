@@ -4,7 +4,9 @@
 \name{bathymetry}
 \alias{bathymetry}
 \title{\code{data.frame} with topographic information.}
-\format{A \code{data.frame} with topographic information (lon, lat, altitude).}
+\format{
+A \code{data.frame} with topographic information (lon, lat, altitude).
+}
 \usage{
 bathymetry
 }

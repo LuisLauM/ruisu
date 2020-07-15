@@ -4,7 +4,9 @@
 \name{month.abb_spanish}
 \alias{month.abb_spanish}
 \title{\code{charcater} vector with the three-letter abbreviations for names of months in Spanish.}
-\format{A \code{charcater} vector with the three-letter abbreviations for names of months in Spanish.}
+\format{
+A \code{charcater} vector with the three-letter abbreviations for names of months in Spanish.
+}
 \usage{
 month.abb_spanish
 }

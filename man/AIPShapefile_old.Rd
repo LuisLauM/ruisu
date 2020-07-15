@@ -4,7 +4,9 @@
 \name{AIPShapefile_old}
 \alias{AIPShapefile_old}
 \title{\code{shapefile} with old (original) AIP information.}
-\format{A \code{SpatialPolygonsDataFrame}}
+\format{
+A \code{SpatialPolygonsDataFrame}
+}
 \usage{
 AIPShapefile_old
 }

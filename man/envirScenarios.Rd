@@ -4,8 +4,10 @@
 \name{envirScenarios}
 \alias{envirScenarios}
 \title{\code{data.frame} with environmental scenarios given by IGP}
-\format{A \code{data.frame} with environmental scenarios given by IGP (year_start, month_start,
-year_end, month_end, magnitude, what).}
+\format{
+A \code{data.frame} with environmental scenarios given by IGP (year_start, month_start,
+year_end, month_end, magnitude, what).
+}
 \usage{
 envirScenarios
 }

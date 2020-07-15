@@ -4,7 +4,9 @@
 \name{speciesInfo}
 \alias{speciesInfo}
 \title{\code{data.frame} with main information about some Peruvian fishes.}
-\format{A \code{data.frame} with main information about some Peruvian fishes.}
+\format{
+A \code{data.frame} with main information about some Peruvian fishes.
+}
 \usage{
 speciesInfo
 }

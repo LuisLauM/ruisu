@@ -4,8 +4,10 @@
 \name{testExample}
 \alias{testExample}
 \title{\code{list} with a test inspired on Harry Potter books.}
-\format{A \code{list} with two levels: 1) The first, the questions as a \code{character} vector and
-2) the second, the posible answers for each question.}
+\format{
+A \code{list} with two levels: 1) The first, the questions as a \code{character} vector and
+2) the second, the posible answers for each question.
+}
 \usage{
 testExample
 }

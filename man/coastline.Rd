@@ -4,7 +4,9 @@
 \name{coastline}
 \alias{coastline}
 \title{\code{data.frame} with coordinates of the eastern side of the American coast.}
-\format{A \code{data.frame} with coordinates of the eastern side of the American coast: country, lon, lat}
+\format{
+A \code{data.frame} with coordinates of the eastern side of the American coast: country, lon, lat
+}
 \usage{
 coastline
 }

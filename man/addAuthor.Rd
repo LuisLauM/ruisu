@@ -9,11 +9,14 @@ addAuthor(albumFolder, artistName, deleteSpaces, musicExtension = ".mp3")
 \arguments{
 \item{albumFolder}{Folder where the files are located.}
 
-\item{artistName}{Name of the artist. It will be located at the beginning of the file.}
+\item{artistName}{Name of the artist. It will be located at the beginning of
+the file.}
 
-\item{deleteSpaces}{Number of chracters that will be removed in order to replace with \code{artistName}.}
+\item{deleteSpaces}{Number of characters that will be removed in order to
+replace with \code{artistName}.}
 
-\item{musicExtension}{Extension of the files that will be matched for the substitution.}
+\item{musicExtension}{Extension of the files that will be matched for the
+substitution.}
 }
 \value{
 \code{NULL}. This function just makes changes on filen names.

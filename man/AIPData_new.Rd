@@ -4,7 +4,9 @@
 \name{AIPData_new}
 \alias{AIPData_new}
 \title{\code{data.frame} with new (corrected) AIP information.}
-\format{A \code{data.frame} with}
+\format{
+A \code{data.frame} with
+}
 \usage{
 AIPData_new
 }
