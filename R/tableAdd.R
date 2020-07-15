@@ -24,13 +24,6 @@ tableAdd <- function(x, side = c(1, 4), FUN = sum, label = "Total", ...){
 
   if(any(is.element(c(1, 3), side)) & any(is.element(c(2, 4), side))){
     output$x <- c(output$x, sum(output$x))
-    output$y <- c(output$y, sum(output$y))
-  }
-
-  # Add info to the bottom
-  if(is.element(1, side)){
-    x <- rbind(x, output$x)
-    rownames(x)[nrow(x)] <- label
   }
 
   # Add info to the left
@@ -39,16 +32,22 @@ tableAdd <- function(x, side = c(1, 4), FUN = sum, label = "Total", ...){
     colnames(x)[1] <- label
   }
 
-  # Add info to the top
-  if(is.element(3, side)){
-    x <- rbind(output$x, x)
-    rownames(x)[1] <- label
-  }
-
   # Add info to the right
   if(is.element(4, side)){
     x <- cbind(x, output$y)
     colnames(x)[ncol(x)] <- label
+  }
+
+  # Add info to the bottom
+  if(is.element(1, side)){
+    x <- rbind(x, output$x)
+    rownames(x)[nrow(x)] <- label
+  }
+
+  # Add info to the top
+  if(is.element(3, side)){
+    x <- rbind(output$x, x)
+    rownames(x)[1] <- label
   }
 
   return(x)
