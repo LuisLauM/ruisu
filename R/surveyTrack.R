@@ -31,6 +31,9 @@
 #' plot(output$lon, output$lat, pch = 19, cex = 0.1)
 surveyTrack <- function(breakPoints, dotDensity, dcLength, legLength){
 
+  # Load coastline
+  coastline <- ruisu::coastline
+
   # Define projection
   polygonProj <- CRS("+proj=longlat +datum=WGS84")
 
@@ -63,7 +66,9 @@ surveyTrack <- function(breakPoints, dotDensity, dcLength, legLength){
     startPos <- startPos[seq(length(startPos) - ifelse(i != length(breakPoints$angle), 1, 0))]
 
     # Set initial points for tracks
-    startPos <- approx(x = coastBuffer$y, y = coastBuffer$x, xout = startPos)
+    startPos <- suppressWarnings(approx(x = coastBuffer$y,
+                                        y = coastBuffer$x,
+                                        xout = startPos))
     startPos <- list(x = startPos$y, y = startPos$x)
 
     # Set final points for tracks
@@ -126,10 +131,12 @@ surveyTrack <- function(breakPoints, dotDensity, dcLength, legLength){
   }
 
   # Complete final data
-  finalOutput <- rbind(finalOutput, cbind(as.matrix(tempData2[,c("lon", "lat")]), rep(counter, nrow(tempData2))))
+  finalOutput <- rbind(finalOutput, cbind(as.matrix(tempData2[,c("lon", "lat")]),
+                                          rep(counter, nrow(tempData2))))
 
   # Final changes
-  finalOutput <- as.data.frame(cbind(seq(nrow(finalOutput)), finalOutput), stringsAsFactors = FALSE)
+  finalOutput <- as.data.frame(cbind(seq(nrow(finalOutput)), finalOutput),
+                               stringsAsFactors = FALSE)
   colnames(finalOutput) <- c("n", "lon", "lat", "track_index")
 
   return(finalOutput)

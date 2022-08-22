@@ -65,7 +65,7 @@
 minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilter = "peru", unit = "nm",
                                multicore = FALSE, ncores = 1, out = c("value", "position")){
 
-  data(coastline, package = "ruisu")
+  coastline <- ruisu::coastline
 
   # Check data
   if(all(!is.element(c("data.frame", "matrix"), class(data))) ||
@@ -110,7 +110,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
 
     # Registering cluster
     cl <- makeCluster(ncores)
-    registerDoSNOW(cl)
+    registerDoParallel(cl)
 
     # Run multithread process
     allDistances <- foreach(i = seq(nrow(data)), .inorder = FALSE, .packages = "sp") %dopar% {
@@ -137,11 +137,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
     minDistancesValue[validRows] <- apply(allDistances, 2, min)
 
     index <- apply(allDistances, 2, which.min)
-    minDistancesPosition[validRows,] <- refLines[index,]
-  }
-
-  if(class(minDistancesPosition) != "matrix"){
-    minDistancesPosition <- matrix(data = minDistancesPosition, nrow = 1)
+    minDistancesPosition[validRows,] <- as.matrix(refLines[index,, drop = FALSE])
   }
 
   dimnames(minDistancesPosition) <- list(seq(nrow(minDistancesPosition)), c("lon", "lat"))
@@ -155,6 +151,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
   # Return a list with results
   output <- list(value = minDistancesValue*unitFactor,
                  position = minDistancesPosition)[tolower(out)]
+
   return(if(length(output) == 1) output[[1]] else output)
 }
 

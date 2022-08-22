@@ -36,8 +36,10 @@ peruvianGrid.assigner <- function(dataPoints, colLon = NULL, colLat = NULL, what
 
   dataPoints <- switch(class(dataPoints),
                        "matrix" = dataPoints[,c(colLon, colLat)],
-                       "data.frame" = data.frame(lon = dataPoints[,colLon], lat = dataPoints[,colLat], stringsAsFactors = FALSE),
-                       "numeric" = data.frame(lon = dataPoints[colLon], lat = dataPoints[colLat], stringsAsFactors = FALSE))
+                       "data.frame" = data.frame(lon = dataPoints[,colLon],
+                                                 lat = dataPoints[,colLat]),
+                       "numeric" = data.frame(lon = dataPoints[colLon],
+                                              lat = dataPoints[colLat]))
 
   output <- rep(NA, nrow(dataPoints))
 
@@ -56,7 +58,8 @@ peruvianGrid.assigner <- function(dataPoints, colLon = NULL, colLat = NULL, what
 # Auxiliar fx -------------------------------------------------------------
 
 assigner_isoparalitoral <- function(dataPoints, old = FALSE){
-  referenceShapefile <- get(ifelse(test = isTRUE(old), yes = "AIPShapefile_old", no = "AIPShapefile_new"))
+
+  referenceShapefile <- if(isTRUE(old)) ruisu::AIPShapefile_old else ruisu::AIPShapefile_new
 
   coordinates(dataPoints) <- dataPoints
 

@@ -29,7 +29,7 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
   }
 
   # Select the reference shapefile
-  referenceShapefile <- get(ifelse(test = tolower(units) == "m", yes = "coastlineBuffer_m", no = "coastlineBuffer_nm"))
+  referenceShapefile <- if(tolower(units) == "m") ruisu::coastlineBuffer_m else ruisu::coastlineBuffer_nm
 
   # If the input data is a vector, rearrange in a data.frame
   dataPoints <- switch(class(dataPoints),

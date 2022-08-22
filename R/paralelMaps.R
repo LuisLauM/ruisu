@@ -53,8 +53,8 @@ paralelMaps <- function(file, colCategories, allCategories = NULL, categoriesNam
   }
 
   # Get lon/lat and category columns
-  allData$lon <- as.numeric(allData[,colLon])
-  allData$lat <- as.numeric(allData[,colLat])
+  allData$lon <- an(allData[,colLon])
+  allData$lat <- an(allData[,colLat])
   allData$colCategories <- allData[,colCategories]
   allCategories <- if(is.null(allCategories)) sort(unique(allData$colCategories)) else allCategories
 
@@ -120,6 +120,8 @@ paralelMaps <- function(file, colCategories, allCategories = NULL, categoriesNam
 
     # Add coast line
     if(i != 1){
+      coastline <- ruisu::coastline
+
       lines(coastline$lon + delayFactor, coastline$lat)
     }
 
@@ -137,6 +139,8 @@ paralelMaps <- function(file, colCategories, allCategories = NULL, categoriesNam
 
   # Add harbors
   if(isTRUE(addHarbors)){
+    harborData <- ruisu::harborData
+
     with(harborData[harborData[,"importance"] == 1,], points(x = lon, y = lat, pch = 17, col = "red"))
     with(harborData[harborData[,"importance"] == 1,], text(x = lon, y = lat, labels = name, pos = 4, offset = .5))
   }

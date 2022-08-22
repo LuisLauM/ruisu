@@ -8,8 +8,8 @@ plotIsoparalitoral(
   codeList = NULL,
   add = FALSE,
   old = TRUE,
-  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE, xlab = NA, ylab
-    = NA),
+  plotParams = list(xlim = c(-90, -70), ylim = c(-18, -2), axes = TRUE, xlab = NA, ylab =
+    NA),
   mapParams = list(database = "world"),
   ...
 )

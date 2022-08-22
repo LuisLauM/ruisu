@@ -135,6 +135,8 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
   if(!is.null(profile)){
 
+    speciesInfo <- ruisu::speciesInfo
+
     index <- match(tolower(profile), rownames(speciesInfo))
 
     if(is.null(xlim)){

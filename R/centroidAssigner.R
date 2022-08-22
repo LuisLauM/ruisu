@@ -39,9 +39,7 @@ centroidAssigner <- function(code, what = "isoparalitoral", ...){
 # Auxiliar fx -------------------------------------------------------------
 
 centroidAssigner_isop <- function(code, old = TRUE){
-  isoAreas <- ifelse(isTRUE(old), "AIPData_old", "AIPData_new")
-
-  isoAreas <- get(isoAreas)
+  isoAreas <- if(isTRUE(old)) ruisu::AIPData_old else ruisu::AIPData_new
 
   index <- match(code, isoAreas$code)
 

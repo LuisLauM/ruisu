@@ -1,20 +1,19 @@
-#' @importFrom ncdf4 nc_open ncvar_get nc_close
+#' @importFrom sp dd2dms proj4string over coordinates "coordinates<-" "proj4string<-" spDistsN1 spDists plot CRS SpatialPoints
+#' @importFrom rgeos gBuffer
+#' @importFrom fields tim.colors image.plot
+#' @importFrom zoo rollmean
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel makeCluster stopCluster
+#' @importFrom foreach foreach "%dopar%"
+#' @importFrom stats filter aggregate approx complete.cases median rbeta rnorm runif spline
+#' @importFrom maps map
 #' @importFrom rstudioapi initializeProject openProject
-#' @importFrom stats median complete.cases spline filter runif rnorm rbeta approx
-#' @importFrom rerddap info griddap
-#' @importFrom lubridate year month day is.Date is.POSIXt
-#' @importFrom zoo as.yearmon rollmean
-#' @importFrom grDevices dev.new dev.list dev.off rainbow
-#' @importFrom foreach foreach
-#' @importFrom doSNOW registerDoSNOW
-#' @import raster
-#' @import maps
-#' @import fields
-#' @import rgeos
-#' @import sp
-#' @import graphics
-#' @import utils
-#'
+#' @importFrom grDevices adjustcolor dev.list dev.new dev.off rainbow
+#' @importFrom graphics abline arrows axis barplot box grid image lines mtext par plot.new plot.window points polygon text
+#' @importFrom utils read.csv write.csv
+#' @importFrom lubridate is.Date is.POSIXt year month
+NULL
+
 #' @title Tools for habitual tasks (and another fancy things) at IMARPE
 #' @author Wencheng Lau-Medrano, \email{luis.laum@@gmail.com}
 #' @name ruisu-package
@@ -113,15 +112,6 @@ NULL
 #' @docType data
 #' @usage speciesInfo
 #' @format A \code{data.frame} with main information about some Peruvian fishes.
-NULL
-
-#' @title \code{data.frame} with topographic information.
-#' @name bathymetry
-#' @description A table with information of longitude, latitude and topography (high and depth) in meters.
-#' @aliases bathymetry
-#' @docType data
-#' @usage bathymetry
-#' @format A \code{data.frame} with topographic information (lon, lat, altitude).
 NULL
 
 #' @title \code{data.frame} with environmental scenarios given by IGP

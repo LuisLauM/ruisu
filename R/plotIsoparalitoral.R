@@ -17,7 +17,7 @@ plotIsoparalitoral <- function(codeList = NULL, add = FALSE, old = TRUE,
                                mapParams = list(database = "world"), ...){
 
   # Select shape
-  referenceShapefile <- get(ifelse(test = isTRUE(old), yes = "AIPShapefile_old", no = "AIPShapefile_new"))
+  referenceShapefile <- if(isTRUE(old)) ruisu::AIPShapefile_old else ruisu::AIPShapefile_new
 
   if(!isTRUE(add)){
     # Make plot
