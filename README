@@ -1,2 +1,8 @@
+v2.0.1 (2022-08-22)
+* Removing some deprecated datasets.
+* Removing deprecated functions (`getProportion`).
+* Some minor changes.
+
+
 v2.0.0 (2022-08-22)
 * Version with improvements on imports and the way how ruisu load its functions.
