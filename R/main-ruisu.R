@@ -12,6 +12,7 @@
 #' @importFrom graphics abline arrows axis barplot box grid image lines mtext par plot.new plot.window points polygon text
 #' @importFrom utils read.csv write.csv
 #' @importFrom lubridate is.Date is.POSIXt year month
+#' @importFrom magrittr "%>%"
 NULL
 
 #' @title Tools for habitual tasks (and another fancy things) at IMARPE
