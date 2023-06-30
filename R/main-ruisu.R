@@ -8,7 +8,7 @@
 #' @importFrom stats aggregate approx complete.cases median rbeta rnorm runif spline
 #' @importFrom maps map
 #' @importFrom rstudioapi initializeProject openProject
-#' @importFrom grDevices adjustcolor dev.list dev.new dev.off rainbow
+#' @importFrom grDevices adjustcolor dev.list dev.new dev.off rainbow png
 #' @importFrom graphics abline arrows axis barplot box grid image lines mtext par plot.new plot.window points polygon text rasterImage
 #' @importFrom utils read.csv write.csv modifyList
 #' @importFrom lubridate is.Date is.POSIXt year month
