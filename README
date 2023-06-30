@@ -1,3 +1,7 @@
+v2.1.0 (2023-06-30)
+* Removing function `movingAverage`.
+* Adding functions `parallelMaps` and `passwordGen`.
+
 v2.0.1 (2022-08-22)
 * Removing some deprecated datasets.
 * Removing deprecated functions (`getProportion`).

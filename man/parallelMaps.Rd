@@ -8,14 +8,17 @@ parallelMaps(
   x,
   overlay = 0,
   direction = 2,
-  labels.args = list(side = 3, line = -1),
-  map.args = list(database = "world", interior = FALSE),
+  labels.args = list(),
+  map.args = list(),
   final.par = list(),
   saveFig = FALSE,
   png.args = list(),
   extra.args = list(res = 450, width = 2000),
   xlim = NULL,
   ylim = NULL,
+  col = "black",
+  pch = 1,
+  cex = 1,
   interpolate = FALSE,
   show.axis.labels = TRUE,
   pos.axis.labels = ifelse(direction\%\%2 == 0, 2, 1),
@@ -34,10 +37,10 @@ subplots (\eqn{[0; 0.5>}).}
 2 = left, 3 = top, 4 = right) the subplots will be placed?}
 
 \item{labels.args}{Extra arguments for \link[graphics]{mtext} that is used to
-specify the labels of groups.}
+specify the labels of groups. If \code{NULL}, labels will not be plotted.}
 
 \item{map.args}{Extra arguments for \link[maps]{map} that is used to add map
-shapes to subplots.}
+shapes to subplots. If \code{NULL}, map lines will not be plotted.}
 
 \item{final.par}{\code{list} with graphical settings applied to the final
 plot. See the available options in \link[graphics]{par}.}
@@ -51,6 +54,8 @@ passed to \link[grDevices]{png}.}
 \item{extra.args}{Extra arguments passed to some internal steps. See Details.}
 
 \item{xlim, ylim}{\code{numeric} Range of subplots in X and Y axis.}
+
+\item{col, pch, cex}{Features that will vary by groups.}
 
 \item{interpolate}{a \code{logical} vector (or scalar) indicating whether to
 apply linear interpolation to the image when drawing. Argument passed from
@@ -85,4 +90,13 @@ otherwise, it will be defined internaly as it using \link{as.factor}.
 This function plots and saves internaly one figure per group. The quality of
 this subplots can be modified by \code{extra.args} setting \code{res}
 (default 200) and \code{width} in pixels (default 2500).
+}
+\examples{
+data(coord_example)
+
+parallelMaps(x = coord_example, direction = 4, overlay = 0.4,
+             xlim = c(-82, -74), ylim = c(-16, -5),
+             labels.args = list(adj = 0.5, side = 1),
+             col = c("blue", "red"), pch = c(16, 17),
+             map.args = list(database = "worldHires"))
 }

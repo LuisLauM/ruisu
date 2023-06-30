@@ -158,3 +158,12 @@ NULL
 #' @usage coastlineBuffer_nm
 #' @format \code{SpatialPolygonsDataFrame} object with a buffer in nautical miles of South America coastline.
 NULL
+
+#' @title \code{data.frame} with some random coordinates for running \link[ruisu]{parallelMaps}.
+#' @name coord_example
+#' @description \code{data.frame} with some random coordinates for running \link[ruisu]{parallelMaps}.
+#' @aliases coord_example
+#' @docType data
+#' @usage coord_example
+#' @format \code{data.frame} object with three columns: lon, lat and group.
+NULL

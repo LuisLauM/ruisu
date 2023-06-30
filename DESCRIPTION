@@ -29,8 +29,8 @@ Imports: sp,
   abind,
   magrittr,
   dplyr,
-  mapdata,
   metR
 RoxygenNote: 7.2.3
 Depends: 
-    R (>= 3.5.0)
+    R (>= 3.5.0),
+    mapdata

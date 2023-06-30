@@ -48,6 +48,15 @@
 #' @return Depending on \code{saveFig} and \code{plot} values, this function
 #' will return a plot
 #' @export
+#'
+#' @examples
+#' data(coord_example)
+#'
+#' parallelMaps(x = coord_example, direction = 4, overlay = 0.4,
+#'              xlim = c(-82, -74), ylim = c(-16, -5),
+#'              labels.args = list(adj = 0.5, side = 1),
+#'              col = c("blue", "red"), pch = c(16, 17),
+#'              map.args = list(database = "worldHires"))
 parallelMaps <- function(x, overlay = 0, direction = 2,
                          labels.args = list(),
                          map.args = list(),
