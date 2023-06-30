@@ -79,8 +79,8 @@ Depending on \code{saveFig} and \code{plot} values, this function
 will return a plot
 }
 \description{
-This function takes a coordinates \code{data.frame} and plot the points in a
-single figure using a
+This function takes a \code{data.frame} of coordinates and uses a 'group'
+column to make a plot placing the points in a parallel way.
 }
 \details{
 \code{x} must be defined as a \code{data.frame} with at least 3 columns: lon,

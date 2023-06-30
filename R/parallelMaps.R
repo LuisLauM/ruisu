@@ -1,8 +1,8 @@
 #' @title Make plots with parallel effect
 #'
 #' @description
-#' This function takes a coordinates \code{data.frame} and plot the points in a
-#' single figure using a
+#' This function takes a \code{data.frame} of coordinates and uses a 'group'
+#' column to make a plot placing the points in a parallel way.
 #'
 #'
 #' @param x \code{data.frame} with coordinates and group column.
