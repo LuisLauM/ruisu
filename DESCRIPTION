@@ -1,8 +1,8 @@
 Package: ruisu
 Type: Package
 Title: Tools for habitual tasks (and another fancy things)
-Version: 2.0.2
-Date: 2023-05-11
+Version: 2.1.0
+Date: 2023-06-30
 Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "luis.laum@gmail.com"))
 Author: Wencheng Lau-Medrano [aut, cre]
 Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
@@ -24,7 +24,13 @@ Imports: sp,
   grDevices,
   graphics,
   utils,
-  lubridate
+  lubridate,
+  png,
+  abind,
+  magrittr,
+  dplyr,
+  mapdata,
+  metR
 RoxygenNote: 7.2.3
 Depends: 
     R (>= 3.5.0)

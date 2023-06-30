@@ -5,14 +5,19 @@
 #' @importFrom doParallel registerDoParallel
 #' @importFrom parallel makeCluster stopCluster
 #' @importFrom foreach foreach "%dopar%"
-#' @importFrom stats filter aggregate approx complete.cases median rbeta rnorm runif spline
+#' @importFrom stats aggregate approx complete.cases median rbeta rnorm runif spline
 #' @importFrom maps map
 #' @importFrom rstudioapi initializeProject openProject
 #' @importFrom grDevices adjustcolor dev.list dev.new dev.off rainbow
-#' @importFrom graphics abline arrows axis barplot box grid image lines mtext par plot.new plot.window points polygon text
-#' @importFrom utils read.csv write.csv
+#' @importFrom graphics abline arrows axis barplot box grid image lines mtext par plot.new plot.window points polygon text rasterImage
+#' @importFrom utils read.csv write.csv modifyList
 #' @importFrom lubridate is.Date is.POSIXt year month
+#' @importFrom png readPNG
+#' @importFrom abind abind
 #' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter transmute
+#' @importFrom metR LonLabel LatLabel
+#' @import mapdata
 NULL
 
 #' @title Tools for habitual tasks (and another fancy things) at IMARPE
