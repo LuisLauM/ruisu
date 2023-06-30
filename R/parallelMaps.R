@@ -100,7 +100,7 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
   dims <- round(x = extra.args$width*c(1, diff(ylim)/diff(xlim)), digits = 0)
 
   # Check value of direction
-  if(all(!sapply(1:4, \(x) isTRUE(all.equal(target = x, current = direction))))){
+  if(all(!sapply(1:4, function(x) isTRUE(all.equal(target = x, current = direction))))){
     stop("'direction' must be a numeric value: 1 (bottom), 2 (left), 3 (top) or 4 (right).")
   }
 
