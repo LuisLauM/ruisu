@@ -211,13 +211,23 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
       # Subsection type 2
       index1 <- seq(to = proportions$a, length.out = proportions$b, by = 1)
       index2 <- seq(from = 1, length.out = proportions$b, by = 1)
-      tempMat1 <- abind(if(verDir) prevPlot[index1,, 1:3] else prevPlot[,index1, 1:3],
-                        if(verDir) tempPlot[index2,, 1:3] else tempPlot[,index2, 1:3],
-                        along = 4) %>%
 
-        apply(MARGIN = 3, FUN = \(x) apply(x, 1:2, min), simplify = FALSE) %>%
+      tempMat1 <- list(if(verDir) prevPlot[index1,, 1:3] else prevPlot[,index1, 1:3],
+                       if(verDir) tempPlot[index2,, 1:3] else tempPlot[,index2, 1:3]) %>%
 
-        abind(along = 3)
+        lapply(as.numeric) %>%
+
+        do.call(what = pmin) %>%
+
+        array(dim = c(dims[ifelse(verDir, 1, 2)], proportions$b, 3))
+
+      # tempMat1 <- abind(if(verDir) prevPlot[index1,, 1:3] else prevPlot[,index1, 1:3],
+      #                   if(verDir) tempPlot[index2,, 1:3] else tempPlot[,index2, 1:3],
+      #                   along = 4) %>%
+      #
+      #   apply(MARGIN = 3, FUN = \(x) apply(x, 1:2, min), simplify = FALSE) %>%
+      #
+      #   abind(along = 3)
 
       if(verDir){
         tempMat2 <- prevPlot[index1,, 4] + tempPlot[index2,, 4]
