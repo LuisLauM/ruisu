@@ -1,3 +1,6 @@
+v2.1.1 (2023-07-06)
+* Little improvements `parallelMaps`.
+
 v2.1.0 (2023-06-30)
 * Removing function `movingAverage`.
 * Adding functions `parallelMaps` and `passwordGen`.

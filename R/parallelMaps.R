@@ -314,9 +314,14 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
 
   # Show informative messages
   if(!isTRUE(quiet)){
-    cat(sprintf("\nxlim: [%s]\nylim: [%s]\n",
-                paste(round(xlim, 2), collapse = "- "),
-                paste(round(ylim, 2), collapse = "- ")))
+
+    xyLabels <- mapply(x = list(x = xlim, y = ylim),
+                       f = list(metR::LonLabel, metR::LatLabel),
+                       FUN = \(x, f, ...) paste(f(round(x, ...)), collapse = " - "),
+                       MoreArgs = list(digits = 1),
+                       SIMPLIFY = FALSE)
+
+    cat(sprintf("\nxlim: [%s]\nylim: [%s]\n", xyLabels$x, xyLabels$y))
     cat(sprintf("\nSubplots' dimensions: %d x %d", dims[1], dims[2]))
     cat(sprintf("\nFinal figure dimensions: %d x %d\n",
                 nrow(finalPlot), ncol(finalPlot)))
