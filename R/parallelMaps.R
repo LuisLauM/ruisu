@@ -33,6 +33,10 @@
 #' @param axis.labels.args If \code{show.axis.labels = TRUE}, extra arguments
 #' passed to \link[graphics]{axis}.
 #' @param quiet \code{logical} value to control informative messages.
+#' @param extra.elements.bf,extra.elements.af Addicional elements could be
+#' included in the subplots (by group) by this argument. \code{extra.elements.bf}
+#' is for include the lines before drawing the points, otherwise, use
+#' \code{extra.elements.af}. See Details.
 #' @param ... Extra arguments passed to \link{plot} that makes subplots.
 #'
 #' @details
@@ -43,6 +47,12 @@
 #' This function plots and saves internaly one figure per group. The quality of
 #' this subplots can be modified by \code{extra.args} setting \code{res}
 #' (default 200) and \code{width} in pixels (default 2500).
+#'
+#' \code{extra.elements.bf} and \code{extra.elements.af} receive pieces of code
+#' that will be placed and run before or after the drawing of points. The order
+#' of drawing is an empty canvas, the \code{extra.elements.bf}-elements, the
+#' points, the map, the labels of groups, and the
+#' \code{extra.elements.af}-elements.
 #'
 #'
 #' @return Depending on \code{saveFig} and \code{plot} values, this function
@@ -70,7 +80,10 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
                          show.axis.labels = TRUE,
                          pos.axis.labels = ifelse(direction %% 2 == 0, 2, 1),
                          axis.labels.args = list(),
-                         quiet = FALSE, ...){
+                         quiet = FALSE,
+                         extra.elements.bf = NULL,
+                         extra.elements.af = NULL,
+                         ...){
 
   # Save initial date-time
   if(!isTRUE(quiet)){
@@ -142,7 +155,7 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
     lapply(rep, length.out = length(allGroups))
 
   # Run a loop along groups
-  allPlots <- list()
+  finalPlot <- list()
   for(i in seq_along(allGroups)){
 
     # Define a temporal path for subplots
@@ -155,6 +168,12 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
     # Define graphical parameters
     par(mar = rep(0, 4), xaxs = "i", yaxs = "i")
 
+    # Empty canvas
+    plot(1, 1, type = "n", axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
+
+    # Extra elements (before)
+    eval(substitute(extra.elements.bf))
+
     # Take x...
     x %>%
 
@@ -162,20 +181,22 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
       filter(group == allGroups[i]) %>%
 
       # ...plotting coordinates
-      with(plot(x = lon, y = lat, xlim = xlim, ylim = ylim, axes = FALSE,
-                col = ptsFeatures$col[i],
-                pch = ptsFeatures$pch[i],
-                cex = ptsFeatures$cex[i],
-                ...))
+      with(points(x = lon, y = lat,
+                  col = ptsFeatures$col[i],
+                  pch = ptsFeatures$pch[i],
+                  cex = ptsFeatures$cex[i],
+                  ...))
 
     # Add map
     if(!is.null(map.args) && is.list(map.args)){
 
       # Combine arguments for map
-      map.args <- modifyList(x = modifyList(x = list(database = "world",
-                                                     interior = FALSE),
-                                            val = map.args),
-                             val = list(add = TRUE))
+      map.args <- list(database = "world",
+                       interior = FALSE) %>%
+
+        modifyList(val = map.args) %>%
+
+        modifyList(val = list(add = TRUE))
 
       # Add map
       do.call(what = map, args = map.args)
@@ -185,13 +206,19 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
     if(!is.null(labels.args) && is.list(labels.args)){
 
       # Combine arguments for labels (mtext)
-      labels.args <- modifyList(x = modifyList(x = list(side = 3, line = -1),
-                                               val = labels.args),
-                                val = list(text = allGroups[i]))
+      labels.args <- list(side = ifelse(verDir %% 2 == 0, 3, 2),
+                          line = -1) %>%
+
+        modifyList(val = labels.args) %>%
+
+        modifyList(val = list(text = allGroups[i]))
 
       # Add group labels
       do.call(what = mtext, args = labels.args)
     }
+
+    # Extra elements (after)
+    eval(substitute(extra.elements.af))
 
     # Ending file saving
     dev.off()
@@ -205,7 +232,7 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
     if(i == 1){
       # If i == 1, subsection type 1
       index <- seq(proportions$c)
-      allPlots[[length(allPlots) + 1]] <- if(verDir) tempPlot[index,,] else tempPlot[,index,]
+      finalPlot[[length(finalPlot) + 1]] <- if(verDir) tempPlot[index,,] else tempPlot[,index,]
     }else{
 
       # Subsection type 2
@@ -235,34 +262,40 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
         tempMat2 <- prevPlot[,index1, 4] + tempPlot[,index2, 4]
       }
 
-      allPlots[[length(allPlots) + 1]] <- abind(tempMat1, pmin(tempMat2, 1), along = 3)
+      finalPlot[[length(finalPlot) + 1]] <- abind(tempMat1, pmin(tempMat2, 1), along = 3)
 
       if(i != length(allGroups)){
         # Subsection type 3
         index <- seq(from = proportions$b + 1, length.out = proportions$d)
-        allPlots[[length(allPlots) + 1]] <- if(verDir) tempPlot[index,,] else tempPlot[,index,]
+        finalPlot[[length(finalPlot) + 1]] <- if(verDir) tempPlot[index,,] else tempPlot[,index,]
       }else{
         # Subsection type 4
         index <- seq(to = proportions$a, length.out = proportions$c, by = 1)
-        allPlots[[length(allPlots) + 1]] <- if(verDir) tempPlot[index,,] else tempPlot[,index,]
+        finalPlot[[length(finalPlot) + 1]] <- if(verDir) tempPlot[index,,] else tempPlot[,index,]
       }
     }
 
     # Save plot as previous plot
-    prevPlot <- tempPlot
+    if(i == length(allGroups)){
+      suppressWarnings(rm(list = c("tempPlot", "prevPlot", "tempMat1", "tempMat2")))
+    }else{
+      prevPlot <- tempPlot
+    }
   }
 
   # Combine arrays of subsections
-  finalPlot <- abind(allPlots, along = ifelse(verDir, 1, 2))
+  finalPlot <- abind(finalPlot, along = ifelse(verDir, 1, 2))
 
   if(isTRUE(saveFig)){
 
     # Combine png arguments for final plot
-    png.args <- modifyList(x = modifyList(x = list(res = extra.args$res,
-                                                   bg = "transparent"),
-                                          val = png.args),
-                           val = list(width = dim(finalPlot)[2],
-                                      height = dim(finalPlot)[1]))
+    png.args <- list(res = extra.args$res,
+                     bg = "transparent") %>%
+
+      modifyList(val = png.args) %>%
+
+      modifyList(val = list(width = dim(finalPlot)[2],
+                            height = dim(finalPlot)[1]))
 
     # Starting final figure saving
     do.call(what = png, args = png.args)
@@ -273,9 +306,12 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
   }
 
   # Defining graphical parameters
-  par(modifyList(x = list(xaxs = "i", yaxs = "i", oma = rep(0, 4),
-                          mar = c(3, 4, 1, 1)),
-                 val = final.par))
+  list(xaxs = "i", yaxs = "i", oma = rep(0, 4),
+       mar = c(if(verDir %% 2 == 0) c(1, 3) else c(3, 1), 1, 1)) %>%
+
+    modifyList(val = final.par) %>%
+
+    par
 
   # Defining values for canvas plot
   plotVals <- list(x = if(verDir) xlim else xlim - c(dim(finalPlot)[2]*diff(xlim)/proportions$a, 0),
@@ -297,10 +333,11 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
     counterDir <- switch(direction, '1' = 3, '2' = 4, '3' = 1, '4' = 2)
 
     # Combining arguments for axis labels
-    axis.labels.args <- modifyList(x = list(side = if(verDir) 1 else 2,
-                                            at = axisLabs, las = 1,
-                                            labels = if(verDir) LonLabel(axisLabs) else LatLabel(axisLabs)),
-                                   val = axis.labels.args)
+    axis.labels.args <- list(side = if(verDir) 1 else 2,
+                             at = axisLabs, las = 1,
+                             labels = if(verDir) LonLabel(axisLabs) else LatLabel(axisLabs)) %>%
+
+      modifyList(val = axis.labels.args)
 
     # Adding axis labels
     do.call(what = axis, args = axis.labels.args)
@@ -337,6 +374,8 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
     cat(sprintf("\nProcessing time: %02d h %02d m %02d s\n",
                 procTime[1], procTime[2] - procTime[1]*60, procTime[3]))
   }
+
+  rm(finalPlot)
 
   return(invisible())
 }

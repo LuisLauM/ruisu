@@ -2,7 +2,7 @@ Package: ruisu
 Type: Package
 Title: Tools for habitual tasks (and another fancy things)
 Version: 2.1.1
-Date: 2023-07-06
+Date: 2023-07-07
 Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "luis.laum@gmail.com"))
 Author: Wencheng Lau-Medrano [aut, cre]
 Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>

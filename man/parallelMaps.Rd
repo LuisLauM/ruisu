@@ -24,6 +24,8 @@ parallelMaps(
   pos.axis.labels = ifelse(direction\%\%2 == 0, 2, 1),
   axis.labels.args = list(),
   quiet = FALSE,
+  extra.elements.bf = NULL,
+  extra.elements.af = NULL,
   ...
 )
 }
@@ -72,6 +74,11 @@ passed to \link[graphics]{axis}.}
 
 \item{quiet}{\code{logical} value to control informative messages.}
 
+\item{extra.elements.bf, extra.elements.af}{Addicional elements could be
+included in the subplots (by group) by this argument. \code{extra.elements.bf}
+is for include the lines before drawing the points, otherwise, use
+\code{extra.elements.af}. See Details.}
+
 \item{...}{Extra arguments passed to \link{plot} that makes subplots.}
 }
 \value{
@@ -90,6 +97,12 @@ otherwise, it will be defined internaly as it using \link{as.factor}.
 This function plots and saves internaly one figure per group. The quality of
 this subplots can be modified by \code{extra.args} setting \code{res}
 (default 200) and \code{width} in pixels (default 2500).
+
+\code{extra.elements.bf} and \code{extra.elements.af} receive pieces of code
+that will be placed and run before or after the drawing of points. The order
+of drawing is an empty canvas, the \code{extra.elements.bf}-elements, the
+points, the map, the labels of groups, and the
+\code{extra.elements.af}-elements.
 }
 \examples{
 data(coord_example)
