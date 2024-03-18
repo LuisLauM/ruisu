@@ -1,3 +1,7 @@
+v2.1.2 (2024-03-24)
+* New function: `envir_downANDextract`.
+* Some internal improvements related to migration to terra-sf philosophy.
+
 v2.1.1 (2023-07-06)
 * Little improvements `parallelMaps`.
 
@@ -9,7 +13,6 @@ v2.0.1 (2022-08-22)
 * Removing some deprecated datasets.
 * Removing deprecated functions (`getProportion`).
 * Some minor changes.
-
 
 v2.0.0 (2022-08-22)
 * Version with improvements on imports and the way how ruisu load its functions.

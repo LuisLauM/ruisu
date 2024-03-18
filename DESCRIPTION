@@ -1,11 +1,11 @@
 Package: ruisu
 Type: Package
 Title: Tools for habitual tasks (and another fancy things)
-Version: 2.1.1
-Date: 2023-07-07
-Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "luis.laum@gmail.com"))
+Version: 2.2.1
+Date: 2024-03-18
+Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "luis.laum@outlook.com"))
 Author: Wencheng Lau-Medrano [aut, cre]
-Maintainer: Wencheng Lau-Medrano <luis.laum@gmail.com>
+Maintainer: Wencheng Lau-Medrano <luis.laum@outlook.com>
 Description: Tools for common tasks as well as some fancy functions.
 License: GPL (>= 2)
 Encoding: UTF-8
@@ -29,8 +29,9 @@ Imports: sp,
   abind,
   magrittr,
   dplyr,
-  metR
-RoxygenNote: 7.2.3
+  metR,
+  terra
+RoxygenNote: 7.3.1
 Depends: 
-    R (>= 3.5.0),
-    mapdata
+  R (>= 4.1.0),
+  mapdata

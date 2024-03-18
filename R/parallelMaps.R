@@ -33,10 +33,10 @@
 #' @param axis.labels.args If \code{show.axis.labels = TRUE}, extra arguments
 #' passed to \link[graphics]{axis}.
 #' @param quiet \code{logical} value to control informative messages.
-#' @param extra.elements.bf,extra.elements.af Addicional elements could be
-#' included in the subplots (by group) by this argument. \code{extra.elements.bf}
-#' is for include the lines before drawing the points, otherwise, use
-#' \code{extra.elements.af}. See Details.
+#' @param extra.elements.bf,extra.elements.af Adicional elements could be
+#' included in the subplots (by group) by this argument: \code{extra.elements.bf}
+#' for including elements before drawing the points, otherwise
+#'  \code{extra.elements.af}. See Details.
 #' @param ... Extra arguments passed to \link{plot} that makes subplots.
 #'
 #' @details
@@ -62,11 +62,15 @@
 #' @examples
 #' data(coord_example)
 #'
-#' parallelMaps(x = coord_example, direction = 4, overlay = 0.4,
-#'              xlim = c(-82, -74), ylim = c(-16, -5),
+#' parallelMaps(x = coord_example, direction = 2, overlay = 0.1,
+#'              xlim = c(-82, -74), ylim = c(-16, -4),
 #'              labels.args = list(adj = 0.5, side = 1),
-#'              col = c("blue", "red"), pch = c(16, 17),
-#'              map.args = list(database = "worldHires"))
+#'              col = adjustcolor(c("blue", "red", "forestgreen", "gold2"), 0.5),
+#'              pch = c(15, 16, 17, 18),
+#'              map.args = list(database = "worldHires"),
+#'              extra.elements.bf = {
+#'                abline(h = -6, col = "purple")
+#'                abline(h = -14, col = "gold4")})
 parallelMaps <- function(x, overlay = 0, direction = 2,
                          labels.args = list(),
                          map.args = list(),
@@ -169,7 +173,8 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
     par(mar = rep(0, 4), xaxs = "i", yaxs = "i")
 
     # Empty canvas
-    plot(1, 1, type = "n", axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
+    plot(1, 1, type = "n", axes = FALSE, xlab = NA, ylab = NA,
+         xlim = xlim, ylim = ylim, asp = 1)
 
     # Extra elements (before)
     eval(substitute(extra.elements.bf))
@@ -318,7 +323,8 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
                    y = if(verDir) ylim - c(dim(finalPlot)[1]*diff(ylim)/proportions$a, 0) else ylim)
 
   # Plotting empty canvas
-  plot(x = plotVals$x, y = plotVals$y, type = "n", axes = FALSE, xlab = NA, ylab = NA)
+  plot(x = plotVals$x, y = plotVals$y, type = "n", axes = FALSE,
+       xlab = NA, ylab = NA)
 
   # Add final figure
   rasterImage(image = finalPlot,

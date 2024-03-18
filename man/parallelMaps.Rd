@@ -74,10 +74,10 @@ passed to \link[graphics]{axis}.}
 
 \item{quiet}{\code{logical} value to control informative messages.}
 
-\item{extra.elements.bf, extra.elements.af}{Addicional elements could be
-included in the subplots (by group) by this argument. \code{extra.elements.bf}
-is for include the lines before drawing the points, otherwise, use
-\code{extra.elements.af}. See Details.}
+\item{extra.elements.bf, extra.elements.af}{Adicional elements could be
+included in the subplots (by group) by this argument: \code{extra.elements.bf}
+for including elements before drawing the points, otherwise
+ \code{extra.elements.af}. See Details.}
 
 \item{...}{Extra arguments passed to \link{plot} that makes subplots.}
 }
@@ -107,9 +107,13 @@ points, the map, the labels of groups, and the
 \examples{
 data(coord_example)
 
-parallelMaps(x = coord_example, direction = 4, overlay = 0.4,
-             xlim = c(-82, -74), ylim = c(-16, -5),
+parallelMaps(x = coord_example, direction = 2, overlay = 0.1,
+             xlim = c(-82, -74), ylim = c(-16, -4),
              labels.args = list(adj = 0.5, side = 1),
-             col = c("blue", "red"), pch = c(16, 17),
-             map.args = list(database = "worldHires"))
+             col = adjustcolor(c("blue", "red", "forestgreen", "gold2"), 0.5),
+             pch = c(15, 16, 17, 18),
+             map.args = list(database = "worldHires"),
+             extra.elements.bf = {
+               abline(h = -6, col = "purple")
+               abline(h = -14, col = "gold4")})
 }

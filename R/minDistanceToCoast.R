@@ -3,30 +3,44 @@
 
 #' @title Get the minumim distance to coast
 #'
-#' @param data \code{data.frame} with coords that will be used to calculate min distance to coast line.
-#' @param colLon Name or position of column for longitude. As default, it will be \code{lon}.
-#' @param colLat Name or position of column for latitude. As default, it will be \code{lat}.
-#' @param countryFilter Select the country for make comparation
-#' @param unit Define the unit for outputs: nm (nautical miles), kilometers (km), m (meters).
-#' @param multicore \code{logical} indicating whether to use multiple cores for calculate distances.
-#' See Details.
+#' @param data \code{data.frame} with coords that will be used to calculate min
+#' distance to coast line.
+#' @param colLon Name or position of column for longitude. As default, it will
+#' be \code{lon}.
+#' @param colLat Name or position of column for latitude. As default, it will be
+#' \code{lat}.
+#' @param country \code{character}. Define the country (or countries) used to
+#' perform the distance searching. See Details.
+#' @param unit Define the unit for outputs: \code{nm} (nautical miles),
+#' \code{kilometers} (km) or \code{m} (meters).
+#' @param multicore \code{logical} indicating whether to use multiple cores for
+#' calculate distances. See Details.
 #' @param ncores If \code{multicore = TRUE}, how many cores are you going to use?
-#' @param out \code{character} indicating what products are going to be returned: \code{value} or
-#' \code{position}. By default, it will return both as a list.
+#' @param out \code{character} indicating what products are going to be returned:
+#' \code{value} or \code{position}. By default, it will return both as a list.
 #'
-#' @details This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument
+#' @details This function uses internaly \link{distance}[terra] function, with argument
 #' \code{longlat = TRUE}.
 #'
-#' If \code{data} is a matrix, \code{colLon} and \code{colLat} must be ONLY numeric values.
+#' If \code{country} is not defined (\code{NULL}), the internal algorithm will
+#' perform a search along the ENTIRE west coast of America: from Alaska to Chile.
+#' This might be (very) inefficient especially if the calculation is performed
+#' over many (thousands of) points, so it is suggested to define the country or
+#' countries with which you want to make the comparison.
 #'
-#' It is recommended to use multicore mode only when the database exceeds 2000 rows, less than
-#' this, single core mode have proved to be faster.
+#' If \code{data} is a matrix, \code{colLon} and \code{colLat} must be ONLY
+#' numeric values.
 #'
-#' \code{out} argument allows to users to decide having between: the values (the values of minimum distance
-#' to coast), the positions (where this minimum distance where achieved in coast) or both.
+#' It is recommended to use multicore mode only when the database exceeds 2000
+#' rows, less than this, single core mode have proved to be faster.
 #'
-#' @return It returns a list with 2 levels: \code{value}, The minimum distance to coast line and
-#' \code{position}, the point where this minimum distance is reached.
+#' \code{out} argument allows to users to decide having between: the values (the
+#' values of minimum distance to coast), the positions (where this minimum
+#' distance where achieved in coast) or both.
+#'
+#' @return It returns a list with 2 levels: \code{value}, The minimum distance
+#' to coast line and \code{position}, the point where this minimum distance is
+#' reached.
 #'
 #' @export
 #'
@@ -129,9 +143,9 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
     minDistancesPosition[validRows,] <- t(sapply(allDistances, "[[", 2))
   }else{
     # Get min distances
-    allDistances <- spDists(x = refLines,
-                            y = as.matrix(data),
-                            longlat = TRUE)
+    allDistances <- terra::distance(x = refLines,
+                                    y = as.matrix(data),
+                                    lonlat = TRUE)
 
     # Get distances and positions
     minDistancesValue[validRows] <- apply(allDistances, 2, min)
@@ -144,9 +158,9 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
 
   # Get a factor using unit argument
   unitFactor <- switch(tolower(unit),
-                       nm = 1/1.852,
-                       km = 1,
-                       m = 1e-3)
+                       nm = 1/1852,
+                       km = 1e-3,
+                       m = 1)
 
   # Return a list with results
   output <- list(value = minDistancesValue*unitFactor,
@@ -160,9 +174,9 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
 
 getDistance <- function(data, refLines, i){
 
-  allDistances <- spDistsN1(pts = refLines,
-                            pt = as.numeric(data[i, 1:2]),
-                            longlat = TRUE)
+  allDistances <- terra::distance(x = refLines,
+                                  y= as.numeric(data[i, 1:2]),
+                                  lonlat = TRUE)
 
   index <- which.min(allDistances)
 

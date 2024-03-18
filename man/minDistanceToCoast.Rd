@@ -16,42 +16,56 @@ minDistanceToCoast(
 )
 }
 \arguments{
-\item{data}{\code{data.frame} with coords that will be used to calculate min distance to coast line.}
+\item{data}{\code{data.frame} with coords that will be used to calculate min
+distance to coast line.}
 
-\item{colLon}{Name or position of column for longitude. As default, it will be \code{lon}.}
+\item{colLon}{Name or position of column for longitude. As default, it will
+be \code{lon}.}
 
-\item{colLat}{Name or position of column for latitude. As default, it will be \code{lat}.}
+\item{colLat}{Name or position of column for latitude. As default, it will be
+\code{lat}.}
 
-\item{countryFilter}{Select the country for make comparation}
+\item{unit}{Define the unit for outputs: \code{nm} (nautical miles),
+\code{kilometers} (km) or \code{m} (meters).}
 
-\item{unit}{Define the unit for outputs: nm (nautical miles), kilometers (km), m (meters).}
-
-\item{multicore}{\code{logical} indicating whether to use multiple cores for calculate distances.
-See Details.}
+\item{multicore}{\code{logical} indicating whether to use multiple cores for
+calculate distances. See Details.}
 
 \item{ncores}{If \code{multicore = TRUE}, how many cores are you going to use?}
 
-\item{out}{\code{character} indicating what products are going to be returned: \code{value} or
-\code{position}. By default, it will return both as a list.}
+\item{out}{\code{character} indicating what products are going to be returned:
+\code{value} or \code{position}. By default, it will return both as a list.}
+
+\item{country}{\code{character}. Define the country (or countries) used to
+perform the distance searching. See Details.}
 }
 \value{
-It returns a list with 2 levels: \code{value}, The minimum distance to coast line and
-\code{position}, the point where this minimum distance is reached.
+It returns a list with 2 levels: \code{value}, The minimum distance
+to coast line and \code{position}, the point where this minimum distance is
+reached.
 }
 \description{
 Get the minumim distance to coast
 }
 \details{
-This function uses internaly both \link{spDists} and \link{spDistsN1}, with argument
+This function uses internaly \link{distance}[terra] function, with argument
 \code{longlat = TRUE}.
 
-If \code{data} is a matrix, \code{colLon} and \code{colLat} must be ONLY numeric values.
+If \code{country} is not defined (\code{NULL}), the internal algorithm will
+perform a search along the ENTIRE west coast of America: from Alaska to Chile.
+This might be (very) inefficient especially if the calculation is performed
+over many (thousands of) points, so it is suggested to define the country or
+countries with which you want to make the comparison.
 
-It is recommended to use multicore mode only when the database exceeds 2000 rows, less than
-this, single core mode have proved to be faster.
+If \code{data} is a matrix, \code{colLon} and \code{colLat} must be ONLY
+numeric values.
 
-\code{out} argument allows to users to decide having between: the values (the values of minimum distance
-to coast), the positions (where this minimum distance where achieved in coast) or both.
+It is recommended to use multicore mode only when the database exceeds 2000
+rows, less than this, single core mode have proved to be faster.
+
+\code{out} argument allows to users to decide having between: the values (the
+values of minimum distance to coast), the positions (where this minimum
+distance where achieved in coast) or both.
 }
 \examples{
 
