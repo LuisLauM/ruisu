@@ -6,7 +6,6 @@
 
 ## usethis namespace: start
 #' @importFrom sp dd2dms proj4string over coordinates "coordinates<-" "proj4string<-" plot CRS SpatialPoints
-#' @importFrom rgeos gBuffer
 #' @importFrom fields tim.colors image.plot
 #' @importFrom zoo rollmean
 #' @importFrom doParallel registerDoParallel

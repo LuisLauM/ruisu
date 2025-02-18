@@ -1,3 +1,6 @@
+v2.2.2 (2025-02-18)
+* `surveyTrack` function was removed temporarily (it uses internally functions of defuncted [rgeos](https://r-spatial.org/r/2022/04/12/evolution.html) package).
+
 v2.1.2 (2024-03-24)
 * New function: `envir_downANDextract`.
 * Some internal improvements related to migration to terra-sf philosophy.
