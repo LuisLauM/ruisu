@@ -26,7 +26,7 @@ waiting <- function(time_ref, time_check = 60, msg = NULL, ...){
 
   time_ref <- as.POSIXct(x = time_ref, ...)
 
-  if(time_ref <= Sys.time()) stop("'time_ref' must be lower than now.")
+  if(time_ref <= Sys.time()) stop("'time_ref' must set after than now.")
 
   startTime <- Sys.time()
   while(startTime < time_ref){
