@@ -7,7 +7,7 @@
 #' @param ... Extra arguments passed to the main plot.
 #'
 #' @returns A numeric vector: out of (\code{0}) or within (\code{1}) the polygon.
-#'
+#' @export
 #' @examples
 #' n <- 50
 #' sampleData <- data.frame(x = runif(n = 50, min = 0.5, max = 1.5),
