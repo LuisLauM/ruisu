@@ -15,15 +15,16 @@
 #' @importFrom maps map
 #' @importFrom rstudioapi initializeProject openProject
 #' @importFrom grDevices adjustcolor dev.list dev.new dev.off rainbow png
-#' @importFrom graphics abline arrows axis barplot box grid image lines mtext par plot.new plot.window points polygon text rasterImage
+#' @importFrom graphics abline arrows axis barplot box grid image lines mtext par plot.new plot.window points polygon text rasterImage locator
 #' @importFrom utils read.csv write.csv modifyList
 #' @importFrom lubridate is.Date is.POSIXt year month
 #' @importFrom png readPNG
 #' @importFrom abind abind
 #' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter transmute select mutate distinct
+#' @importFrom dplyr filter transmute select mutate distinct group_by summarise
 #' @importFrom metR LonLabel LatLabel
 #' @importFrom terra rast extract distance
+#' @importFrom sf st_as_sf st_combine st_cast st_intersects
 #' @import mapdata
 ## usethis namespace: end
 NULL

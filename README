@@ -1,3 +1,6 @@
+v2.4.1 (2025-09-23)
+* Add `selectPtsByPolygon` function.
+
 v2.2.2 (2025-02-18)
 * `surveyTrack` function was removed temporarily (it uses internally functions of defuncted [rgeos](https://r-spatial.org/r/2022/04/12/evolution.html) package).
 
