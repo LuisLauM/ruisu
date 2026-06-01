@@ -68,7 +68,7 @@ compression available. See Details.}
 points ("simple" or "bilinear"). With "simple" values for the cell a point
 falls in are returned. With "bilinear" the returned values are interpolated
 from the values of the four nearest raster cells. This argument will be
-transmitted to \link{extract}[terra] function (\code{method} argument).}
+transmitted to \link{extract}\link[terra:terra]{terra} function (\code{method} argument).}
 }
 \value{
 The \code{pts} object with extra columns corresponding to the

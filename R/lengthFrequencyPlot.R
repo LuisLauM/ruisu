@@ -1,90 +1,120 @@
-#' @title  Given a frequency table size, it generates a vertical array of graphics for each specified
-#' category (months, latitudes, years, etc.).
+#' Plot length-frequency distributions
 #'
-#' @param file1 Indicates the table from the main length distribution will be drawn. See details.
-#' @param file2 Indicates the table from the secondary length distribution will be drawn. See details.
-#' @param dataFactor Factor that multiplies matrices 1 and 2.
-#' @param newPlot If \code{TRUE}, the plot will be opened in a new window (using \code{x11} command).
-#' @param profile \code{character}. Indicates the profile (as an species' name) used to predine values of
-#' xlim, juvLine, xInterval and xlab.
-#' @param xlim Limits of x axis.
-#' @param xInterval Number of intervals for x axis labels.
-#' @param ylim Limits of y axis.
-#' @param yInterval Number of intervals for y axis labels.
-#' @param ylimList List of xlim value for each plot.
-#' @param yIntervalList List of yInterval value for each plot.
-#' @param ltys1 lty (see \code{\link{par}}) parameter for main length distribution lines.
-#' @param lwds1 lwd (see \code{\link{par}}) parameter for main length distribution lines.
-#' @param col1 col (see \code{\link{par}}) parameter for main length distribution lines.
-#' @param alpha1 factor modifying the opacity alpha (typically in [0,1]) for line 1.
-#' @param ltys2 lty (see \code{\link{par}}) parameter for secondary length distribution lines.
-#' @param lwds2 lwd (see \code{\link{par}}) parameter for secondary length distribution lines.
-#' @param col2 col (see \code{\link{par}}) parameter for secondary length distribution lines.
-#' @param alpha2 factor modifying the opacity alpha (typically in [0,1]) for line 2.
-#' @param juvLimit Limit length for juveniles.
-#' @param juvLty lty (see \code{\link{par}}) parameter for juvenile line.
-#' @param juvLwd lwd (see \code{\link{par}}) parameter for juvenile line.
-#' @param juvCol col (see \code{\link{par}}) parameter for juvenile line.
-#' @param showJuv1 Do you want to show the percentage of juveniles 1 as text?
-#' @param juvLine1 line (see \code{\link{mtext}}) parameter for juvenile 1 line.
-#' @param juvCex1 Size for juveniles 1 text.
-#' @param juvLabel1 Text before juvenile 1 value.
-#' @param showJuv2 Do you want to show the percentage of juveniles 2 as text?
-#' @param juvLine2 line (see \code{\link{mtext}}) parameter for juvenile 2 line.
-#' @param juvCex2 Size for juveniles 2 text.
-#' @param juvLabel2 Text before juvenile 2 value.
-#' @param juvAdj adj (see \code{\link{mtext}}) parameter for juvenile text.
-#' @param juvRound Number of decimals places used to show juveniles' values.
-#' @param juvSide side (see \code{\link{mtext}}) parameter for juvenile text.
-#' @param cex.axis cex.axis (see \code{\link{par}}) parameter for x and y axes.
-#' @param cex.lab cex.lab (see \code{\link{par}}) parameter for x and y axes.
-#' @param ylab_line line (see \code{\link{mtext}}) parameter for ylab text.
-#' @param namesAdj adj (see \code{\link{mtext}}) parameter for categories (column names) text.
-#' @param title_text Text for title. If not \code{NULL}, default \code{oma = c(5, 5, 3, 3)}
-#' @param title_line line (see \code{\link{mtext}}) parameter for title text.
-#' @param title_cex Size for title text.
-#' @param title_col col (see \code{\link{par}}) parameter for title text.
-#' @param title_font font (see \code{\link{par}}) parameter for title text.
-#' @param smooth \code{logical} Do you want to smooth the length distribution lines?
-#' @param oma oma (see \code{\link{par}}) parameter for plot. Default \code{c(5, 5, 1, 3)}.
-#' @param xlab Label for x axis.
-#' @param ylab Label for y axis.
-#' @param noDataLabel \code{character}. If there is no data in a column, the function will show
-#' what this parameter indicates.
-#' @param ylabFactor \code{numeric}. Value that multiplies all values in both main and secondary matrices.
-#' @param relative \code{logical} Do you want to plot relatives or absolutes values?
-#' @param namesLine1 line (see \code{\link{mtext}}) parameter for text of category for file 1.
-#' @param namesCex1 cex (see \code{\link{mtext}}) parameter for text of category for file 1.
-#' @param namesCol1 col (see \code{\link{mtext}}) parameter for text of category for file 1.
-#' @param showNames2 \code{logical} do you want to show the names of categories of file 2?
-#' @param namesLine2 line (see \code{\link{mtext}}) parameter for text of category for file 2.
-#' @param namesCex2 cex (see \code{\link{mtext}}) parameter for text of category for file 2.
-#' @param namesCol2 col (see \code{\link{mtext}}) parameter for text of category for file 2.
-#' @param juvTextCol1 col (see \code{\link{mtext}}) parameter for text of juveniles for file 1.
-#' @param juvTextCol2 col (see \code{\link{mtext}}) parameter for text of juveniles for file 2.
+#' Creates one or more length-frequency plots from length-class data stored
+#' in matrices, data frames, or CSV files. Optionally overlays a second
+#' dataset for comparison and displays the proportion of individuals below
+#' a juvenile size threshold.
 #'
-#' @details This function takes a length frequency data and returns an stacking plot of that frequencies.
-#' smooth: logical. If TRUE, function uses an spline function to plot by categories.
-#' This function uses a data with categories at col and length at rows.
+#' @param file1 A matrix, data frame, or path to a CSV file containing
+#' length-frequency data. Rows represent length classes and columns represent
+#' groups (e.g. years, months, fleets, areas).
+#' @param file2 Optional second dataset with the same structure as \code{file1},
+#' used for comparison.
+#' @param dataFactor Numeric multiplier applied to all frequency values.
+#' @param newPlot Logical. If \code{TRUE}, opens a new graphics device.
+#' @param profile Optional species profile name. When provided, default values
+#' for \code{xlim}, \code{xInterval}, \code{juvLimit}, and \code{xlab} are
+#' extracted from \code{speciesInfo}.
+#' @param xlim Numeric vector of length two defining the x-axis limits.
+#' @param xInterval Length-class interval for x-axis tick marks.
+#' @param ylim Numeric vector of length two defining the y-axis limits.
+#' @param yInterval Interval between y-axis tick marks.
+#' @param ylimList Optional list of \code{ylim} values, one per panel.
+#' @param yIntervalList Optional list of \code{yInterval} values, one per panel.
+#' @param ltys1,lwds1,col1 Graphical parameters for lines corresponding to
+#' \code{file1}.
+#' @param alpha1 Transparency level for \code{file1} lines.
+#' @param ltys2,lwds2,col2 Graphical parameters for lines corresponding
+#'   to \code{file2}.
+#' @param alpha2 Transparency level for \code{file2} lines.
+#' @param juvLimit Numeric juvenile length threshold. A vertical reference
+#'   line is drawn at this value and the percentage of individuals below
+#'   the threshold can be displayed.
+#' @param juvLty,juvLwd,juvCol Graphical parameters for the juvenile
+#'   threshold line.
+#' @param showJuv1,showJuv2 Logical. Whether to display juvenile percentages
+#'   for \code{file1} and \code{file2}, respectively.
+#' @param juvLine1,juvLine2 Line positions used when displaying juvenile
+#'   percentages.
+#' @param juvCex1,juvCex2 Character expansion factors for juvenile percentage
+#' labels.
+#' @param juvLabel1,juvLabel2 Labels preceding juvenile percentages.
+#' @param namesLine1,namesLine2 Line positions for panel labels.
+#' @param namesCex1,namesCex2 Character expansion factors for panel labels.
+#' @param namesCol1,namesCol2 Colours used for panel labels.
+#' @param showNames2 Logical. If \code{TRUE}, displays labels associated with
+#' \code{file2}.
+#' @param juvAdj Adjustment used for juvenile text placement.
+#' @param juvRound Number of decimal places used when displaying juvenile percentages.
+#' @param juvSide Margin side used for juvenile annotations.
+#' @param juvTextCol1,juvTextCol2 Colours used for juvenile percentage labels.
+#' @param cex.axis Character expansion factor for axis labels.
+#' @param cex.lab Character expansion factor for axis titles.
+#' @param ylab_line Margin line position for the y-axis title.
+#' @param namesAdj Adjustment used for panel labels.
+#' @param title_text Optional overall figure title.
+#' @param title_line Margin line position for the title.
+#' @param title_cex Character expansion factor for the title.
+#' @param title_col Colour of the title.
+#' @param title_font Font used for the title.
+#' @param smooth Logical. If \code{TRUE}, smooths length-frequency curves
+#' using natural cubic splines.
+#' @param oma Numeric vector specifying outer margins passed to
+#' \code{\link[graphics]{par}}.
+#' @param xlab Label for the x-axis.
+#' @param ylab Label for the y-axis.
+#' @param noDataLabel Text displayed when insufficient data are available for a
+#' panel.
+#' @param ylabFactor Numeric factor used to rescale y-axis labels without
+#' modifying the plotted values.
+#' @param relative Logical. If \code{TRUE}, frequencies are converted to
+#' percentages within each column before plotting.
 #'
+#' @details
+#' The first column of a matrix or data frame is assumed to contain the
+#' length classes. Remaining columns are interpreted as independent
+#' length-frequency distributions and are plotted in separate panels.
+#'
+#' When \code{file2} is provided, both datasets are displayed in the same
+#' panels using independent graphical settings. Juvenile percentages are
+#' calculated as the proportion of observations below \code{juvLimit}.
+#'
+#' If \code{relative = TRUE}, frequencies are standardised so that each
+#' column sums to 100.
+#'
+#' @return
+#' Invisibly returns \code{NULL}. The function is called for its side effect
+#' of producing graphics.
+#'
+#' @examples
+#' data(anchoveta_lengths)
+#'
+#' lengthFrequencyPlot(
+#'   file1 = anchoveta_lengths,
+#'   profile = "anchoveta",
+#'   juvLimit = 12,
+#'   relative = TRUE
+#' )
 #'
 #' @export
-lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = FALSE, profile = NULL,
-                                xlim = NULL, xInterval = 1,
-                                ylim = c(0, 50), yInterval = NULL,
-                                ylimList = NULL, yIntervalList = NULL,
-                                ltys1 = "solid", lwds1 = "1", col1 = "black", alpha1 = 1,
-                                ltys2 = "solid", lwds2 = "1", col2 = "blue", alpha2 = 1,
-                                juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
-                                showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1, juvLabel1 = "juveniles_1 = ",
-                                showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
-                                namesLine1 = -2, namesCex1 = 1, namesCol1 = NULL,
-                                showNames2 = FALSE, namesLine2 = -2, namesCex2 = 1, namesCol2 = NULL,
-                                juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL, juvTextCol2 = NULL,
-                                cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
-                                title_text = NULL, title_line = 2, title_cex = NULL, title_col = "black", title_font = 1,
-                                smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
-                                noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE){
+lengthFrequencyPlot <- function(
+    file1, file2 = NULL, dataFactor = 1, newPlot = FALSE, profile = NULL,
+    xlim = NULL, xInterval = 1,
+    ylim = c(0, 50), yInterval = NULL,
+    ylimList = NULL, yIntervalList = NULL,
+    ltys1 = "solid", lwds1 = "1", col1 = "black", alpha1 = 1,
+    ltys2 = "solid", lwds2 = "1", col2 = "blue", alpha2 = 1,
+    juvLimit = NULL, juvLty = "dotted", juvLwd = 1, juvCol = "red",
+    showJuv1 = TRUE, juvLine1 = -2, juvCex1 = 1, juvLabel1 = "juveniles_1 = ",
+    showJuv2 = TRUE, juvLine2 = -4, juvCex2 = 1, juvLabel2 = "juveniles_2 = ",
+    namesLine1 = -2, namesCex1 = 1, namesCol1 = NULL,
+    showNames2 = FALSE, namesLine2 = -2, namesCex2 = 1, namesCol2 = NULL,
+    juvAdj = 0.99, juvRound = 0, juvSide = 3, juvTextCol1 = NULL, juvTextCol2 = NULL,
+    cex.axis = 1, cex.lab = 1, ylab_line = 3, namesAdj = 0.01,
+    title_text = NULL, title_line = 2, title_cex = NULL, title_col = "black", title_font = 1,
+    smooth = FALSE, oma = NULL, xlab = NULL, ylab = "Frecuencia (%)",
+    noDataLabel = "Sin datos", ylabFactor = 1, relative = TRUE
+){
 
   # Preserve par values before make graphics
   old.par <- par(no.readonly = TRUE)
@@ -97,7 +127,12 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     file1 <- data.frame(file1[,-1], stringsAsFactors = FALSE)
     dimnames(file1) <- file1Names
   }else if(length(file1) == 1 && is.character(file1) && file.exists(file1)){
-    file1 <- read.csv(file = file1, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
+    file1 <- read.csv(
+      file = file1,
+      row.names = 1,
+      check.names = FALSE,
+      stringsAsFactors = FALSE
+    )
   }else{
     stop("Incorrect value for file1. It must be a 'matrix', 'data.frame' or it must indicate the file name of a length matrix.")
   }
@@ -110,7 +145,12 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
       file2 <- data.frame(file2[,-1], stringsAsFactors = FALSE)
       dimnames(file2) <- file2Names
     }else{
-      file2 <- read.csv(file = file2, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
+      file2 <- read.csv(
+        file = file2,
+        row.names = 1,
+        check.names = FALSE,
+        stringsAsFactors = FALSE
+      )
     }
 
     if(ncol(file1) != ncol(file2)){
@@ -119,7 +159,14 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     if(isTRUE(relative)){
       file2Names <- dimnames(file2)
-      file2 <- data.frame(sweep(as.matrix(file2), 2, colSums(file2, na.rm = TRUE), "/")*100)
+      file2 <- data.frame(
+        sweep(
+          x = as.matrix(file2),
+          MARGIN = 2,
+          STATS = colSums(file2, na.rm = TRUE),
+          FUN = "/"
+        )*100
+      )
       dimnames(file2) <- file2Names
     }
 
@@ -127,9 +174,9 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
 
     file2 <- file2*dataFactor
 
-    ltys2 <- rep(ltys2, length.out = ncol(file2))
-    lwds2 <- rep(lwds2, length.out = ncol(file2))
-    col2 <- rep(col2, length.out = ncol(file2))
+    ltys2 <- rep(x = ltys2, length.out = ncol(file2))
+    lwds2 <- rep(x = lwds2, length.out = ncol(file2))
+    col2 <- rep(x = col2, length.out = ncol(file2))
     namesCol2 <- if(is.null(namesCol2)) col2 else rep(namesCol2, length.out = ncol(file2))
   }
 
@@ -152,14 +199,23 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
     }
 
     if(is.null(xlab)){
-      xlab <- paste0("Longitud ", speciesInfo$lengthType[index], " (", speciesInfo$unit[index], ")")
+      xlab <- sprintf(
+        fmt = "Longitud %s (%s)",
+        speciesInfo$lengthType[index],
+        speciesInfo$unit[index]
+      )
     }
   }
 
   file1[file1 <= 0 | is.na(file1)] <- 0
 
   if(isTRUE(relative)){
-    file1 <- sweep(as.matrix(file1), 2, colSums(file1, na.rm = TRUE), "/")*100
+    file1 <- sweep(
+      x = as.matrix(file1),
+      MARGIN = 2,
+      STATS = colSums(file1, na.rm = TRUE),
+      FUN = "/"
+    )*100
   }
 
   if(is.null(xlim)){
@@ -197,7 +253,12 @@ lengthFrequencyPlot <- function(file1, file2 = NULL, dataFactor = 1, newPlot = F
       ylim <- ylimList[[i]]
     }
 
-    plot(1, 1, pch = NA, axes = FALSE, xlab = NA, ylab = NA, xlim = xlim, ylim = ylim)
+    plot(
+      x = 1, y = 1, type = "n",
+      axes = FALSE, xlab = NA, ylab = NA,
+      xlim = xlim, ylim = ylim,
+      pch = NA,
+    )
 
     if(isTRUE(smooth)){
       allLengths <- spline(x = an(rownames(file1)), y = file1[,i], method = "natural", n = 1e3)

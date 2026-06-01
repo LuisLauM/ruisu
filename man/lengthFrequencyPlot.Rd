@@ -2,8 +2,7 @@
 % Please edit documentation in R/lengthFrequencyPlot.R
 \name{lengthFrequencyPlot}
 \alias{lengthFrequencyPlot}
-\title{Given a frequency table size, it generates a vertical array of graphics for each specified
-category (months, latitudes, years, etc.).}
+\title{Plot length-frequency distributions}
 \usage{
 lengthFrequencyPlot(
   file1,
@@ -68,132 +67,145 @@ lengthFrequencyPlot(
 )
 }
 \arguments{
-\item{file1}{Indicates the table from the main length distribution will be drawn. See details.}
+\item{file1}{A matrix, data frame, or path to a CSV file containing
+length-frequency data. Rows represent length classes and columns represent
+groups (e.g. years, months, fleets, areas).}
 
-\item{file2}{Indicates the table from the secondary length distribution will be drawn. See details.}
+\item{file2}{Optional second dataset with the same structure as \code{file1},
+used for comparison.}
 
-\item{dataFactor}{Factor that multiplies matrices 1 and 2.}
+\item{dataFactor}{Numeric multiplier applied to all frequency values.}
 
-\item{newPlot}{If \code{TRUE}, the plot will be opened in a new window (using \code{x11} command).}
+\item{newPlot}{Logical. If \code{TRUE}, opens a new graphics device.}
 
-\item{profile}{\code{character}. Indicates the profile (as an species' name) used to predine values of
-xlim, juvLine, xInterval and xlab.}
+\item{profile}{Optional species profile name. When provided, default values
+for \code{xlim}, \code{xInterval}, \code{juvLimit}, and \code{xlab} are
+extracted from \code{speciesInfo}.}
 
-\item{xlim}{Limits of x axis.}
+\item{xlim}{Numeric vector of length two defining the x-axis limits.}
 
-\item{xInterval}{Number of intervals for x axis labels.}
+\item{xInterval}{Length-class interval for x-axis tick marks.}
 
-\item{ylim}{Limits of y axis.}
+\item{ylim}{Numeric vector of length two defining the y-axis limits.}
 
-\item{yInterval}{Number of intervals for y axis labels.}
+\item{yInterval}{Interval between y-axis tick marks.}
 
-\item{ylimList}{List of xlim value for each plot.}
+\item{ylimList}{Optional list of \code{ylim} values, one per panel.}
 
-\item{yIntervalList}{List of yInterval value for each plot.}
+\item{yIntervalList}{Optional list of \code{yInterval} values, one per panel.}
 
-\item{ltys1}{lty (see \code{\link{par}}) parameter for main length distribution lines.}
+\item{ltys1, lwds1, col1}{Graphical parameters for lines corresponding to
+\code{file1}.}
 
-\item{lwds1}{lwd (see \code{\link{par}}) parameter for main length distribution lines.}
+\item{alpha1}{Transparency level for \code{file1} lines.}
 
-\item{col1}{col (see \code{\link{par}}) parameter for main length distribution lines.}
+\item{ltys2, lwds2, col2}{Graphical parameters for lines corresponding
+to \code{file2}.}
 
-\item{alpha1}{factor modifying the opacity alpha (typically in [0,1]) for line 1.}
+\item{alpha2}{Transparency level for \code{file2} lines.}
 
-\item{ltys2}{lty (see \code{\link{par}}) parameter for secondary length distribution lines.}
+\item{juvLimit}{Numeric juvenile length threshold. A vertical reference
+line is drawn at this value and the percentage of individuals below
+the threshold can be displayed.}
 
-\item{lwds2}{lwd (see \code{\link{par}}) parameter for secondary length distribution lines.}
+\item{juvLty, juvLwd, juvCol}{Graphical parameters for the juvenile
+threshold line.}
 
-\item{col2}{col (see \code{\link{par}}) parameter for secondary length distribution lines.}
+\item{showJuv1, showJuv2}{Logical. Whether to display juvenile percentages
+for \code{file1} and \code{file2}, respectively.}
 
-\item{alpha2}{factor modifying the opacity alpha (typically in [0,1]) for line 2.}
+\item{juvLine1, juvLine2}{Line positions used when displaying juvenile
+percentages.}
 
-\item{juvLimit}{Limit length for juveniles.}
+\item{juvCex1, juvCex2}{Character expansion factors for juvenile percentage
+labels.}
 
-\item{juvLty}{lty (see \code{\link{par}}) parameter for juvenile line.}
+\item{juvLabel1, juvLabel2}{Labels preceding juvenile percentages.}
 
-\item{juvLwd}{lwd (see \code{\link{par}}) parameter for juvenile line.}
+\item{namesLine1, namesLine2}{Line positions for panel labels.}
 
-\item{juvCol}{col (see \code{\link{par}}) parameter for juvenile line.}
+\item{namesCex1, namesCex2}{Character expansion factors for panel labels.}
 
-\item{showJuv1}{Do you want to show the percentage of juveniles 1 as text?}
+\item{namesCol1, namesCol2}{Colours used for panel labels.}
 
-\item{juvLine1}{line (see \code{\link{mtext}}) parameter for juvenile 1 line.}
+\item{showNames2}{Logical. If \code{TRUE}, displays labels associated with
+\code{file2}.}
 
-\item{juvCex1}{Size for juveniles 1 text.}
+\item{juvAdj}{Adjustment used for juvenile text placement.}
 
-\item{juvLabel1}{Text before juvenile 1 value.}
+\item{juvRound}{Number of decimal places used when displaying juvenile percentages.}
 
-\item{showJuv2}{Do you want to show the percentage of juveniles 2 as text?}
+\item{juvSide}{Margin side used for juvenile annotations.}
 
-\item{juvLine2}{line (see \code{\link{mtext}}) parameter for juvenile 2 line.}
+\item{juvTextCol1, juvTextCol2}{Colours used for juvenile percentage labels.}
 
-\item{juvCex2}{Size for juveniles 2 text.}
+\item{cex.axis}{Character expansion factor for axis labels.}
 
-\item{juvLabel2}{Text before juvenile 2 value.}
+\item{cex.lab}{Character expansion factor for axis titles.}
 
-\item{namesLine1}{line (see \code{\link{mtext}}) parameter for text of category for file 1.}
+\item{ylab_line}{Margin line position for the y-axis title.}
 
-\item{namesCex1}{cex (see \code{\link{mtext}}) parameter for text of category for file 1.}
+\item{namesAdj}{Adjustment used for panel labels.}
 
-\item{namesCol1}{col (see \code{\link{mtext}}) parameter for text of category for file 1.}
+\item{title_text}{Optional overall figure title.}
 
-\item{showNames2}{\code{logical} do you want to show the names of categories of file 2?}
+\item{title_line}{Margin line position for the title.}
 
-\item{namesLine2}{line (see \code{\link{mtext}}) parameter for text of category for file 2.}
+\item{title_cex}{Character expansion factor for the title.}
 
-\item{namesCex2}{cex (see \code{\link{mtext}}) parameter for text of category for file 2.}
+\item{title_col}{Colour of the title.}
 
-\item{namesCol2}{col (see \code{\link{mtext}}) parameter for text of category for file 2.}
+\item{title_font}{Font used for the title.}
 
-\item{juvAdj}{adj (see \code{\link{mtext}}) parameter for juvenile text.}
+\item{smooth}{Logical. If \code{TRUE}, smooths length-frequency curves
+using natural cubic splines.}
 
-\item{juvRound}{Number of decimals places used to show juveniles' values.}
+\item{oma}{Numeric vector specifying outer margins passed to
+\code{\link[graphics]{par}}.}
 
-\item{juvSide}{side (see \code{\link{mtext}}) parameter for juvenile text.}
+\item{xlab}{Label for the x-axis.}
 
-\item{juvTextCol1}{col (see \code{\link{mtext}}) parameter for text of juveniles for file 1.}
+\item{ylab}{Label for the y-axis.}
 
-\item{juvTextCol2}{col (see \code{\link{mtext}}) parameter for text of juveniles for file 2.}
+\item{noDataLabel}{Text displayed when insufficient data are available for a
+panel.}
 
-\item{cex.axis}{cex.axis (see \code{\link{par}}) parameter for x and y axes.}
+\item{ylabFactor}{Numeric factor used to rescale y-axis labels without
+modifying the plotted values.}
 
-\item{cex.lab}{cex.lab (see \code{\link{par}}) parameter for x and y axes.}
-
-\item{ylab_line}{line (see \code{\link{mtext}}) parameter for ylab text.}
-
-\item{namesAdj}{adj (see \code{\link{mtext}}) parameter for categories (column names) text.}
-
-\item{title_text}{Text for title. If not \code{NULL}, default \code{oma = c(5, 5, 3, 3)}}
-
-\item{title_line}{line (see \code{\link{mtext}}) parameter for title text.}
-
-\item{title_cex}{Size for title text.}
-
-\item{title_col}{col (see \code{\link{par}}) parameter for title text.}
-
-\item{title_font}{font (see \code{\link{par}}) parameter for title text.}
-
-\item{smooth}{\code{logical} Do you want to smooth the length distribution lines?}
-
-\item{oma}{oma (see \code{\link{par}}) parameter for plot. Default \code{c(5, 5, 1, 3)}.}
-
-\item{xlab}{Label for x axis.}
-
-\item{ylab}{Label for y axis.}
-
-\item{noDataLabel}{\code{character}. If there is no data in a column, the function will show
-what this parameter indicates.}
-
-\item{ylabFactor}{\code{numeric}. Value that multiplies all values in both main and secondary matrices.}
-
-\item{relative}{\code{logical} Do you want to plot relatives or absolutes values?}
+\item{relative}{Logical. If \code{TRUE}, frequencies are converted to
+percentages within each column before plotting.}
+}
+\value{
+Invisibly returns \code{NULL}. The function is called for its side effect
+of producing graphics.
 }
 \description{
-Given a frequency table size, it generates a vertical array of graphics for each specified
-category (months, latitudes, years, etc.).
+Creates one or more length-frequency plots from length-class data stored
+in matrices, data frames, or CSV files. Optionally overlays a second
+dataset for comparison and displays the proportion of individuals below
+a juvenile size threshold.
 }
 \details{
-This function takes a length frequency data and returns an stacking plot of that frequencies.
-smooth: logical. If TRUE, function uses an spline function to plot by categories.
-This function uses a data with categories at col and length at rows.
+The first column of a matrix or data frame is assumed to contain the
+length classes. Remaining columns are interpreted as independent
+length-frequency distributions and are plotted in separate panels.
+
+When \code{file2} is provided, both datasets are displayed in the same
+panels using independent graphical settings. Juvenile percentages are
+calculated as the proportion of observations below \code{juvLimit}.
+
+If \code{relative = TRUE}, frequencies are standardised so that each
+column sums to 100.
+}
+\examples{
+data(anchoveta_lengths)
+
+lengthFrequencyPlot(
+  file1 = anchoveta_lengths,
+  profile = "anchoveta",
+  juvLimit = 12,
+  relative = TRUE
+)
+
 }

@@ -30,11 +30,11 @@ Easy way to prepare a folder for a typical R Project
 \details{
 You can indicate the set of directories that will be created using \code{type} as follows:
 \itemize{
- \item{1: }{code, data, figures, outputs}
- \item{2: }{code, data, figures, outputs, presentations}
- \item{3: }{code, data, figures, outputs, presentations, docs}
- \item{4: }{code, data, figures, outputs, presentations, docs, bib}
- \item{5: }{code, data, figures, outputs, presentations, docs, bib, raw}
+\item{1: }{code, data, figures, outputs}
+\item{2: }{code, data, figures, outputs, presentations}
+\item{3: }{code, data, figures, outputs, presentations, docs}
+\item{4: }{code, data, figures, outputs, presentations, docs, bib}
+\item{5: }{code, data, figures, outputs, presentations, docs, bib, raw}
 }
 
 The function will creates folder recursively, so the non created folders (or sub folders) specified

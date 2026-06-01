@@ -1,8 +1,8 @@
 Package: ruisu
 Type: Package
 Title: Tools for habitual tasks (and another fancy things)
-Version: 2.4.1
-Date: 2025-09-23
+Version: 2.5.1
+Date: 2026-06-01
 Authors@R: c(person("Wencheng", "Lau-Medrano", role = c("aut", "cre"), email = "luis.laum@outlook.com"))
 Author: Wencheng Lau-Medrano [aut, cre]
 Maintainer: Wencheng Lau-Medrano <luis.laum@outlook.com>
@@ -11,27 +11,30 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz
-Imports: sp,
-  fields,
-  zoo,
-  doParallel,
-  parallel,
-  foreach,
-  stats,
-  maps,
-  rstudioapi,
-  grDevices,
-  graphics,
-  utils,
-  lubridate,
-  png,
-  abind,
-  magrittr,
-  dplyr,
-  metR,
-  terra,
-  sf
-RoxygenNote: 7.3.3
+Imports: 
+    sp,
+    fields,
+    zoo,
+    doParallel,
+    parallel,
+    foreach,
+    stats,
+    maps,
+    rstudioapi,
+    grDevices,
+    graphics,
+    utils,
+    lubridate,
+    png,
+    abind,
+    magrittr,
+    dplyr,
+    metR,
+    terra,
+    sf,
+    qgisprocess
 Depends: 
   R (>= 4.1.0),
   mapdata
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.0.0
