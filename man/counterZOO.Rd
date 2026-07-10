@@ -20,10 +20,10 @@ Laboratory Counter simulator
 \details{
 This function uses next commands:
 \itemize{
-\item{\strong{new}{Defines a new species that will be included in the count.}}
-\item{\strong{correct}{Allows to make some basic operation in count values. E.g. +1, -2.}}
-\item{\strong{end}{Ends the count and save the file.}}
-\item{{\strong{help}}{Shows commands' help in console.}}
+ \item \strong{new:} Defines a new species that will be included in the count.
+ \item \strong{correct:} Allows to make some basic operation in count values. E.g. +1, -2.
+ \item \strong{end:} Ends the count and save the file.
+ \item \strong{help:} Shows commands' help in console.
 }
 }
 \examples{

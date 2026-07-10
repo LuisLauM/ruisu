@@ -32,11 +32,8 @@
 #'
 #' @export
 #'
-#' @seealso
-#' \code{\link[qgisprocess:qgis_run_algorithm]{qgis_run_algorithm}}
-#'
 #' @examples
-#' multiringconstantbuffer(distance = 40, n_rings = 5)
+#' multiring_constant_buffer(distance = 40, n_rings = 5)
 multiring_constant_buffer <- \(distance, n_rings, units = "nm"){
   qgis_run_algorithm(
     algorithm = "native:multiringconstantbuffer",

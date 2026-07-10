@@ -25,8 +25,8 @@ A quite simple password generator.
 }
 \details{
 If the user just specifies the lenght, \code{passwordGen} will return a
-password composed with 20\% of numbers, 20\% of special characters, 30\% of
-lower-case and 30\% of upper-case letters.
+password composed with 20% of numbers, 20% of special characters, 30% of
+lower-case and 30% of upper-case letters.
 
 \code{passwordGen} will generate one password at time. If you want to
 generate several passwords, you can use \code{sapply(rep(7, 10), passwordGen)}

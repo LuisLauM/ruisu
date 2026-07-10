@@ -22,7 +22,9 @@ selectPtsByPolygon <- function(x, n_polygon, coords_x = c("x", "y"), crs = 4326,
   plot(x = x[,coords_x[1]], y = x[,coords_x[2]], pch = 4,
        xlab = coords_x[1], ylab = coords_x[2], ...)
 
-  selectPoly <- locator(n = n_polygon, type = "o", pch = 16, col = "blue") |> as.data.frame()
+  selectPoly <- locator(n = n_polygon, type = "o", pch = 16, col = "blue") |>
+
+    as.data.frame()
   selectPoly$id <- 1
 
   index <- c(1, length(selectPoly$x))

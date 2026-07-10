@@ -18,8 +18,12 @@ getAIPInfo <- function(aipVector){
   upDown <- an(substr(aipVector, ncharAip, ncharAip))
 
   if(any(!is.element(upDown, c(0, 3)))){
-    warning(paste("Values #", paste(which(!is.element(upDown, c(0, 3))), collapse = ", "),
-                  "have wrong values for up-down info."))
+    paste(
+      "Values #", paste(which(!is.element(upDown, c(0, 3))), collapse = ", "),
+      "have wrong values for up-down info."
+    ) |>
+
+      cli_warn()
   }
 
   return(data.frame(dc, lat, upDown, stringsAsFactors = FALSE))

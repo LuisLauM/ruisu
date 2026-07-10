@@ -44,7 +44,7 @@ getCoordsAxesInternal <- function(coord, what, dms){
       sufix <- ""
     }
   }else{
-    stop("Incorrect value for 'what' parameter.")
+    cli_abort("Incorrect value for 'what' parameter.")
   }
 
   coord <- dd2dms(coord)

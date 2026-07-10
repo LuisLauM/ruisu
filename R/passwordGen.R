@@ -26,7 +26,7 @@
 passwordGen <- function(len = 10, numbers = TRUE, special_chars = TRUE, upper_letters = TRUE){
 
   if(!is.numeric(len) || length(len) != 1 || len < 5){
-    stop("'len' must be a numeric vector of length 1 and greater than 5.")
+    cli_abort("'len' must be a numeric vector of length 1 and greater than 5.")
   }
 
   allLens <- c(numbers       = ifelse(isTRUE(numbers), 0.2, 0),

@@ -21,7 +21,7 @@
 sillyTest <- function(testName, questions, answers, correctAnswers){
 
   if(length(unique(c(length(questions), length(answers), length(correctAnswers)))) > 1){
-    stop("Arguments for questions, answers and correct answers must have the same length.")
+    cli_abort("Arguments for questions, answers and correct answers must have the same length.")
   }
 
   cat(paste0("Hola, bienvenido(a) a este Test de ", testName[1],

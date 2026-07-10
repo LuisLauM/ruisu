@@ -17,7 +17,7 @@ progressBar <- function(i, n = NULL, iterator = NULL){
 
   if(is.null(n)){
     if(is.null(iterator)){
-      stop("You must indicate a valid value for 'i' or 'iterator'.")
+      cli_abort("You must indicate a valid value for 'i' or 'iterator'.")
     }
 
     n <- length(iterator)

@@ -17,14 +17,17 @@ plotIsoparalitoral(
 \arguments{
 \item{codeList}{AIP codes to plot.}
 
-\item{add}{logical flag that specifies whether to add to the current plot. If FALSE, a new plot is begun, using
-coordinates for Peruvian shore.}
+\item{add}{logical flag that specifies whether to add to the current plot.
+If FALSE, a new plot is begun, using coordinates for Peruvian shore.}
 
-\item{old}{\code{logical}. Specifying whether to use old AIP shape (\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).}
+\item{old}{\code{logical}. Specifying whether to use old AIP shape
+(\code{AIPShapefile_old}) o the new (\code{AIPShapefile_new}).}
 
-\item{plotParams}{Extra parameters passed to \code{\link{plot}} function. This argument is ignored if \code{add = TRUE}.}
+\item{plotParams}{Extra parameters passed to \code{\link{plot}} function.
+This argument is ignored if \code{add = TRUE}.}
 
-\item{mapParams}{Extra parameters passed to \code{\link{map}} function. This argument is ignored if \code{add = TRUE}.}
+\item{mapParams}{Extra parameters passed to \code{\link{map}} function. This
+argument is ignored if \code{add = TRUE}.}
 
 \item{...}{Extra parameters passed to \code{plot.SpatialPolygons} function.}
 }
@@ -32,6 +35,8 @@ coordinates for Peruvian shore.}
 Plot Isoparalitoral shapes
 }
 \details{
-\code{plot.SpatialPolygons} is an internal function of \code{\link{sp}}. Some important parameters are: \code{border} which
-allows to specify color (or colors if a vector) of each AIP. \code{col} is useful to modify fill color of AIP.
+\code{plot.SpatialPolygons} is an internal function of
+\code{\link{sp}}. Some important parameters are: \code{border} which allows
+to specify color (or colors if a vector) of each AIP. \code{col} is useful to
+modify fill color of AIP.
 }

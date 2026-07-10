@@ -21,9 +21,13 @@ getHarbor <- function(myHarbor){
     harborPos <- which(sapply(ruisu::harborData$pattern, grepl, x = tempHarbor))
 
     if(length(harborPos) > 1){
-      warning(paste(tempHarbor, "matched with more than one pattern at pos =", i,
-                    "\nFunction will take the first matched value:",
-                    ruisu::harborData$name[harborPos[1]]))
+      paste(
+        tempHarbor, "matched with more than one pattern at pos =", i,
+        "\nFunction will take the first matched value:",
+        ruisu::harborData$name[harborPos[1]]
+      ) |>
+
+        cli_warn()
     }
 
     output <- c(output, harborPos[1])

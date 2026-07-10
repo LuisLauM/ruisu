@@ -48,7 +48,7 @@ reached.
 Get the minumim distance to coast
 }
 \details{
-This function uses internaly \link{distance}\link[terra:terra]{terra} function, with argument
+This function uses internaly \link{distance}[terra] function, with argument
 \code{longlat = TRUE}.
 
 If \code{country} is not defined (\code{NULL}), the internal algorithm will

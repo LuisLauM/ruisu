@@ -134,7 +134,7 @@ lengthFrequencyPlot <- function(
       stringsAsFactors = FALSE
     )
   }else{
-    stop("Incorrect value for file1. It must be a 'matrix', 'data.frame' or it must indicate the file name of a length matrix.")
+    cli_abort("Incorrect value for file1. It must be a 'matrix', 'data.frame' or it must indicate the file name of a length matrix.")
   }
 
   file1 <- file1*dataFactor
@@ -154,7 +154,7 @@ lengthFrequencyPlot <- function(
     }
 
     if(ncol(file1) != ncol(file2)){
-      stop("'file1' and 'file2' must have the same number of columns.")
+      cli_abort("'file1' and 'file2' must have the same number of columns.")
     }
 
     if(isTRUE(relative)){

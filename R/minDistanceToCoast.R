@@ -86,7 +86,7 @@ minDistanceToCoast <- function(data, colLon = "lon", colLat = "lat", countryFilt
      nrow(data) < 1 || (is.element("data.frame", class(data)) & any(!is.element(c(colLon, colLat), colnames(data)))) ||
      length(colLon) != 1 || length(colLat) != 1 ||
      sum(complete.cases(data[,c(colLon, colLat)])) < 1){
-    stop("'data' must be a valid 'data.frame' or 'matrix' with numeric columns for lon/lat.")
+    cli_abort("'data' must be a valid 'data.frame' or 'matrix' with numeric columns for lon/lat.")
   }
 
   data <- data.frame(lon = an(data[,colLon]),

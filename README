@@ -1,3 +1,6 @@
+v2.6.0 (2026-07-10)
+* Add `identifica_puertos` function.
+
 v2.4.1 (2025-09-23)
 * Add `selectPtsByPolygon` function.
 

@@ -77,7 +77,7 @@ passed to \link[graphics]{axis}.}
 \item{extra.elements.bf, extra.elements.af}{Adicional elements could be
 included in the subplots (by group) by this argument: \code{extra.elements.bf}
 for including elements before drawing the points, otherwise
-\code{extra.elements.af}. See Details.}
+ \code{extra.elements.af}. See Details.}
 
 \item{...}{Extra arguments passed to \link{plot} that makes subplots.}
 }

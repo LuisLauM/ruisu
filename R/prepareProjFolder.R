@@ -8,7 +8,7 @@
 #' @param openAtFinish If \code{TRUE} (default), the RStudio project will be opened in a RStudio window.
 #'
 #' @details You can indicate the set of directories that will be created using \code{type} as follows:
-#' \itemize{
+#' \describe{
 #'  \item{1: }{code, data, figures, outputs}
 #'  \item{2: }{code, data, figures, outputs, presentations}
 #'  \item{3: }{code, data, figures, outputs, presentations, docs}
@@ -29,16 +29,18 @@ prepareProjFolder <- function(folder, type = 1, folderList = NULL, addRProj = TR
 
   if(!is.null(folderList)){
     if(!is.character(folderList) | length(folderList) < 1){
-      stop("'folderList' must be a character vector.")
+      cli_abort("'folderList' must be a character vector.")
     }
   }else{
-    folderList <- switch(type,
-                         "1" = c("code", "data", "figures", "outputs"),
-                         "2" = c("code", "data", "figures", "outputs", "presentations"),
-                         "3" = c("code", "data", "figures", "outputs", "presentations", "docs"),
-                         "4" = c("code", "data", "figures", "outputs", "presentations", "docs", "bib"),
-                         "5" = c("code", "data", "figures", "outputs", "presentations", "docs", "bib", "raw"),
-                         "Incorrect value for 'type'.")
+    folderList <- switch(
+      type,
+      "1" = c("code", "data", "figures", "outputs"),
+      "2" = c("code", "data", "figures", "outputs", "presentations"),
+      "3" = c("code", "data", "figures", "outputs", "presentations", "docs"),
+      "4" = c("code", "data", "figures", "outputs", "presentations", "docs", "bib"),
+      "5" = c("code", "data", "figures", "outputs", "presentations", "docs", "bib", "raw"),
+      "Incorrect value for 'type'."
+    )
   }
 
   lastChar <- substr(x = folder, start = nchar(folder), stop = nchar(folder))

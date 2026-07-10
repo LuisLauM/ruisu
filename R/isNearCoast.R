@@ -21,11 +21,11 @@ isNearCoast <- function(dataPoints, colLon = "lon", colLat = "lat", units = "m",
   }else if(tolower(units) == "nm"){
     posibleValues <- seq(0.2, 2, 0.2)
   }else{
-    stop("'units' must be m (meters) or nm (nautical miles).")
+    cli_abort("'units' must be m (meters) or nm (nautical miles).")
   }
 
   if(length(distance) != 1 || !is.numeric(an(distance)) || !is.element(an(distance), posibleValues)){
-    stop("'distance' must be numeric, length 1 and values ", paste(posibleValues, collapse = ", "), ".")
+    cli_abort("'distance' must be numeric, length 1 and values ", paste(posibleValues, collapse = ", "), ".")
   }
 
   # Select the reference shapefile

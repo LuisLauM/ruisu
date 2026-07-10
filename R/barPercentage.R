@@ -35,11 +35,11 @@ barPercentage <- function(x, cols = NULL, lwd = 2, digits = 1,
 
   if(is.null(cols)) cols <- tim.colors(length(x$values))
 
-  if(tagPosDelay > 1 || tagPosDelay < -1) stop("'tagPosDelay' must be [-1, 1].")
+  if(tagPosDelay > 1 || tagPosDelay < -1) cli_abort("'tagPosDelay' must be [-1, 1].")
 
   textPos <- rep(x = textPos, length.out = length(x$percentage))
 
-  if(sum(!is.element(textPos, c(2, 4))) > 0) stop("'textPos' must be a vector of values 2 or 4.")
+  if(sum(!is.element(textPos, c(2, 4))) > 0) cli_abort("'textPos' must be a vector of values 2 or 4.")
 
   ylim <- c(-sum(is.element(textPos, 2))*0.5, 1.4 + sum(is.element(textPos, 4))*0.5)
 

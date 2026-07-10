@@ -10,8 +10,9 @@
 #' @param dms A \code{character} strings indicating what to show (d: degrees,
 #' m: minutes, s: seconds).
 #'
-#' @details \code{xParams} and \code{yParams} must contain axis information as a 3 or 4 length vector.
-##' \itemize{
+#' @details
+#' \code{xParams} and \code{yParams} must contain axis information as a 3 or 4 length vector.
+##' \describe{
 ##'  \item{"length 3:"}{to indicate from 100 S to 70 S by 5, the vector will be c(-100, -70, 5).}
 ##'  \item{"length 4:"}{to indicate from 100 S to 70 S by 5 and draw a second set of ticks from 100 S to 70 S by 1, the
 ##'  vector will be c(-100, -70, 1, 5).}
@@ -36,17 +37,17 @@
 addCoordsAxes <- function(xParams = NULL, yParams = NULL, where = c(1, 2), las = 1, labels = NULL,
                           dms = "d", ...){
 
-  if(is.null(xParams) && is.null(yParams)) stop("You must indicate at least one xParams or yParams.")
+  if(is.null(xParams) && is.null(yParams)) cli_abort("You must indicate at least one xParams or yParams.")
 
   for(i in c("xParams", "yParams")){
     if(is.null(get(i))) next
 
     msg <- sprintf("'%s' must be a numeric vector of length 3 or 4. See ?addCoordsAxes", i)
-    if(!is.numeric(get(i)) || !is.element(length(get(i)), c(3, 4))) stop(msg)
+    if(!is.numeric(get(i)) || !is.element(length(get(i)), c(3, 4))) cli_abort(msg)
   }
 
   if(length(where) > 4 | length(where) < 1 | any(!is.element(where, 1:4))){
-    stop("'where' must be an integer between 1 and 4.")
+    cli_abort("'where' must be an integer between 1 and 4.")
   }
 
   for(i in seq_along(where)){

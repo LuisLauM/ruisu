@@ -96,7 +96,7 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
 
   if(!is.data.frame(x) || !all(is.element(c("lon", "lat", "group"), colnames(x)))){
     # Check 'x'
-    stop("'x' must be a data.frame with columns 'lon', 'lat' and 'group'.")
+    cli_abort("'x' must be a data.frame with columns 'lon', 'lat' and 'group'.")
   }else{
 
     # Lower case column names of 'x'
@@ -118,7 +118,7 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
 
   # Check value of direction
   if(all(!sapply(1:4, function(x) isTRUE(all.equal(target = x, current = direction))))){
-    stop("'direction' must be a numeric value: 1 (bottom), 2 (left), 3 (top) or 4 (right).")
+    cli_abort("'direction' must be a numeric value: 1 (bottom), 2 (left), 3 (top) or 4 (right).")
   }
 
   # Get levels of group columns
@@ -134,7 +134,7 @@ parallelMaps <- function(x, overlay = 0, direction = 2,
 
   # Check overlay value
   if(!is.numeric(overlay) || length(overlay) != 1 || overlay < 0 || overlay >= 0.5){
-    stop("'overlay' must a numeric value between 0 and 0,5 (not included).")
+    cli_abort("'overlay' must a numeric value between 0 and 0,5 (not included).")
   }
 
   # Important proportions
