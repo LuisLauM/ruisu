@@ -122,3 +122,25 @@ NULL
 #' @usage coord_example
 #' @format \code{data.frame} object with three columns: lon, lat and group.
 NULL
+
+#' @title Main Peruvian Harbors
+#'
+#' @name patron_puertos
+#' @description
+#' A \code{data.frame} containing information on the main Peruvian harbors
+#' and landing sites used by IMARPE.
+#'
+#' @aliases patron_puertos
+#' @usage patron_puertos
+#'
+#' @format A \code{data.frame} with the following variables:
+#' \describe{
+#'   \item{\code{LUGAR}}{Name of the harbor or landing site.}
+#'   \item{\code{LABORATORIO}}{Name of the IMARPE laboratory associated with the harbor.}
+#'   \item{\code{ZONA}}{Latitudinal region: \code{"North"}, \code{"Central"}, or \code{"South"}.}
+#'   \item{\code{DEPARTAMENTO}}{Name of the Peruvian department where the harbor is located.}
+#'   \item{\code{REGEX}}{Regular expression pattern used to identify the harbor name in text.}
+#'   \item{\code{LATITUD}}{Latitude of the harbor location (decimal degrees).}
+#'   \item{\code{LONGITUD}}{Longitude of the harbor location (decimal degrees).}
+#' }
+NULL

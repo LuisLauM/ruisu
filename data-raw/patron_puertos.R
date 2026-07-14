@@ -9,6 +9,10 @@ patron_puertos <- readxl::read_excel(
       pattern = stringr::fixed("\\\\"),
       replacement = "\\"
     )
-  )
+  ) |>
+
+  dplyr::select(-CODIGO) |>
+
+  dplyr::relocate(LUGAR, .before = 1)
 
 usethis::use_data(patron_puertos, overwrite = TRUE)

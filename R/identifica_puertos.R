@@ -22,7 +22,7 @@
 #'   to be returned.
 #' @param out_vars A character vector indicating which columns from
 #'   `patron_puertos` should be returned. Defaults to
-#'   \code{c("LABORATORIO", "ZONA", "DEPARTAMENTO", "CODIGO", "LATITUD", "LONGITUD")}.
+#'   \code{c("LABORATORIO", "ZONA", "DEPARTAMENTO", "LATITUD", "LONGITUD")}.
 #'
 #'   If `NULL` or a vector of length zero is supplied, the function
 #'   returns the matched port names (\code{LUGAR}).
@@ -62,7 +62,7 @@ identifica_puertos <- function(
   x, patron_puertos = NULL,
   out_vars = c(
     "LABORATORIO", "ZONA", "DEPARTAMENTO",
-    "CODIGO", "LATITUD", "LONGITUD"
+    "LATITUD", "LONGITUD"
   ),
   mostrar_no_encontrados = FALSE
 ){
