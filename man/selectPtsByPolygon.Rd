@@ -2,34 +2,68 @@
 % Please edit documentation in R/selectPtsByPolygon.R
 \name{selectPtsByPolygon}
 \alias{selectPtsByPolygon}
-\title{Function to obtain an index of points inside and outside a polygon}
+\title{Select Points Inside an Interactive Polygon}
 \usage{
 selectPtsByPolygon(x, n_polygon, coords_x = c("x", "y"), crs = 4326, ...)
 }
 \arguments{
-\item{x}{\code{data.frame} with coordinates to be classified.}
+\item{x}{A \code{data.frame} containing the point coordinates.}
 
-\item{n_polygon}{Number of points to define polygon.}
+\item{n_polygon}{Integer. Number of vertices to use when drawing the
+polygon. Passed to \code{\link[graphics]{locator}}.}
 
-\item{coords_x}{Names of coordinates on \code{x}.}
+\item{coords_x}{A character vector of length two giving the names of the
+columns in \code{x} containing the x- and y-coordinates, respectively.
+Defaults to \code{c("x", "y")}.}
 
-\item{crs}{Coordinate reference system}
+\item{crs}{Coordinate reference system of the coordinates, given as an
+EPSG code or any value accepted by \code{\link[sf:st_crs]{sf::st_crs}}.
+Defaults to \code{4326} (WGS84).}
 
-\item{...}{Extra arguments passed to the main plot.}
+\item{...}{Additional graphical arguments passed to
+\code{\link[graphics]{plot}}.}
 }
 \value{
-A numeric vector: out of (\code{0}) or within (\code{1}) the polygon.
+An integer vector of length \code{nrow(x)} with values:
+\describe{
+  \item{0}{Point lies outside the polygon.}
+  \item{1}{Point lies inside the polygon.}
+}
 }
 \description{
-Function to obtain an index of points inside and outside a polygon
+Interactively draws a polygon on a scatter plot and returns a binary
+vector indicating whether each point lies inside the selected polygon.
+}
+\details{
+After plotting the points, the user is prompted to click
+\code{n_polygon} vertices to define a polygon. The polygon is closed
+automatically, and the function uses spatial intersections from the
+\pkg{sf} package to determine which points are located inside it.
 }
 \examples{
+\dontrun{
+# Define number op points
 n <- 50
-sampleData <- data.frame(x = runif(n = 50, min = 0.5, max = 1.5),
-                         y = runif(n = 50, min = 0.5, max = 1.5))
 
+# Create a table with coordinates for n points
+sampleData <- data.frame(
+  x = runif(n = 50, min = 0.5, max = 1.5),
+  y = runif(n = 50, min = 0.5, max = 1.5)
+)
+
+# Plot points and allow the user to draw the polygon (interactive)
 index <- selectPtsByPolygon(x = sampleData, n_polygon = 8, asp = 1)
 
-plot(x = sampleData$x, y = sampleData$y,
-     col = ifelse(index == 0, "black", "blue"), asp = 1)
+# Plot polygon and points classified by its status of out or within the
+# polygon
+plot(
+  x = sampleData$x, y = sampleData$y,
+  col = ifelse(index == 0, "black", "blue"),
+  asp = 1
+)
+}
+}
+\seealso{
+\code{\link[graphics]{locator}},
+\code{\link[sf:st_intersects]{sf::st_intersects}}
 }
